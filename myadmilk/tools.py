@@ -7,6 +7,8 @@ from wechatpy.client import WeChatClient
 API_ID = "wx63d7c5403fa29607"
 API_SECRET = "d4624c36b6795d1d99dcf0547af5443d"
 
+menu = {"button":[{"type":"click","name":"今日歌曲","key":"V1001_TODAY_MUSIC"},{"name":"菜单","sub_button":[{"type":"view","name":"你好","url":"http://www.qq.com/"},{"type":"click","name":"顶","key":"V1001_GOOD"}]}]}
+
 def menuCreate(body):
     client = WeChatClient(API_ID, API_SECRET)
     client.menu.delete()
@@ -42,7 +44,7 @@ def getStat(deviceId):
 def getOpenId(deviceType, deviceId):
     client = WeChatClient(API_ID, API_SECRET)
     return client.device.get_user_id(deviceType, deviceId)
-   
+
 def transMsg(deviceType, deviceId, user, content):
     client = WeChatClient(API_ID, API_SECRET)
     return client.device.send_message(deviceType, deviceId, user, content)
