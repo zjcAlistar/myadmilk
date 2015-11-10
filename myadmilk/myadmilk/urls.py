@@ -18,5 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^weixin', 'adWrist.views.test1',name='test1'),
     url(r'^', 'adWrist.views.test',name='test'),
 ]

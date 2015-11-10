@@ -78,8 +78,12 @@ WSGI_APPLICATION = 'myadmilk.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        "ENGINE": "django.db.backends.mysql", # Add "postgresql_psycopg2", "postgresql", "mysql", "sqlite3" or "oracle".
+        "NAME": "wrist",                       # Or path to database file if using sqlite3.
+        "USER": "root",                          # Not used with sqlite3.
+        "PASSWORD": "dhezzjc0117",                         # Not used with sqlite3.
+        "HOST": "127.0.0.1",                   # Set to empty string for localhost. Not used with sqlite3.
+        "PORT": "",                             # Set to empty string for default. Not used with sqlite3.
     }
 }
 
