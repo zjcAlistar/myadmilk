@@ -3,5 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 # Create your views here.
 import tools
 
+
 def test(request):
-    return tools.customSendText('olLDfvzIL2dJYDtHjmf4Pq4y60Pk','helloworld')
+    tools.customSendText('olLDfv5UjSjjKWQSIASeeyJYQHLg', 'nimabi')
+    tools.customSendImage('olLDfv5UjSjjKWQSIASeeyJYQHLg', 'gou.jpg')

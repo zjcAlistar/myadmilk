@@ -39,10 +39,12 @@ def getStat(deviceId):
     client = WeChatClient(API_ID, API_SECRET)
     return client.device.get_stat(deviceId)
 
+
 def getOpenId(deviceType, deviceId):
     client = WeChatClient(API_ID, API_SECRET)
     return client.device.get_user_id(deviceType, deviceId)
-   
+
+
 def transMsg(deviceType, deviceId, user, content):
     client = WeChatClient(API_ID, API_SECRET)
     return client.device.send_message(deviceType, deviceId, user, content)
