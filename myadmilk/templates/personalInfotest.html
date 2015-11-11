@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <meta charset="UTF-8">
+    <title>修改个人信息</title>
+</head>
+<body>
+<input id="height">身高</input>
+<input id="weight">体重</input>
+<input id="age">年龄</input>
+<input id="sex">性别</input>
+<button id="submit">提交</button>
+</body>
+<script type="text/javascript">
+    $("#submit").click(function(){
+        var openID = '{{ openID }}';
+        var height = $("#height").val();
+        var weight = $("#weight").val();
+        var age = $("#age").val();
+        var sex = $("#sex").val();
+        if(sex == '男') sex = true;
+        else sex = false;
+        $.get("/changeinfo/",{"openID":openID,"height":height,"weight":weight,"age":age,"sex":sex},function(ret){
+            if (ret == 'success') alert('成功');
+        });
+    });
+</script>
+</html>
