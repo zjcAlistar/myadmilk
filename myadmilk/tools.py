@@ -7,7 +7,15 @@ from wechatpy.client import WeChatClient
 API_ID = "wx63d7c5403fa29607"
 API_SECRET = "d4624c36b6795d1d99dcf0547af5443d"
 
-menu = {"button":[{"name":"个人信息","sub_button":[{"type":"click","name":"运动建议","key":"sports_advice"},{"type":"click","name":"修改信息","key":"change_info"}]},{"type":"click","name":"运动数据","key":"sports_data"}]}
+menu = {"button":
+            [{"name":"个人信息","sub_button":[
+                {"type":"click","name":"运动建议","key":"sports_advice"},
+                {"type":"click","name":"修改信息","key":"change_info"},
+                {"type":"click","name":"查看信息","key":"view_info"}]},
+             {"name":"运动数据","sub_button":[
+                 {"type":"click","name":"添加测试","key":"add_test"},
+                 {"type":"click","name":"查看今日","key":"show_today"},
+                 {"type":"click","name":"查看以往","key":"show_history"}]}]}
 
 def menuCreate(body):
     client = WeChatClient(API_ID, API_SECRET)

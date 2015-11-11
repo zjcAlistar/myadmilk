@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^weixin', 'adWrist.views.handleMsg',name='handleMsg'),
     url(r'^showinfo', 'adWrist.views.showInfopage',name='showInfopage'),
+    url(r'^showhistory', 'adWrist.views.showHistory',name='showHistory'),
     url(r'^changeinfo/$', 'adWrist.views.changeInfo',name='changeInfo'),
-
+    url(r'^checkprevious/$', 'adWrist.views.checkPrevious',name='checkPrevious'),
 ]

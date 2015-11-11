@@ -1,0 +1,64 @@
+    #infobox{
+        position: absolute;
+        border-radius: 20px;
+        background: #EEE;
+    }
+
+
+    .front_items{
+        position:absolute; 
+        left:20%;
+        height:6%;
+        font-family:STXihei; 
+        width:60%;
+        text-align: center;
+    }
+
+
+    #date{
+        position:absolute; 
+        height:6%;
+        left:20%;
+        font-family:STXihei; 
+        width:60%;
+        text-align: center;
+    }
+
+    #confirm{
+        position:absolute; 
+        height:6%;
+        left:20%;
+        font-family:STXihei; 
+        width:60%;
+        text-align: center;
+        background-color:#FFF;
+        border:1px solid #CDCDCD;
+    }
+
+    #databox{
+        position: absolute;
+        border-radius: 20px;
+        background: #1c4b34;
+    }
+
+    .data_items{
+        position: absolute;
+        left: 10%;
+        height: 10%;
+        font-family:STXihei;
+        color: white;
+        width:50%;
+        text-align: left;
+    }
+
+    .data{
+        position: absolute;
+        left: 65%;
+        height: 10%;
+        font-family:STXihei;
+        background-color:transparent;
+        border:0;
+        color: white;
+        width:30%;
+        text-align: center;
+    }

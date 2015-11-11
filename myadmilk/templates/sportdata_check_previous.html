@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>运动数据</title>
+    <link rel="stylesheet" href="../static/css/sportdata_check_previous.css" type="text/css">
+    <script type="text/javascript" src="../static/js/sportdata_check_previous.js"></script>
+    <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+</head>
+<body>
+
+    <div id = "infobox">
+        <div>
+            <div class="front_items" style="top:20%;">查看以往运动数据</div>
+            <input id = "date"  type="date" style="top:27%;">
+            <input id = "confirm" type="submit" style="top:37%;" value="确认" onclick="check_previous();"/>
+        </div>
+
+        <div id = "databox">
+            <div class="data_items" style="top:25%;">运动类型：</div>
+            <input id = "sporttype"class="data" type="text" disabled="true"   style="top:25%;"/>
+
+            <div class="data_items" style="top:45%;">运动量：</div>
+            <input id = "quantity"class="data" type="text" disabled="true"   style="top:45%;"/>
+
+            <div class="data_items" style="top:65%;">卡路里消耗：</div>
+            <input id = "calorie"class="data" type="text" disabled="true"   style="top:65%;"/>
+
+
+        </div>
+
+    </div>
+    <script>
+    	changesize();
+        var openID = '{{ openID }}'
+    </script>
+</body>
+</html>

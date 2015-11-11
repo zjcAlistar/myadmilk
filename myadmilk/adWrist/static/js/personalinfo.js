@@ -6,10 +6,15 @@ function changesize() {
 	$("#infobox").css({
 		"left": Width/10,
 		"top": Height/10,
-		"width": Width*0.8});
+		"width": Width*0.8,
+		"height": Height*0.8
+	});
 
-
+	var Fontsize = $("#infobox select").css("height");
+	$("#infobox select").css("font-size", parseInt(Fontsize)*0.7);
+	$("#confirm").css("font-size", parseInt(Fontsize)*0.7);
 }
+
 
 
 function confirm_personalinfo() {
@@ -142,7 +147,6 @@ function confirm_personalinfo() {
 			weight = 100;
 			break;
 	}
-
 	$.get("/changeinfo/", {"openID":openID, "sex":sex, "age":age, "height":height, "weight":weight}, function(ret){
 		if(ret == 'success') alert('成功');
 	});
