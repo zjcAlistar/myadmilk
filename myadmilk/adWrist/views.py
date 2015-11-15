@@ -1,21 +1,26 @@
 # encoding: utf-8
-from django.shortcuts import render,render_to_response
+from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from wechatpy.utils import check_signature
 from wechatpy import parse_message
 from wechatpy.replies import TextReply
 from django.views.decorators.csrf import csrf_exempt
-from adWrist.models import userlist,sportrecords
+from adWrist.models import userlist, sportrecords
 from datetime import *
+from urllib.request import *
+import json
 # Create your views here.
-import tools
 
-serverIP = 'http://59.66.139.66/'
+
+serverIP = 'http://59.66.139.14/'
+API_ID = "wx63d7c5403fa29607"
+API_SECRET = "d4624c36b6795d1d99dcf0547af5443d"
 TOKEN = 'admilk'
 
+
 @csrf_exempt
-def handleMsg(request):
+def handle_msg(request):
     if request.method == 'GET':
         signature = request.GET.get('signature')
         timestamp = request.GET.get('timestamp')
@@ -32,20 +37,16 @@ def handleMsg(request):
         if msg.type == 'event':
             if msg.event == 'click':
                 print(msg.key)
-                if msg.key == 'change_info':
-                    rep.content = '请点击下面的链接修改信息\n<a href="'+serverIP+'showinfo?openID='+ msg.source + '">修改信息</a>'
-                elif msg.key == 'sports_advice':
-                    rep.content = recommendPlan(msg.source)
+                if msg.key == 'sports_advice':
+                    rep.content = recommend_plan(msg.source)
                 elif msg.key == 'view_info':
-                    rep.content = getInfo(msg.source)
+                    rep.content = get_info(msg.source)
                 elif msg.key == 'add_test':
-                    rep.content = addTest(msg.source)
+                    rep.content = add_test(msg.source)
                 elif msg.key == 'show_today':
-                    rep.content = getDataToday(msg.source)
-                elif msg.key == 'show_history':
-                    rep.content = '请点击下面的链接进行查询\n<a href="'+serverIP+'showhistory?openID='+ msg.source + '">查看以往数据</a>'
+                    rep.content = get_datatoday(msg.source)
             elif msg.event == 'subscribe':
-                rep.content = createNewUser(msg.source)
+                rep.content = create_newuser(msg.source)
             else:
                 rep.content = '!!!'
         else:
@@ -53,60 +54,68 @@ def handleMsg(request):
         repxml = rep.render()
         return HttpResponse(repxml)
 
-def createNewUser(openID):
+
+def create_newuser(openID):
     try:
-        userlist.objects.get(user_open_id=openID)
-    except:
+        cur_user = userlist.objects.get(user_open_id=openID)
+    except userlist.DoesNotExist:
         new_user = userlist(
             user_open_id = openID
         )
         new_user.save()
-        return  '欢迎你，新用户'
+        return '欢迎你，新用户'
     else:
         return '欢迎你，老朋友'
 
-def showInfopage(request):
-    openID = request.GET.get('openID')
-    return render_to_response('personalInfo.html',{'openID':openID },context_instance=RequestContext(request))
 
-def addTest(openID):
+def show_info_page(request):
+    if request.method == 'GET':
+        code = request.GET.get('code')
+        openID = get_openid(code)
+        return render_to_response('personalInfo.html',{'openID':openID },context_instance=RequestContext(request))
+    else:
+        raise Http404
+
+
+def add_test(openID):
     try:
         cur_user = userlist.objects.get(user_open_id = openID)
-    except:
+    except userlist.DoesNotExist:
         rep = '好像出问题了，请填写信息'
     else:
         print(openID)
-        date1 = datetime.now()
-        date2 = datetime.now()
-        print('!!!')
-        new_record1 = sportrecords(
-            sportrecords_person_id = cur_user,
-            sportrecords_sport_type = '慢跑',
-            sportrecords_quantity = 2000,
-            sportrecords_calorie = 500
-        )
-        new_record2 = sportrecords(
-            sportrecords_person_id = cur_user,
-            sportrecords_sport_type = '走路',
-            sportrecords_quantity = 1000,
-            sportrecords_calorie = 200
-        )
-        new_record1.save()
-        new_record2.save()
-        new_record1.sportrecords_end_time = date1
-        new_record2.sportrecords_end_time = date2
-        new_record1.save()
-        new_record2.save()
+        date = datetime.now()
+        for i in range(7):
+            new_record1 = sportrecords(
+                sportrecords_person_id=cur_user,
+                sportrecords_sport_type='慢跑',
+                sportrecords_quantity=2000,
+                sportrecords_calorie=500
+            )
+            new_record2 = sportrecords(
+                sportrecords_person_id=cur_user,
+                sportrecords_sport_type='走路',
+                sportrecords_quantity=1000,
+                sportrecords_calorie=200
+            )
+            new_record1.save()
+            new_record2.save()
+            new_record1.sportrecords_end_time = date + timedelta(days=-i)
+            new_record2.sportrecords_end_time = date + timedelta(days=-i)
+            new_record1.save()
+            new_record2.save()
         rep = '添加成功'
     return rep
 
-def getDataToday(openID):
+
+def get_datatoday(openID):
     try:
-        cur_user = userlist.objects.get(user_open_id = openID)
-    except:
+        cur_user = userlist.objects.get(user_open_id=openID)
+    except userlist.DoesNotExist:
         rep = '好像出问题了，请填写信息'
     else:
-        cur_data = sportrecords.objects.filter(sportrecords_person_id = cur_user, sportrecords_end_time__startswith = datetime.today().date())
+        cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user,
+                                               sportrecords_end_time__startswith=datetime.today().date())
         if cur_data :
             walk_quantity = 0
             slow_run_quantity = 0
@@ -124,13 +133,14 @@ def getDataToday(openID):
             rep = '没查到数据'
     return rep
 
-def getInfo(openID):
+
+def get_info(openID):
     try:
         cur_user = userlist.objects.get(user_open_id=openID)
     except userlist.DoesNotExist:
         rep = '您还没有填写个人信息'
     else:
-        if cur_user.user_comfirmed:
+        if cur_user.user_confirmed:
             age = cur_user.user_age
             if cur_user.user_sex:
                 sex = '男'
@@ -143,13 +153,14 @@ def getInfo(openID):
             rep = '您还没有填写个人信息'
     return rep
 
-def recommendPlan(openID):
+
+def recommend_plan(openID):
     try:
         cur_user = userlist.objects.get(user_open_id=openID)
     except userlist.DoesNotExist:
         plan = '您还没有填写个人信息'
     else:
-        if cur_user.user_comfirmed:
+        if cur_user.user_confirmed:
             if cur_user.user_sex:
                 bmr = 66 + 13.7*cur_user.user_weight + 5*cur_user.user_height - 6.8*cur_user.user_age
             else:
@@ -173,58 +184,86 @@ def recommendPlan(openID):
                 caladvise = bmr * 0.375
             rundistance = caladvise*1.6/100
             walkdistance = caladvise/52
-            plan = "您的身体状况是：" + msg + "\n每天建议额外消耗:" + str(int(caladvise)) + "大卡\n即慢跑：" + str(int(rundistance)) + "公里\n或走路：" + str(int(walkdistance)) + "公里\n"
+            plan = "您的身体状况是：" + msg + "\n每天建议额外消耗:" + str(int(caladvise)) + "大卡\n即慢跑：" + \
+                   str(int(rundistance)) + "公里\n或走路：" + str(int(walkdistance)) + "公里\n"
         else:
             plan = '您还没有填写个人信息'
-        return plan
+    return plan
 
-def changeInfo(request):
+
+def change_info(request):
     if request.method == 'GET':
         openID = request.GET.get('openID')
-        sex = request.GET.get('sex')
-        age = request.GET.get('age')
-        height = request.GET.get('height')
-        weight = request.GET.get('weight')
-        try:
-            cur_user = userlist.objects.get(user_open_id=openID)
-        except userlist.DoesNotExist:
-            newuser = userlist(
-                user_open_id  =  openID,
-                user_age = age,
-                user_sex = sex,
-                user_height = height,
-                user_weight = weight,
-                user_comfirmed = True
-            )
-            newuser.save()
-        else:
-            cur_user.user_age = age
-            cur_user.user_sex = sex
-            cur_user.user_height = height
-            cur_user.user_weight = weight
-            cur_user.user_comfirmed = True
-            cur_user.save()
-        return HttpResponse('success')
+        type = request.GET.get('type')
+        if type == 'init':
+            try:
+                cur_user = userlist.objects.get(user_open_id=openID)
+            except userlist.DoesNotExist:
+                new_user = userlist(
+                    user_open_id = openID
+                )
+                new_user.save()
+                return JsonResponse({"age": new_user.user_age, "sex": new_user.user_sex, "weight": new_user.user_weight,
+                                     "height": new_user.user_height})
+            else:
+                return JsonResponse({"age": cur_user.user_age, "sex": cur_user.user_sex, "weight": cur_user.user_weight,
+                                     "height": cur_user.user_height})
+        elif type == 'confirm':
+            sex = request.GET.get('sex')
+            if sex == 'true':
+                sex = True
+            else:
+                sex = False
+            age = request.GET.get('age')
+            height = request.GET.get('height')
+            weight = request.GET.get('weight')
+            try:
+                cur_user = userlist.objects.get(user_open_id=openID)
+            except userlist.DoesNotExist:
+                newuser = userlist(
+                    user_open_id=openID,
+                    user_age=age,
+                    user_sex=sex,
+                    user_height=height,
+                    user_weight=weight,
+                    user_confirmed=True
+                )
+                newuser.save()
+            else:
+                cur_user.user_age = age
+                cur_user.user_sex = sex
+                cur_user.user_height = height
+                cur_user.user_weight = weight
+                cur_user.user_confirmed = True
+                cur_user.save()
+            return HttpResponse('success')
+    else:
+        raise Http404
 
-def showHistory(request):
-    openID = request.GET.get('openID')
-    return render_to_response('sportdata_check_previous.html',{'openID':openID },context_instance=RequestContext(request))
+def show_history(request):
+    if request.method == 'GET':
+        code = request.GET.get('code')
+        openID = get_openid(code)
+        return render_to_response('sportdata_check_previous.html', {'openID': openID},
+                                  context_instance=RequestContext(request))
+    else:
+        raise Http404
 
-def checkPrevious(request):
+
+def check_previous(request):
     if request.method == 'GET':
         openID = request.GET.get('openID')
         year = request.GET.get('year')
         month = request.GET.get('month')
         day = request.GET.get('day')
         try:
-            cur_user = userlist.objects.get(user_open_id = openID)
-        except:
-            rep = {"flag":'failed'}
+            cur_user = userlist.objects.get(user_open_id=openID)
+        except userlist.DoesNotExist:
+            rep = {"flag": 'failed'}
         else:
-            print(year,month,day)
-            cur_data = sportrecords.objects.filter(sportrecords_person_id = cur_user, sportrecords_end_time__startswith = date(int(year),int(month),int(day)))
-            print(year,month,day)
-            if cur_data :
+            cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user,
+                                                   sportrecords_end_time__startswith=date(int(year), int(month), int(day)))
+            if cur_data:
                 walk_quantity = 0
                 slow_run_quantity = 0
                 walk_calorie = 0
@@ -236,11 +275,80 @@ def checkPrevious(request):
                     elif single_data.sportrecords_sport_type == '走路':
                         walk_quantity += single_data.sportrecords_quantity
                         walk_calorie += single_data.sportrecords_calorie
-                rep = {"flag":'success',"sporttype":'走路',"quantity":walk_quantity,"calorie":walk_calorie}
+                rep = {"flag": 'success', "sporttype": '走路', "quantity": walk_quantity, "calorie": walk_calorie}
             else:
-                rep = {"flag":'failed'}
+                rep = {"flag": 'failed'}
         return JsonResponse(rep)
 
-def test(request):
-    tools.customSendText('olLDfvzIL2dJYDtHjmf4Pq4y60Pk','hello')
+
+def oauth_test(request):
+    if request.method == 'GET':
+        code = request.GET.get('code')
+        openID = get_openid(code)
+        return HttpResponse(openID)
+    else:
+        raise Http404
+
+
+def show_chart(request):
+    if request.method == 'GET':
+        code = request.GET.get('code')
+        openID = get_openid(code)
+        return render_to_response('pedometer.html', {'openID': openID},
+                                  context_instance=RequestContext(request))
+    else:
+        raise Http404
+
+
+def get_openid(code):
+    url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + API_ID + '&secret=' + API_SECRET + \
+              '&code=' + code + '&grant_type=authorization_code'
+    res_data = urlopen(url)
+    res = res_data.read()
+    resj = json.loads(res.decode('utf-8'))
+    openID = resj['openid']
+    return openID
+
+def get_steps(request):
+    if request.method == 'GET':
+        openID = request.GET.get('openID')
+        type = request.GET.get('type')
+        if type == 'init':
+            cur_date = datetime.today().date()
+            print(cur_date)
+        else:
+            datestr = request.GET.get('date')
+            datelist = datestr.split('-')
+            cur_date = date(int(datelist[0]),int(datelist[1]),int(datelist[2]))
+            if type == 'next':
+                cur_date += timedelta(days=1)
+            elif type == 'previous':
+                cur_date += timedelta(days=-1)
+        try:
+            cur_user = userlist.objects.get(user_open_id = openID)
+        except userlist.DoesNotExist:
+            rep = {"goal": 0, "steps": 0, "distance": 0, "cal": 0}
+        else:
+            cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user,
+                                               sportrecords_end_time__startswith=cur_date)
+            if cur_data:
+                print(cur_data)
+                walk_quantity = 0
+                walk_calorie = 0
+                for single_data in cur_data:
+                    if single_data.sportrecords_sport_type == '走路':
+                        walk_quantity += single_data.sportrecords_quantity
+                        walk_calorie += single_data.sportrecords_calorie
+                dist = float(str('%.2f' % (walk_quantity*0.5/1000)))
+                goal = 20000
+                rep = {"goal": goal, "steps": walk_quantity, "distance": dist,  "cal": walk_calorie}
+            else:
+                rep = {"goal": 0, "steps": 0, "distance": 0, "cal": 0}
+        if type != 'someday':
+            rep['date'] = str(cur_date)
+        print(rep)
+        return JsonResponse(rep)
+    else:
+        raise Http404
+
 

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人信息</title>
+    <link rel="stylesheet" href="../static/css/pedometer.css" type="text/css">
+    <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <script src="../static/js/pedometer.js"></script>
+    <script src="../static/js/Chart.min.js"></script>
+</head>
+<body style="background:black;">
+	<div id = "titlebox">
+		<nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+		<nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
+	</div>
+    <div id = "infobox">
+       	<div id = "top"> 
+	       	<button id="next">next</button>
+	        <input id = "date" type="date"/>
+	        <button id="previous">previous</button>
+       	</div>
+       	<div id = "middle">
+	        <canvas id = "DoughnutChart"></canvas>
+	        <div id="text">
+	        	<a id = "steps">1</a>|<a id="distance">2</a>|<a id="cal">3</a>
+       		</div>
+       	</div>
+	    <div id = "bottom">
+	        <button id = "showchart">showchart</button>
+       	</div>
+    </div>
+    <script type="text/javascript">
+    	changesize();
+        var openID = '{{ openID }}'
+    </script>
+</body>
+</html>

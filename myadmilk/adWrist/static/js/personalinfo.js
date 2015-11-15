@@ -1,157 +1,233 @@
-﻿
+﻿var Height = $(window).height();
+var Width = $(window).width();
 
 function changesize() {
-	var Height = $(window).height();
-	var Width = $(window).width();
+
+	$("#titlebox").css({
+		"width": Width,
+		"height": Height*0.1
+	});
+
+	$("#titlebox_text1").css("font-size", Height*0.06);
+	$("#titlebox_text2").css("font-size", Height*0.07);
+
 	$("#infobox").css({
-		"left": Width/10,
-		"top": Height/10,
-		"width": Width*0.8,
-		"height": Height*0.8
+		"width": Width,
+		"height": Height*0.898
 	});
 
-	var Fontsize = $("#infobox select").css("height");
-	$("#infobox select").css("font-size", parseInt(Fontsize)*0.7);
+	$(".sex").css({
+		"width": Width*0.35,
+		"height": Width*0.35/0.188*0.107
+	});
+	$("#sex").css({
+		"width": Width*0.35,
+		"height": Width*0.35/0.188*0.107
+	});
+	$("#sex_man").css({
+		"width": Width*0.35,
+		"height": Width*0.35/0.188*0.107
+	});
+	$("#sex_woman").css({
+		"width": Width*0.35,
+		"height": Width*0.35/0.188*0.107
+	});
+	$("#sex_text").css({
+		"left": 0,
+		"top": Width*0.35/0.188*0.107*0.8,
+		"width": Width*0.35,
+		"height": Width*0.35/0.188*0.107*0.2,
+		 //"line-height": Width*0.35/0.188*0.107*0.5,
+		 // "font-size": Width*0.35/0.188*0.107*0.5
+		"font-size": Width*0.35/0.188*0.107*0.13,
+		"font-family": "SimHei"
+	});
+	$(".age").css({
+		"width": Width*0.35,
+		"height": Width*0.35/0.188*0.107
+	});
+	$("#age_text").css({
+		"left": 0,
+		"top": Width*0.35/0.188*0.107*0.8,
+		"width": Width*0.35,
+		"height": Width*0.35/0.188*0.107*0.2,
+		 //"line-height": Width*0.35/0.188*0.107*0.5,
+		 // "font-size": Width*0.35/0.188*0.107*0.5
+		"font-size": Width*0.35/0.188*0.107*0.13,
+		"font-family": "SimHei"
+	});
+	$("#age").css({
+		"width": Width*0.35,
+		"height": Width*0.35/0.188*0.107*0.7,
+		 //"line-height": Width*0.35/0.188*0.107*0.5,
+		 "font-size": Width*0.35/0.188*0.107*0.5
+	});
+	$(".weight").css({
+		"width": Width*0.35,
+		"height": Width*0.35/0.188*0.107
+	});
+	$("#weight").css({
+		"width": Width*0.35,
+		"height": Width*0.35/0.188*0.107*0.7,
+		//"line-height": Width*0.35/0.188*0.107*0.5,
+		"font-size": Width*0.35/0.188*0.107*0.5
+	});
+	$("#weight_text").css({
+		"left": 0,
+		"top": Width*0.35/0.188*0.107*0.8,
+		"width": Width*0.35,
+		"height": Width*0.35/0.188*0.107*0.2,
+		 //"line-height": Width*0.35/0.188*0.107*0.5,
+		 // "font-size": Width*0.35/0.188*0.107*0.5
+		"font-size": Width*0.35/0.188*0.107*0.13,
+		"font-family": "SimHei"
+	});
+	$(".height").css({
+		"width": Width*0.35,
+		"height": Width*0.35/0.188*0.107
+	});
+	$("#height").css({
+		"width": Width*0.35,
+		"height": Width*0.35/0.188*0.107*0.7,
+		//"line-height": Width*0.35/0.188*0.107*0.5,
+		"font-size": Width*0.35/0.188*0.107*0.5
+	});
+	$("#height_text").css({
+		"left": 0,
+		"top": Width*0.35/0.188*0.107*0.8,
+		"width": Width*0.35,
+		"height": Width*0.35/0.188*0.107*0.2,
+		 //"line-height": Width*0.35/0.188*0.107*0.5,
+		 // "font-size": Width*0.35/0.188*0.107*0.5
+		"font-size": Width*0.35/0.188*0.107*0.13,
+		"font-family": "SimHei"
+	});
+	var Fontsize = $("#confirm").css("height");
 	$("#confirm").css("font-size", parseInt(Fontsize)*0.7);
+};
+
+var defaultAge;
+var defaultSex;
+var defaultWeight;
+var defaultHeight;
+
+var sex;
+
+window.onload = function(){
+
+	$.get("/changeinfo/",{"openID":openID,"type":"init"},function(ret){
+		defaultAge = ret.age;
+		defaultSex = ret.sex;
+		defaultHeight = ret.height;
+		defaultWeight = ret.weight;
+		if (defaultAge != -1) {
+			$("#age").val(defaultAge);
+		};
+		if (defaultWeight != -1) {
+			$("#weight").val(defaultWeight);
+		};
+		if (defaultHeight != -1) {
+			$("#height").val(defaultHeight);
+		};
+		if(defaultSex) {
+			$('#sex_man').css("visibility", "visible");
+			$('#sex').css("visibility", "hidden");
+			$('#sex_woman').css("visibility", "hidden");
+		}
+		else {
+			$('#sex_man').css("visibility", "hidden");
+			$('#sex').css("visibility", "hidden");
+			$('#sex_woman').css("visibility", "visible");
+		}
+		//sex
+	});
 }
 
-
-
-function confirm_personalinfo() {
-	var tsex = $("#sex").val();
-	var tage = $("#age").val();
-	var theight = $("#height").val();
-	var tweight = $("#weight").val();
-
-	var sex;
-	if (tsex == "0") {
-		sex = false;
-	}
-	else{
-		sex = true;
-	}
-
-	var age;
-	switch(tage) {
-		case "1":
-			age = 2;
-			break;
-		case "2":
-			age = 7;
-			break;
-		case "3":
-			age = 12;
-			break;
-		case "4":
-			age = 17;
-			break;
-		case "5":
-			age = 22;
-			break;
-		case "6":
-			age = 27;
-			break;
-		case "7":
-			age = 35;
-			break;
-		case "8":
-			age = 45;
-			break;
-		case "9":
-			age = 55;
-			break;
-		case "10":
-			age = 60;
-			break;
-	}
-
-	var height;
-	switch(theight) {
-		case "1":
-			height = 119;
-			break;
-		case "2":
-			height = 125;
-			break;
-		case "3":
-			height = 135;
-			break;
-		case "4":
-			height = 145;
-			break;
-		case "5":
-			height = 155;
-			break;
-		case "6":
-			height = 165;
-			break;
-		case "7":
-			height = 175;
-			break;
-		case "8":
-			height = 185;
-			break;
-		case "9":
-			height = 195;
-			break;
-	}
-
-	var weight;
-		switch(tweight) {
-		case "1":
-			weight = 29;
-			break;
-		case "2":
-			weight = 32;
-			break;
-		case "3":
-			weight = 37;
-			break;
-		case "4":
-			weight = 42;
-			break;
-		case "5":
-			weight = 47;
-			break;
-		case "6":
-			weight = 52;
-			break;
-		case "7":
-			weight = 57;
-			break;
-		case "8":
-			weight = 62;
-			break;
-		case "9":
-			weight = 67;
-			break;
-		case "10":
-			weight = 72;
-			break;
-		case "11":
-			weight = 77;
-			break;
-		case "12":
-			weight = 82;
-			break;
-		case "13":
-			weight = 87;
-			break;
-		case "14":
-			weight = 92;
-			break;
-		case "15":
-			weight = 97;
-			break;
-		case "16":
-			weight = 100;
-			break;
-	}
-	$.get("/changeinfo/", {"openID":openID, "sex":sex, "age":age, "height":height, "weight":weight}, function(ret){
-		if(ret == 'success') alert('成功');
+	$(function(){
+		$('.sex').click(function(event){
+			var objLeft = $("#sex").offset().left;//对象x位置
+			var objWidth = $("#sex").width();//对象宽度
+			var mouseX = event.clientX + document.body.scrollLeft;//鼠标x位置
+			//计算点击的相对位置
+			var objX = mouseX - parseInt(objLeft);
+			if(objX < parseInt(objWidth) / 2) {
+				$('#sex_man').css("visibility", "visible");
+				$('#sex').css("visibility", "hidden");
+				$('#sex_woman').css("visibility", "hidden");
+				sex = true;
+			} else {
+				$('#sex_man').css("visibility", "hidden");
+				$('#sex').css("visibility", "hidden");
+				$('#sex_woman').css("visibility", "visible");
+				sex = false;
+			}
+		});
 	});
 
-}
+$(function(){
+	$("#age").blur(function(){
+		var age = Number($("#age").val());
+		if(age=="" || !isNaN(age)&&age>0&&age<150){
+			$("#age_data").innerHTML = 'age';
+			$("#age").css("visibility", "visible");
+			
+		}
+		else{
+			alert("格式错误");
+			console.info(typeof(age));
+			$("#age").val("");
+		}
+	});
+});
+
+$(function(){
+	$("#weight").blur(function(){
+		var weight =  Number($("#weight").val());
+		if(weight=="" || !isNaN(weight)&&weight>0&&weight<300){
+
+		}
+		else{
+			alert("格式错误");
+			$("#weight").val("");
+		}
+	});
+});
+
+$(function(){
+	$("#height").blur(function(){
+		var height =  Number($("#height").val());
+		if(height=="" || !isNaN(height)&&height>0&&height<250){
+
+		}
+		else{
+			alert("格式错误");
+			$("#height").val("");
+		}
+	});
+});
+
+$(function(){
+	$("#confirm").click(function(){
+		var age = Number($("#age").val());
+		var height = Number($("#height").val());
+		var weight = Number($("#weight").val());
+		if (age!=""&&weight!=""&&height!="") {
+			$.get("/changeinfo/",{"openID":openID,"type":"confirm","age":age,"sex":sex,"height":height,"weight":weight},function(ret){
+				if(ret == 'success'){
+					alert("修改成功");
+				}
+				else{
+					alert("修改失败");
+				}
+			})
+		}
+		else{
+			alert("请填完整的信息");
+		}
+	});
+});
+
+
 
 
 

@@ -81,7 +81,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql", # Add "postgresql_psycopg2", "postgresql", "mysql", "sqlite3" or "oracle".
         "NAME": "wrist",                       # Or path to database file if using sqlite3.
         "USER": "root",                          # Not used with sqlite3.
-        "PASSWORD": "dhezzjc0117",                         # Not used with sqlite3.
+        "PASSWORD": "",                         # Not used with sqlite3.
         "HOST": "127.0.0.1",                   # Set to empty string for localhost. Not used with sqlite3.
         "PORT": "",                             # Set to empty string for default. Not used with sqlite3.
     }
@@ -93,13 +93,13 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

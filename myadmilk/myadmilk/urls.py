@@ -18,9 +18,12 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^weixin', 'adWrist.views.handleMsg',name='handleMsg'),
-    url(r'^showinfo', 'adWrist.views.showInfopage',name='showInfopage'),
-    url(r'^showhistory', 'adWrist.views.showHistory',name='showHistory'),
-    url(r'^changeinfo/$', 'adWrist.views.changeInfo',name='changeInfo'),
-    url(r'^checkprevious/$', 'adWrist.views.checkPrevious',name='checkPrevious'),
+    url(r'^weixin', 'adWrist.views.handle_msg',name='handle_msg'),
+    url(r'^showinfo', 'adWrist.views.show_info_page',name='show_info_page'),
+    url(r'^showhistory', 'adWrist.views.show_history',name='show_history'),
+    url(r'^changeinfo/$', 'adWrist.views.change_info',name='change_info'),
+    url(r'^checkprevious/$', 'adWrist.views.check_previous',name='check_previous'),
+    url(r'^showchart', 'adWrist.views.show_chart', name='show_chart'),
+    url(r'^getsteps', 'adWrist.views.get_steps', name='get_steps'),
+    url(r'^oauth', 'adWrist.views.oauth_test',name='oauth_test'),
 ]

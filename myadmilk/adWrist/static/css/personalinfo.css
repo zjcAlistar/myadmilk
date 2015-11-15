@@ -1,17 +1,29 @@
+    #titlebox{
+    	position: absolute;
+        height:350px;
+        top:0px;
+        left:0px;
+        border-bottom: 1px solid white;
+        color:white;
+    	font-family:STXihei;
+    	text-align: center;
+    }
     #infobox{
         position: absolute;
-        border-radius: 20px;
+        left: 0px;
+        bottom: 0px;
+        border-radius: 50px;
         height:350px;
-        background: #EEE;
+        background: #F3F3F3;
     }
-    .front_items{
+    /*.front_items{
         position:absolute; 
         left:10%;
         height:30px;
         font-family:STXihei; 
         font-size:50px; 
         width:280px;
-    }
+    }*/
     .input_items{
         position:absolute; 
         left:10%;
@@ -20,58 +32,133 @@
         font-size:15px; 
         width:80%; 
     }
+
     #confirm{
-        position:absolute;
-        bottom:3%;
-        right:8%;
-        height: 6%;
-        width: 20%;
+        position:absolute; 
+    	bottom:3%; 
+    	right:8%;
+    	height: 6%;
+    	width: 20%;
         font-family:STXihei;
         background-color:#FFF;
         border:1px solid #CDCDCD;
     }
-/*#confirm {*/
-	/*position:absolute; */
-    /*bottom:3%; */
-    /*right:8%;*/
-    /*height: 6%;*/
-    /*width: 20%;*/
-	/*-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;*/
-	/*-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;*/
-	/*box-shadow:inset 0px 1px 0px 0px #ffffff;*/
-	/*background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf));*/
-	/*background:-moz-linear-gradient(top, #ededed 5%, #dfdfdf 100%);*/
-	/*background:-webkit-linear-gradient(top, #ededed 5%, #dfdfdf 100%);*/
-	/*background:-o-linear-gradient(top, #ededed 5%, #dfdfdf 100%);*/
-	/*background:-ms-linear-gradient(top, #ededed 5%, #dfdfdf 100%);*/
-	/*background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);*/
-	/*filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf',GradientType=0);*/
-	/*background-color:#ededed;*/
-	/*border:1px solid #dcdcdc;*/
-	/*display:inline-block;*/
-	/*cursor:pointer;*/
-	/*color:#777777;*/
-	/*font-family:Arial;*/
-	/*font-weight:bold;*/
-	/*padding:6px 12px;*/
-	/*text-decoration:none;*/
-/*}*/
-/*#confirm:hover {*/
-	/*background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed));*/
-	/*background:-moz-linear-gradient(top, #dfdfdf 5%, #ededed 100%);*/
-	/*background:-webkit-linear-gradient(top, #dfdfdf 5%, #ededed 100%);*/
-	/*background:-o-linear-gradient(top, #dfdfdf 5%, #ededed 100%);*/
-	/*background:-ms-linear-gradient(top, #dfdfdf 5%, #ededed 100%);*/
-	/*background:linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);*/
-	/*filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed',GradientType=0);*/
-	/*background-color:#dfdfdf;*/
-/*}*/
-/*#confirm:active {*/
-	/*position:relative;*/
-	/*top:1px;*/
-/*}*/
 
-#infobox  select {
-    border-radius: 10px;
-    height:5%;
-}
+	.sex{
+		position:absolute;
+		top:40%;
+		left:10%;
+		border-radius: 10px;
+		border: 2px solid #EDEDED;
+		text-align: center;
+	}
+
+	#sex {
+		visibility:visible;
+		z-index:1;
+	}
+
+    #sex_man{
+    	visibility:hidden;
+		position:absolute;
+		top:0;
+		left:0;
+		border-radius: 10px;
+		border: 2px solid #EDEDED;
+		z-index:1;
+	}
+
+	#sex_woman{
+    	visibility:hidden;
+		position:absolute;
+		top:0;
+		left:0;
+		border-radius: 10px;
+		border: 2px solid #EDEDED;
+		z-index:1;
+	}
+	
+	#sex_text{
+		position: absolute;
+		z-index:2;
+	}
+
+	.age{
+		position: absolute;
+		top:40%;
+		left: 55%;
+		border-radius: 10px;
+		border: none;
+		background: #EBEBEB;
+		text-align: center;
+	}
+	#age{
+		position: absolute;
+		top:0;
+		left: 0;
+		border-radius: 10px;
+		border: none;
+		background: #EBEBEB;
+		text-align: center;
+	}
+
+	#age_text{
+		position: absolute;
+	}
+
+/*	#age_data{
+		position: absolute;
+		top:0;
+		left: 0;
+		border-radius: 10px;
+		background: #EBEBEB;
+		text-align: center;
+		visibility: hidden;
+	}*/
+	#age_tip{
+
+	}
+
+	.weight{
+		position: absolute;
+		top:60%;
+		left: 10%;
+		border-radius: 10px;
+		border: none;
+		background: #EBEBEB;
+		text-align: center;
+	}
+	#weight{
+		position: absolute;
+		top:0;
+		left: 0;
+		border-radius: 10px;
+		border: none;
+		background: #EBEBEB;
+		text-align: center;
+	}
+	#weight_text{
+		position: absolute;
+	}
+
+	.height{
+		position: absolute;
+		top:60%;
+		left: 55%;
+		border-radius: 10px;
+		border: none;
+		background: #EBEBEB;
+		text-align: center;
+	}
+	#height{
+		position: absolute;
+		top:0;
+		left: 0;
+		border-radius: 10px;
+		border: none;
+		background: #EBEBEB;
+		text-align: center;
+	}
+	#height_text{
+		position: absolute;
+	}

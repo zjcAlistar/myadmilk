@@ -7,71 +7,37 @@
     <meta http-equiv="Expires" content="0" />
     <title>个人信息</title>
     <link rel="stylesheet" href="../static/css/personalinfo.css" type="text/css">
-    <script type="text/javascript" src="../static/js/personalinfo.js"></script>
     <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <script type="text/javascript" src="../static/js/personalinfo.js"></script>
 </head>
-<body>
-
+<body style="background:black;">
+	<div id = "titlebox">
+		<nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+		<nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
+	</div>
     <div id = "infobox">
-        <div>
-            <div class="front_items" style="top:10%;">性别：</div>
-            <select id="sex" class="input_items"style="top:17%;">
-            	<option value="1">男</option>
-            	<option value="0">女</option>
-            </select>
-        </div>
-        <div>
-            <div class="front_items" style="top:30%;">年龄：</div>
-            <select id="age"class="input_items"style="top:37%;">
-            	<option value="1">0~4(岁)</option>
-            	<option value="2">5~9</option>
-            	<option value="3">10~14</option>
-            	<option value="4">15~19</option>
-            	<option value="5">20~24</option>
-            	<option value="6">24~30</option>
-            	<option value="7">31~40</option>
-            	<option value="8">41~50</option>
-            	<option value="9">51~60</option>
-            	<option value="10">>61</option>
-            </select>
-        </div>
-        <div>
-            <div class="front_items" style="top:50%;">身高：</div>
-            <select id="height" class="input_items"style="top:57%;">
-            	<option value="1">&lt119(厘米)</option>
-            	<option value="2">120~129</option>
-            	<option value="3">130~139</option>
-            	<option value="4">140~149</option>
-            	<option value="5">150~159</option>
-            	<option value="6">160~169</option>
-            	<option value="7">170~179</option>
-            	<option value="8">180~189</option>
-            	<option value="9">&gt190</option>
-            </select>
-        </div>
-        <div>
-            <div class="front_items" style="top:70%;">体重：</div>
-            <select id="weight" class="input_items"style="top:77%;">
-            	<option value="1">&lt29(千克)</option>
-            	<option value="2">30~34</option>
-            	<option value="3">35~40</option>
-            	<option value="4">40~44</option>
-            	<option value="5">45~49</option>
-            	<option value="6">50~54</option>
-            	<option value="7">55~59</option>
-            	<option value="8">60~64</option>
-            	<option value="9">65~69</option>
-            	<option value="10">70~74</option>
-            	<option value="11">75~79</option>
-            	<option value="12">80~84</option>
-            	<option value="13">85~89</option>
-            	<option value="14">90~94</option>
-            	<option value="15">95~99</option>
-            	<option value="16">&gt100</option>
-            </select>
-        </div>
+     	<div class="sex">
+       		<img id="sex" src="../static/img/sex.png">
+			<img id="sex_man" src="../static/img/sex_man.png">
+			<img id="sex_woman" src="../static/img/sex_woman.png">
+			<div id="sex_text">性别</div>
+		</div>
+    	<div class="age">
+    		<input type="text" id="age"/>
+    		<div id="age_text">年龄</div>
+    	</div>
 
-        <input id="confirm" type="submit" name="signup" value="确认" onclick="confirm_personalinfo()"/>
+    	<div class="weight">
+			<input type="text" id="weight"/>
+			<div id="weight_text">体重</div>
+		</div>
+
+		<div class="height">
+			<input type="text" id="height"/>
+			<div id="height_text">身高</div>
+		</div>
+
+        <input id="confirm" type="submit" name="signup" value="确认"/>
 
     </div>
     <script>
