@@ -10,13 +10,14 @@ from adWrist.models import userlist, sportrecords
 from datetime import *
 from urllib.request import *
 import json
+import config
 # Create your views here.
 
 
-serverIP = 'http://59.66.139.14/'
-API_ID = "wx63d7c5403fa29607"
-API_SECRET = "d4624c36b6795d1d99dcf0547af5443d"
-TOKEN = 'admilk'
+serverIP = config.serverIP
+API_ID = config.API_ID
+API_SECRET = config.API_SECRET
+TOKEN = config.TOKEN
 
 
 @csrf_exempt
