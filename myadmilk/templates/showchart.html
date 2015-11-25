@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>综合统计</title>
+    <link rel="stylesheet" href="../static/css/showchart.css" type="text/css">
+    <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <script src="../static/js/Chart.min.js"></script>
+</head>
+<body style="background:black;">
+    <div id = "titlebox">
+        <nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+        <nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
+    </div>
+    <div id = "infobox">
+        <img src="../static/img/run02.jpg" style="position:fixed;width:100%;height:100%;"/>
+        <div id = "top"> 
+            <button id="next">后<br>一<br>天</button>
+            <input id = "date" type="date"/>
+            <button id="previous">前<br>一<br>天</button>
+        </div>
+        <div id = "middle">
+            <div id="chart_background">
+            </div>
+            <canvas id = "barChart"></canvas>
+        </div>
+        <div id = "bottom">
+            <button id = "pedometer">返回</button>
+        </div>
+    </div>
+    <script type="text/javascript">
+        changesize();
+        var openID = '{{ openID }}'
+        var canvas;
+        var ctx;
+        var barChart;
+        var date;
+        var data;
+        function changesize() {
+            var Height = $(window).height();
+            var Width = $(window).width();
+            $("#titlebox").css({
+                "width": Width,
+                "height": Height*0.1
+            });
+        
+            $("#titlebox_text1").css("font-size", Height*0.06);
+            $("#titlebox_text2").css("font-size", Height*0.07);
+        
+            $("#infobox").css({
+                "width": Width,
+                "height": Height*0.898
+            });
+            $('#previous').css("font-size", Height*0.9*0.2*0.6*0.25);
+            $('#next').css("font-size", Height*0.9*0.2*0.6*0.25);
+            $('#date').css("font-size", Height*0.9*0.2*0.6*0.35);
+            $('#text').css("font-size", Height*0.9*0.6*0.15*0.35);
+            $('#pedometer').css("font-size", Height*0.9*0.2*0.4*0.5);
+            
+            // var Fontsize = $("#confirm").css("height");
+            // $("#confirm").css("font-size", parseInt(Fontsize)*0.7);
+        };
+        window.onload = function(){
+            canvas = document.getElementById("barChart");
+            ctx = canvas.getContext("2d");
+            $.get("/getweekdata/",{"openID":openID,"type":"init7","nums":7},function(ret){
+                data = new Object;
+                data.labels = new Array(7);
+                data.datasets = new Array();
+                data.datasets[0] = {
+                    fillColor: "rgba(0,0,0,0.5)",
+                    strokeColor: "rgba(0,0,0,0.5)",
+                    highlightFill: "rgba(220,220,220,0.75)",
+                    highlightStroke: "rgba(220,220,220,1)"
+                };
+                data.datasets[0].data = new Array();
+                for (var i = 0; i < 7; i++) {
+                    data.labels[i] = ret[i].date;
+                    data.datasets[0].data[i] = Number(ret[i].steps);
+                };
+                $("#date").val(ret[6].date);
+                barChart = new Chart(ctx).Bar(data);
+            })
+            
+        };
+
+        //click next to check next day
+        $("#next").click(function(){
+            $.get("/getweekdata/",{"openID":openID, "type":"next","date":data.labels[6],"nums": 1},function(ret){
+                data.labels.shift();
+                data.labels.push(ret.date);
+                data.datasets[0].data.shift();
+                data.datasets[0].data.push(Number(ret.steps));
+                $("#date").val(ret.date);
+                barChart.destroy();
+                barChart = new Chart(ctx).Bar(data);
+            })
+            
+        });
+        //click previous to check previous day
+        $("#previous").click(function(){
+            $.get("/getweekdata/",{"openID":openID,"type":"previous","date":data.labels[0],"nums":1},function(ret){
+                data.labels.pop();
+                data.datasets[0].data.pop();
+                data.labels.unshift(ret.date);
+                data.datasets[0].data.unshift(Number(ret.steps));
+                $("#date").val(ret.date);
+                barChart.destroy();
+                barChart = new Chart(ctx).Bar(data);
+            })
+        });
+        //set date to check the exact day
+        $("#date").blur(function(){
+            if ($("#date").val()=="") {
+                $("#date").val(date);
+            }
+            else{
+                date = $("#date").val();
+                $.get("/getweekdata/",{"openID":openID,"date":date,"type":"get7","nums":7},function(ret){
+                    for (var i = 0; i < 7; i++) {
+                    data.labels[i] = ret[i].date;
+                    data.datasets[0].data[i] = Number(ret[i].steps);
+                    };
+                    barChart.destroy();
+                    barChart = new Chart(ctx).Bar(data);
+                });
+                
+            }
+        })
+        $("#pedometer").click(function(){
+            location.href = "/gobackchart?openID=" + openID
+        })
+    </script>
+</body>
+</html>

@@ -70,7 +70,7 @@ window.onload = function(){
         label: "Green"
     }
     ];
-    DoughnutChart = new Chart(ctx).Doughnut(data);
+    DoughnutChart = new Chart(ctx).Doughnut(data,{animationEasing: "easeOutQuart",animationSteps: 25});
     $("#steps").text(steps+"步");
     $("#distance").text(distance+"公里");
     $("#cal").text(cal+"卡路里");
@@ -138,8 +138,11 @@ $(function(){
         }
     });
 });
+window.onbeforeunload = function(){
+    delete DoughnutChart;
+}
 $(function(){
     $("#showchart").click(function(){
-        location.href = 'https://www.baidu.com'
+        location.href = "/showdetails?openID=" + openID;
     });
 });

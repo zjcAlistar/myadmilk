@@ -143,10 +143,12 @@ def get_info(openID):
     else:
         if cur_user.user_confirmed:
             age = cur_user.user_age
-            if cur_user.user_sex:
+            if cur_user.user_sex == 1:
                 sex = '男'
-            else:
+            elif cur_user.user_sex == 2:
                 sex = '女'
+            else:
+                sex = '未定'
             weight = cur_user.user_weight
             height = cur_user.user_height
             rep = '您的年龄:'+str(age)+'\n您的性别:'+sex+'\n您的身高:'+str(height)+'cm\n您的体重:'+str(weight)+'kg'
@@ -162,7 +164,7 @@ def recommend_plan(openID):
         plan = '您还没有填写个人信息'
     else:
         if cur_user.user_confirmed:
-            if cur_user.user_sex:
+            if cur_user.user_sex == 1:
                 bmr = 66 + 13.7*cur_user.user_weight + 5*cur_user.user_height - 6.8*cur_user.user_age
             else:
                 bmr = 655 + 9.6*cur_user.user_weight + 1.8*cur_user.user_height - 4.7*cur_user.user_age
@@ -180,16 +182,25 @@ def recommend_plan(openID):
                 msg = "严重超重"
                 fatflag = 3
             if fatflag >= 2:
-                caladvise = bmr * 0.55
+                caladvise = bmr * 0.25
+                rundistance = caladvise*1.6/100
+                walkdistance = caladvise/52
+                food = caladvise/260
+                plan = "您的身体状况是：" + msg + "\n每天建议额外消耗:" + str(int(caladvise)) + "大卡\n相当于慢跑：" + \
+                   str(int(rundistance)) + "公里\n或走路：" + str(int(walkdistance)) + "公里\n或少吃" + str('%.1f'%(food)) + "个汉堡\n"
+            elif fatflag == 1:
+                caladvise = bmr * 0.175
+                rundistance = caladvise*1.6/100
+                walkdistance = caladvise/52
+                food = caladvise/260
+                plan = "您的身体状况是：" + msg + "\n每天建议额外消耗:" + str(int(caladvise)) + "大卡\n相当于慢跑：" + \
+                   str(int(rundistance)) + "公里\n或走路：" + str(int(walkdistance)) + "公里\n或少吃" + str('%.1f'%(food)) + "个汉堡\n"
             else:
-                caladvise = bmr * 0.375
-            rundistance = caladvise*1.6/100
-            walkdistance = caladvise/52
-            plan = "您的身体状况是：" + msg + "\n每天建议额外消耗:" + str(int(caladvise)) + "大卡\n即慢跑：" + \
-                   str(int(rundistance)) + "公里\n或走路：" + str(int(walkdistance)) + "公里\n"
+                plan = "您的身体状况是：" + msg + "\n建议适量增重\n"
         else:
             plan = '您还没有填写个人信息'
     return plan
+
 
 
 def change_info(request):
@@ -201,23 +212,21 @@ def change_info(request):
                 cur_user = userlist.objects.get(user_open_id=openID)
             except userlist.DoesNotExist:
                 new_user = userlist(
-                    user_open_id = openID
+                    user_open_id=openID
                 )
                 new_user.save()
                 return JsonResponse({"age": new_user.user_age, "sex": new_user.user_sex, "weight": new_user.user_weight,
-                                     "height": new_user.user_height})
+                                     "height": new_user.user_height, "advice": '您还没有填写个人信息'})
             else:
+                print(cur_user.user_sex)
                 return JsonResponse({"age": cur_user.user_age, "sex": cur_user.user_sex, "weight": cur_user.user_weight,
-                                     "height": cur_user.user_height})
+                                     "height": cur_user.user_height, "advice": recommend_plan(openID)})
         elif type == 'confirm':
             sex = request.GET.get('sex')
-            if sex == 'true':
-                sex = True
-            else:
-                sex = False
             age = request.GET.get('age')
             height = request.GET.get('height')
             weight = request.GET.get('weight')
+
             try:
                 cur_user = userlist.objects.get(user_open_id=openID)
             except userlist.DoesNotExist:
@@ -237,9 +246,10 @@ def change_info(request):
                 cur_user.user_weight = weight
                 cur_user.user_confirmed = True
                 cur_user.save()
-            return HttpResponse('success')
+            return JsonResponse({"advice": recommend_plan(openID)})
     else:
         raise Http404
+
 
 def show_history(request):
     if request.method == 'GET':
@@ -301,14 +311,89 @@ def show_chart(request):
         raise Http404
 
 
+def show_details(request):
+    if request.method == 'GET':
+        openID = request.GET.get('openID')
+        return render_to_response('showchart.html', {'openID': openID},
+                                  context_instance=RequestContext(request))
+    else:
+        raise Http404
+
+
+def goback_chart(request):
+    if request.method == 'GET':
+        openID = request.GET.get('openID')
+        return render_to_response('pedometer.html', {'openID': openID},
+                                  context_instance=RequestContext(request))
+    else:
+        raise Http404
+
+def get_week_data(request):
+    if request.method == 'GET':
+        openID = request.GET.get('openID')
+        type = request.GET.get('type')
+        nums = request.GET.get('nums')
+        if type == 'init7':
+            cur_date = datetime.today().date()
+            print(cur_date)
+        else:
+            datestr = request.GET.get('date')
+            datelist = datestr.split('-')
+            cur_date = date(int(datelist[0]), int(datelist[1]), int(datelist[2]))
+        if type == 'next':
+                cur_date += timedelta(days=1)
+        elif type == 'previous':
+                cur_date += timedelta(days=-1)
+        try:
+            cur_user = userlist.objects.get(user_open_id = openID)
+        except userlist.DoesNotExist:
+            if nums == '1':
+                rep = {"date": cur_date, "steps": 0}
+            else:
+                rep = []
+                for i in range(7):
+                    rep.append({"date": (cur_date+timedelta(days=-6+i)), "steps": 0})
+        else:
+            if nums == '1':
+                cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user,
+                                               sportrecords_end_time__startswith=cur_date)
+                if cur_data:
+                    walk_quantity = 0
+                    for single_data in cur_data:
+                        if single_data.sportrecords_sport_type == '走路':
+                            walk_quantity += single_data.sportrecords_quantity
+                    rep = {"date": cur_date, "steps": walk_quantity}
+                else:
+                    rep = {"date": cur_date, "steps": 0}
+            else:
+                rep = []
+                for i in range(7):
+                    pre_date = cur_date + timedelta(days=-6+i)
+                    cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user,
+                                                           sportrecords_end_time__startswith=pre_date)
+                    if cur_data:
+                        walk_quantity = 0
+                        for single_data in cur_data:
+                            if single_data.sportrecords_sport_type == '走路':
+                                walk_quantity += single_data.sportrecords_quantity
+                        rep.append({"date": pre_date, "steps": walk_quantity})
+                    else:
+                        rep.append({"date": pre_date, "steps": 0})
+        return JsonResponse(rep, safe=False)
+    else:
+        raise Http404
+
 def get_openid(code):
+    print('!!!')
     url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + API_ID + '&secret=' + API_SECRET + \
               '&code=' + code + '&grant_type=authorization_code'
     res_data = urlopen(url)
     res = res_data.read()
     resj = json.loads(res.decode('utf-8'))
+    print(resj)
     openID = resj['openid']
     return openID
+
 
 def get_steps(request):
     if request.method == 'GET':
@@ -316,11 +401,10 @@ def get_steps(request):
         type = request.GET.get('type')
         if type == 'init':
             cur_date = datetime.today().date()
-            print(cur_date)
         else:
             datestr = request.GET.get('date')
             datelist = datestr.split('-')
-            cur_date = date(int(datelist[0]),int(datelist[1]),int(datelist[2]))
+            cur_date = date(int(datelist[0]), int(datelist[1]), int(datelist[2]))
             if type == 'next':
                 cur_date += timedelta(days=1)
             elif type == 'previous':
