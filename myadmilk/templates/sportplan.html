@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>运动计划</title>
+    <link rel="stylesheet" href="../static/css/sportplan.css" type="text/css">
+    <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <script src="../static/js/sportplan.js"></script>
+</head>
+<body style="background:black;">
+	<div id = "titlebox">
+		<nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+		<nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
+	</div>
+    <div id = "infobox">
+
+        <div id="exercise_advicebox">
+            <div id="exercise_advice_title">&nbsp&nbsp您知道吗</div>
+            <div id="exercise_advice_text"></div>
+        </div>
+
+        <div id="slogan"><b>现在就开始制定您的计划！</b></div>
+        <div id="planbox">
+             <div class="plan_step">  
+                <input type="number" id="plan_step"/>
+                <div id="plan_step_text">步数/步</div>
+            </div> 
+            <div class="plan_distance">  
+                <input type="number" id="plan_distance"/>
+                <div id="plan_distance_text">距离/公里</div>
+            </div>
+            <div class="plan_calories">  
+                <input type="number" id="plan_calories"/>
+                <div id="plan_calories_text">热量/大卡</div>
+            </div>
+        </div>
+        <input id="confirm" type="submit" name="signup" value="修改"/>
+     
+    </div>
+    <script type="text/javascript">
+      	changesize();
+        var openID = '{{ openID }}'
+    </script>
+</body>
+</html>
