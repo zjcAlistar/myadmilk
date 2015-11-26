@@ -14,7 +14,7 @@
         bottom: 0px;
         height:350px;
         background: #F3F3F3;
-        background-image:url("run02.jpg");
+        background-image:url("../img/run02.jpg");
         filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
 		-moz-background-size:100% 100%;
 		background-size:100% 100%;
@@ -142,14 +142,9 @@
 
 	#age{
 		background: #EBEBEB;
-		position: absolute;
-		top:0;
-		left: 0;
-<<<<<<< HEAD
-		width:98%;
-=======
-		width:150%;
->>>>>>> a653a9c4d9af94e13fc9d85df2e9cc60a302d00f
+		margin:0;
+		padding:0;
+		width:100%;
 		height:70%;
 		border-radius: 10px;
 		border: none;
@@ -181,9 +176,8 @@
 		overflow: hidden;
 	}
 	#weight{
-		position: absolute;
-		top:0;
-		left: 0;
+		margin:0;
+		padding: 0;
 		width:98%;
 		height:70%;
 		border-radius: 10px;
@@ -214,9 +208,8 @@
 		overflow: hidden;
 	}
 	#height{
-		position: absolute;
-		top:0;
-		left: 0;
+		margin:0;
+		padding: 0;
 		width:98%;
 		height:70%;
 		border-radius: 10px;

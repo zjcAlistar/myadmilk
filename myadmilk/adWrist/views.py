@@ -37,7 +37,6 @@ def handle_msg(request):
         rep.target = msg.source
         if msg.type == 'event':
             if msg.event == 'click':
-                print(msg.key)
                 if msg.key == 'sports_advice':
                     rep.content = recommend_plan(msg.source)
                 elif msg.key == 'view_info':
@@ -84,7 +83,6 @@ def add_test(openID):
     except userlist.DoesNotExist:
         rep = '好像出问题了，请填写信息'
     else:
-        print(openID)
         date = datetime.now()
         for i in range(7):
             new_record1 = sportrecords(
@@ -218,7 +216,6 @@ def change_info(request):
                 return JsonResponse({"age": new_user.user_age, "sex": new_user.user_sex, "weight": new_user.user_weight,
                                      "height": new_user.user_height, "advice": '您还没有填写个人信息'})
             else:
-                print(cur_user.user_sex)
                 return JsonResponse({"age": cur_user.user_age, "sex": cur_user.user_sex, "weight": cur_user.user_weight,
                                      "height": cur_user.user_height, "advice": recommend_plan(openID)})
         elif type == 'confirm':
@@ -335,7 +332,6 @@ def get_week_data(request):
         nums = request.GET.get('nums')
         if type == 'init7':
             cur_date = datetime.today().date()
-            print(cur_date)
         else:
             datestr = request.GET.get('date')
             datelist = datestr.split('-')
@@ -384,13 +380,11 @@ def get_week_data(request):
         raise Http404
 
 def get_openid(code):
-    print('!!!')
     url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + API_ID + '&secret=' + API_SECRET + \
               '&code=' + code + '&grant_type=authorization_code'
     res_data = urlopen(url)
     res = res_data.read()
     resj = json.loads(res.decode('utf-8'))
-    print(resj)
     openID = resj['openid']
     return openID
 
@@ -417,7 +411,6 @@ def get_steps(request):
             cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user,
                                                sportrecords_end_time__startswith=cur_date)
             if cur_data:
-                print(cur_data)
                 walk_quantity = 0
                 walk_calorie = 0
                 for single_data in cur_data:
@@ -431,7 +424,6 @@ def get_steps(request):
                 rep = {"goal": 0, "steps": 0, "distance": 0, "cal": 0}
         if type != 'someday':
             rep['date'] = str(cur_date)
-        print(rep)
         return JsonResponse(rep)
     else:
         raise Http404
