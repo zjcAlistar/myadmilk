@@ -5,10 +5,14 @@ var valid_comfirm = true;
 
 function changesize() {
 
-$("#titlebox").css({
+	$("#titlebox").css({
 		"width": Width,
-		"height": Height*0.1
+		"height": Height*0.1,
+		"font-family": "verdana",
+		"lineHeight": Height*0.1+"px"
 	});
+
+	//document.getElementById("titlebox").style.lineHeight="100px";
 
 	$("#titlebox_text1").css("font-size", Height*0.06);
 	$("#titlebox_text2").css("font-size", Height*0.07);
@@ -50,12 +54,18 @@ $("#titlebox").css({
 	});
 
 
-	$("#exercise_advice_title").css("font-size", Height*0.023);
-	$("#exercise_advice_text").css("font-size", Height*0.023);
+	$("#exercise_advice_title").css({
+		"font-size": Height*0.023,
+		"lineHeight": Height*0.04+"px"
+	});
+	$("#exercise_advice_text").css({
+		"font-size": Height*0.025,
+		"overflow": "auto"
+	});
 	var Fontsize = $("#confirm").css("height");
 	$("#confirm").css("font-size", parseInt(Fontsize)*0.5);
 
-
+	//exercise_advice_text.innerHTML = "阿萨德就看到哈阿斯顿和地方大师傅随碟附送分隔符是大法官 然后突然已经让他好认同感而他个人提高人体个人头个人他个人听歌认同感而通过而通过而通过ret把电饭锅表达V大发送vsfdv飞";
 };
 
 var defaultAge;

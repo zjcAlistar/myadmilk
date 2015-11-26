@@ -5,7 +5,6 @@
         left:0px;
         border-bottom: 1px solid white;
         color:white;
-    	font-family:STXihei;
     	text-align: center;
     }
 
@@ -15,7 +14,7 @@
         bottom: 0px;
         height:350px;
         background: #F3F3F3;
-        background-image:url("../img/run02.jpg");
+        background-image:url("run02.jpg");
         filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
 		-moz-background-size:100% 100%;
 		background-size:100% 100%;
@@ -48,10 +47,10 @@
 
     #exercise_advice_text{
     	position: absolute;
-    	left: 0px;
-    	top: 20%;
-    	height: 80%;
-    	width: 100%;
+    	left: 5%;
+    	top: 25%;
+    	height: 70%;
+    	width: 90%;
     	border-radius: 0px 0px 10px 10px;
     	font-family:STXihei;
     }
@@ -65,7 +64,7 @@
     	height: 6%;
     	width: 20%;
         font-family:STXihei;
-        border-radius: 10px;
+        border-radius: 5px;
         background-color:#FFF;
         border:1px solid #CDCDCD;
         opacity:0.5;
@@ -138,6 +137,7 @@
 		background: #EBEBEB;
 		text-align: center;
 		opacity:0.7;
+		overflow: hidden;
 	}
 
 	#age{
@@ -145,12 +145,13 @@
 		position: absolute;
 		top:0;
 		left: 0;
-		width:100%;
+		width:150%;
 		height:70%;
 		border-radius: 10px;
 		border: none;
 		/*background: #EBEBEB;*/
 		text-align: center;
+		overflow: hidden;
 	}
 
 	#age_text{
@@ -173,17 +174,19 @@
 		background: #EBEBEB;
 		text-align: center;
 		opacity:0.7;
+		overflow: hidden;
 	}
 	#weight{
 		position: absolute;
 		top:0;
 		left: 0;
-		width:100%;
+		width:98%;
 		height:70%;
 		border-radius: 10px;
 		border: none;
 		background: #EBEBEB;
 		text-align: center;
+		overflow: hidden;
 	}
 	#weight_text{
 		position: absolute;
@@ -204,17 +207,19 @@
 		background: #EBEBEB;
 		text-align: center;
 		opacity:0.7;
+		overflow: hidden;
 	}
 	#height{
 		position: absolute;
 		top:0;
 		left: 0;
-		width:100%;
+		width:98%;
 		height:70%;
 		border-radius: 10px;
 		border: none;
 		background: #EBEBEB;
 		text-align: center;
+		overflow: hidden;
 	}
 	#height_text{
 		position: absolute;
