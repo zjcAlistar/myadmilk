@@ -49,32 +49,33 @@ window.onload = function(){
     steps=0;
     distance=0;
     cal=0;
-     $.get("/getsteps/",{"openID":openID,"type":"init"},function(ret){
-         goal = Number(ret.goal);
-         steps = Number(ret.steps);
-         cal = Number(ret.cal);
-         distance = Number(ret.distance);
-         date = ret.date;
-         var rate = comRate();
-    var data = [
-    {
-        value: rate,
-        color:"#F7464A",
-        highlight: "#FF5A5E",
-        label: "Red"
-    },
-    {
-        value: 1-rate,
-        color: "#46BFBD",
-        highlight: "#5AD3D1",
-        label: "Green"
-    }
-    ];
-    DoughnutChart = new Chart(ctx).Doughnut(data,{animationEasing: "easeOutQuart",animationSteps: 25});
-    $("#steps").text(steps+"步");
-    $("#distance").text(distance+"公里");
-    $("#cal").text(cal+"卡路里");
-    $("#date").val(date);
+    $.get("/getsteps/",{"openID":openID,"type":"init"},function(ret){
+        goal = Number(ret.goal);
+        steps = Number(ret.steps);
+        cal = Number(ret.cal);
+        distance = Number(ret.distance);
+        date = ret.date;
+        var rate = comRate();
+        var data = [
+            {
+                value: rate,
+                color:"#F7464A",
+                highlight: "#FF5A5E",
+                label: "Red"
+            },
+            {
+                value: 1-rate,
+                color: "#46BFBD",
+                highlight: "#5AD3D1",
+                label: "Green"
+            }
+        ];
+        DoughnutChart = new Chart(ctx).Doughnut(data,{animationEasing: "easeOutQuart",animationSteps: 25});
+        $("#goal").text("计划: "+goal);
+        $("#steps").text("当前步数: "+steps+"步");
+        $("#distance").text("当前运动距离: "+distance+"公里");
+        $("#cal").text("当前消耗能量: "+cal+"卡路里");
+        $("#date").val(date);
      });
 }
 $(function(){
@@ -89,9 +90,10 @@ $(function(){
             DoughnutChart.segments[0].value = rate;
             DoughnutChart.segments[1].value = 1-rate;
             DoughnutChart.update();
-            $("#steps").text(steps+"步");
-            $("#distance").text(distance+"公里");
-            $("#cal").text(cal+"卡路里");
+            $("#goal").text("计划: "+goal);
+            $("#steps").text("当前步数: "+steps+"步");
+            $("#distance").text("当前运动距离: "+distance+"公里");
+            $("#cal").text("当前消耗能量: "+cal+"卡路里");
             $("#date").val(date);
         });
     });
@@ -108,9 +110,10 @@ $(function(){
             DoughnutChart.segments[0].value = rate;
             DoughnutChart.segments[1].value = 1-rate;
             DoughnutChart.update();
-            $("#steps").text(steps+"步");
-            $("#distance").text(distance+"公里");
-            $("#cal").text(cal+"卡路里");
+            $("#goal").text("计划: "+goal);
+            $("#steps").text("当前步数: "+steps+"步");
+            $("#distance").text("当前运动距离: "+distance+"公里");
+            $("#cal").text("当前消耗能量: "+cal+"卡路里");
             $("#date").val(date);
         });
     });
@@ -131,9 +134,10 @@ $(function(){
                 DoughnutChart.segments[0].value = rate;
                 DoughnutChart.segments[1].value = 1-rate;
                 DoughnutChart.update();
-                $("#steps").text(steps+"步");
-                $("#distance").text(distance+"公里");
-                $("#cal").text(cal+"卡路里");
+                $("#goal").text("计划: "+goal);
+                $("#steps").text("当前步数: "+steps+"步");
+                $("#distance").text("当前运动距离: "+distance+"公里");
+                $("#cal").text("当前消耗能量: "+cal+"卡路里");
             });
         }
     });
