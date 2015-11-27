@@ -45,6 +45,8 @@ def handle_msg(request):
                     rep.content = add_test(msg.source)
                 elif msg.key == 'show_today':
                     rep.content = get_datatoday(msg.source)
+                elif msg.key == 'change_remind':
+                    rep.content = set_remind(msg.source)
             elif msg.event == 'subscribe':
                 rep.content = create_newuser(msg.source)
             else:
@@ -248,56 +250,6 @@ def change_info(request):
         raise Http404
 
 
-def show_history(request):
-    if request.method == 'GET':
-        code = request.GET.get('code')
-        openID = get_openid(code)
-        return render_to_response('sportdata_check_previous.html', {'openID': openID},
-                                  context_instance=RequestContext(request))
-    else:
-        raise Http404
-
-
-def check_previous(request):
-    if request.method == 'GET':
-        openID = request.GET.get('openID')
-        year = request.GET.get('year')
-        month = request.GET.get('month')
-        day = request.GET.get('day')
-        try:
-            cur_user = userlist.objects.get(user_open_id=openID)
-        except userlist.DoesNotExist:
-            rep = {"flag": 'failed'}
-        else:
-            cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user,
-                                                   sportrecords_end_time__startswith=date(int(year), int(month), int(day)))
-            if cur_data:
-                walk_quantity = 0
-                slow_run_quantity = 0
-                walk_calorie = 0
-                slow_run_calorie = 0
-                for single_data in cur_data:
-                    if single_data.sportrecords_sport_type == '慢跑':
-                        slow_run_quantity += single_data.sportrecords_quantity
-                        slow_run_calorie += single_data.sportrecords_calorie
-                    elif single_data.sportrecords_sport_type == '走路':
-                        walk_quantity += single_data.sportrecords_quantity
-                        walk_calorie += single_data.sportrecords_calorie
-                rep = {"flag": 'success', "sporttype": '走路', "quantity": walk_quantity, "calorie": walk_calorie}
-            else:
-                rep = {"flag": 'failed'}
-        return JsonResponse(rep)
-
-
-def oauth_test(request):
-    if request.method == 'GET':
-        code = request.GET.get('code')
-        openID = get_openid(code)
-        return HttpResponse(openID)
-    else:
-        raise Http404
-
-
 def show_chart(request):
     if request.method == 'GET':
         code = request.GET.get('code')
@@ -388,7 +340,6 @@ def get_openid(code):
     openID = resj['openid']
     return openID
 
-
 def get_steps(request):
     if request.method == 'GET':
         openID = request.GET.get('openID')
@@ -413,12 +364,12 @@ def get_steps(request):
             if cur_data:
                 walk_quantity = 0
                 walk_calorie = 0
+                goal = cur_data[0].sportrecords_step_goal
                 for single_data in cur_data:
                     if single_data.sportrecords_sport_type == '走路':
                         walk_quantity += single_data.sportrecords_quantity
                         walk_calorie += single_data.sportrecords_calorie
                 dist = float(str('%.2f' % (walk_quantity*0.5/1000)))
-                goal = 20000
                 rep = {"goal": goal, "steps": walk_quantity, "distance": dist,  "cal": walk_calorie}
             else:
                 rep = {"goal": 0, "steps": 0, "distance": 0, "cal": 0}
@@ -428,4 +379,55 @@ def get_steps(request):
     else:
         raise Http404
 
+def show_plan(request):
+    if request.method == 'GET':
+        code = request.GET.get('code')
+        openID = get_openid(code)
+        return render_to_response('sportplan.html', {'openID': openID},
+                                  context_instance=RequestContext(request))
+    else:
+        raise Http404
 
+@csrf_exempt
+def change_plan(request):
+    if request.method == 'POST':
+        openID = request.POST.get('openID')
+        daily_step = request.POST.get('daily_step')
+        daily_dist = request.POST.get('daily_dist')
+        daily_cal = request.POST.get('daily_cal')
+        try:
+            cur_user = userlist.objects.get(user_open_id=openID)
+        except userlist.DoesNotExist:
+            rep = '您还没有填写个人信息'
+        else:
+            cur_user.user_step_goal = daily_step
+            cur_user.user_dist_goal = daily_dist
+            cur_user.user_calorie_goal =daily_cal
+            cur_user.save()
+            cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user,
+                                               sportrecords_end_time__startswith=datetime.today().date())
+            for single_data in cur_data:
+                single_data.sportrecords_step_goal = cur_user.user_step_goal
+                single_data.sportrecords_dist_goal = cur_user.user_dist_goal
+                single_data.sportrecords_calorie_goal = cur_user.user_calorie_goal
+                single_data.save()
+
+            rep = '修改成功'
+        return HttpResponse(rep)
+    else:
+        raise Http404
+
+
+def set_remind(openID):
+    try:
+        cur_user = userlist.objects.get(user_open_id=openID)
+    except userlist.DoesNotExist:
+        remind = '您还没有填写个人信息'
+    else:
+        cur_user.user_remind = not cur_user.user_remind
+        cur_user.save()
+        if cur_user.user_remind:
+            remind = '提醒开启'
+        else:
+            remind = '提醒关闭'
+    return remind

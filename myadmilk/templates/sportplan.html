@@ -18,7 +18,6 @@
             <div id="exercise_advice_title">&nbsp&nbsp您知道吗</div>
             <div id="exercise_advice_text"></div>
         </div>
-
         <div id="slogan"><b>现在就开始制定您的计划！</b></div>
         <div id="planbox">
              <div class="plan_step">  
@@ -40,6 +39,16 @@
     <script type="text/javascript">
       	changesize();
         var openID = '{{ openID }}'
+        $(function(){
+            $("#confirm").click(function(){
+                var step = $("#plan_step").val();
+                var dist = $("#plan_distance").val();
+                var cal = $("#plan_calories").val();
+                $.post("/changeplan/",{"openID": openID, "daily_step": step, "daily_dist": dist, "daily_cal": cal},function(ret){
+                    alert(ret);
+                });
+            });
+        });
     </script>
 </body>
 </html>

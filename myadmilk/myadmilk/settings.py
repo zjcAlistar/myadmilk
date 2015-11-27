@@ -107,8 +107,6 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = 'usermanager/static/'
-
 import os
 SITE_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)),'..')
 
