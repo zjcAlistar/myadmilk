@@ -21,46 +21,13 @@
     background-size:100% 100%;
 }
 
-#exercise_advicebox{
-    position: absolute;
-    left: 10%;
-    top: 5%;
-    height: 20%;
-    width: 80%;
-    background-color:#FFF;
-    border-radius: 10px;
-    opacity:0.5;
-}
-
-#exercise_advice_title{
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    height: 20%;
-    width: 100%;
-    background-color:black;
-    color: white;
-    border-radius: 10px 10px 0px 0px;
-    font-family:STXihei;
-}
-
-#exercise_advice_text{
-    position: absolute;
-    left: 5%;
-    top: 25%;
-    height: 70%;
-    width: 90%;
-    border-radius: 0px 0px 10px 10px;
-    font-family:STXihei;
-}
-
 
 ::-webkit-inner-spin-button { visibility: hidden; }
 
 #slogan{
     position: absolute;
     right: 10%;
-    top: 28%;
+    top: 10%;
     height: 5%;
     /*background: blue;*/
     text-align: right;
@@ -69,17 +36,17 @@
     opacity:0.7;
 }
 
-#planbox{
+#userbox{
     position: absolute;
     left: 10%;
-    top: 33%;
+    top: 20%;
     height: 50%;
     width: 80%;
-    border-right: 5px solid black;
+    /*border: 1px solid black;*/
     border-radius: 10px;
 }
 
-.plan_step{
+.username{
     position: absolute;
     top:5%;
     left: 0%;
@@ -93,7 +60,7 @@
     overflow: hidden;
 }
 
-#plan_step{
+#username{
     background: #EBEBEB;
     margin:0;
     padding:0;
@@ -106,7 +73,7 @@
     overflow: hidden;
 }
 
-#plan_step_text{
+#username_text{
     position: absolute;
     bottom: 0%;
     left: 0;
@@ -115,7 +82,7 @@
     opacity:1;
 }
 
-.plan_distance{
+.password{
     position: absolute;
     top:40%;
     left: 0%;
@@ -129,7 +96,7 @@
     overflow: hidden;
 }
 
-#plan_distance{
+#password{
     background: #EBEBEB;
     margin:0;
     padding:0;
@@ -142,7 +109,7 @@
     overflow: hidden;
 }
 
-#plan_distance_text{
+#password_text{
     position: absolute;
     bottom: 0%;
     left: 0;
@@ -151,7 +118,7 @@
     opacity:1;
 }
 
-.plan_calories{
+.confirm_password{
     position: absolute;
     top:75%;
     left: 0%;
@@ -165,7 +132,7 @@
     overflow: hidden;
 }
 
-#plan_calories{
+#confirm_password{
     background: #EBEBEB;
     margin:0;
     padding:0;
@@ -178,7 +145,7 @@
     overflow: hidden;
 }
 
-#plan_calories_text{
+#comfirm_password_text{
     position: absolute;
     bottom: 0%;
     left: 0;
@@ -189,7 +156,7 @@
 
 #confirm{
         position:absolute;
-        bottom:2%;
+        bottom:10%;
         font-family:STXihei;
         border-radius: 100%;
         background-color:#FFF;

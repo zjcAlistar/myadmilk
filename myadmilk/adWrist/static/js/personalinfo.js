@@ -63,7 +63,12 @@ function changesize() {
 		"overflow": "auto"
 	});
 	var Fontsize = $("#confirm").css("height");
-	$("#confirm").css("font-size", parseInt(Fontsize)*0.5);
+	    $("#confirm").css({
+        "font-size": parseInt(Fontsize),
+        "width": Width*0.2,
+        "height": Width* 0.2,
+        "left": Width*0.4  
+    });
 };
 
 var defaultAge;
