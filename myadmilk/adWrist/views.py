@@ -414,6 +414,20 @@ def change_plan(request):
 
             rep = '修改成功'
         return HttpResponse(rep)
+    elif request.method == 'GET':
+        openID = request.GET.get('openID')
+        try:
+            cur_user = userlist.objects.get(user_open_id=openID)
+        except userlist.DoesNotExist:
+            rep = '您还没有填写个人信息'
+            return HttpResponse(rep)
+        else:
+            step_goal = cur_user.user_step_goal
+            dist_goal = cur_user.user_dist_goal
+            cal_goal = cur_user.user_calorie_goal
+            advice = recommend_plan(openID)
+            rep = {"step_goal": step_goal, "dist_goal": dist_goal, "cal_goal": cal_goal, "advice": advice}
+            return JsonResponse(rep)
     else:
         raise Http404
 

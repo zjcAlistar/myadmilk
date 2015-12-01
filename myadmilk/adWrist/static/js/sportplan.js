@@ -1,5 +1,6 @@
 var Height = $(window).height();
 var Width = $(window).width();
+var edit_state = false;
 
 function changesize() {
 
@@ -66,3 +67,77 @@ function changesize() {
         "left": Width*0.4  
     });
 };
+
+window.onload = function(){
+    $.get("/changeplan/",{"openID":openID},function(ret){
+        var defaultStep = Number(ret.step_goal);
+        var defaultDist = Number(ret.dist_goal);
+        var defaultCal = Number(ret.cal_goal);
+        var advice = ret.advice;
+        exercise_advice_text.innerHTML = advice;
+        $("#plan_step").val(defaultStep);
+        $("#plan_distance").val(defaultDist);
+        $("#plan_calories").val(defaultCal);
+    });
+}
+
+$(function(){
+    $("#plan_step").blur(function(){
+        var plan_step = Number($("#plan_step").val());
+        if(plan_step != ""){
+            $("#plan_step").val(parseInt(plan_step));
+        }
+    });
+});
+
+$(function(){
+    $("#plan_distance").blur(function(){
+        var plan_distance = Number($("#plan_distance").val());
+        if(plan_distance != ""){
+            $("#plan_distance").val(parseInt(plan_distance));
+        }
+    });
+});
+
+$(function(){
+    $("#plan_calories").blur(function(){
+        var plan_calories = Number($("#plan_calories").val());
+        if(plan_calories != ""){
+            $("#plan_calories").val(parseInt(plan_calories));
+        }  
+    });
+});
+
+$(function(){
+    $("#confirm").click(function(){
+        if(edit_state == false) {
+            edit_state = true;
+            $("#plan_step").removeAttr("disabled");
+            $("#plan_distance").removeAttr("disabled");
+            $("#plan_calories").removeAttr("disabled");
+            $("#confirm").val("确认");
+        } else if (edit_state == true) {
+            var step = $("#plan_step").val();
+            var dist = $("#plan_distance").val();
+            var cal = $("#plan_calories").val();
+            if (step != "" && dist != "" && cal != "") {
+                $.post("/changeplan/",{"openID": openID, "daily_step": step, "daily_dist": dist, "daily_cal": cal},function(ret){
+                    $("#confirm").val("修改");
+                    $("#plan_step").attr("disabled", "true");
+                    $("#plan_distance").attr("disabled", "true");
+                    $("#plan_calories").attr("disabled", "true");
+                    edit_state = false;
+                    alert(ret);
+                });        
+            }
+            else{
+                alert("请填完整的计划");
+            }
+        }
+    });
+});
+
+window.onorientationchange  = function(){
+    alert("本页面不支持横屏显示");
+    $("body").css("display","none");
+}

@@ -21,15 +21,15 @@
         <div id="slogan"><b>现在就开始制定您的计划！</b></div>
         <div id="planbox">
              <div class="plan_step">  
-                <input type="number" id="plan_step"/>
+                <input type="number" id="plan_step" disabled="true"/>
                 <div id="plan_step_text">步数/步</div>
             </div> 
             <div class="plan_distance">  
-                <input type="number" id="plan_distance"/>
+                <input type="number" id="plan_distance" disabled="true"/>
                 <div id="plan_distance_text">距离/公里</div>
             </div>
             <div class="plan_calories">  
-                <input type="number" id="plan_calories"/>
+                <input type="number" id="plan_calories" disabled="true"/>
                 <div id="plan_calories_text">热量/大卡</div>
             </div>
         </div>
@@ -38,17 +38,7 @@
     </div>
     <script type="text/javascript">
       	changesize();
-        var openID = '{{ openID }}'
-        $(function(){
-            $("#confirm").click(function(){
-                var step = $("#plan_step").val();
-                var dist = $("#plan_distance").val();
-                var cal = $("#plan_calories").val();
-                $.post("/changeplan/",{"openID": openID, "daily_step": step, "daily_dist": dist, "daily_cal": cal},function(ret){
-                    alert(ret);
-                });
-            });
-        });
+        var openID = '{{ openID }}'    
     </script>
 </body>
 </html>
