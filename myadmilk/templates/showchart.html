@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>综合统计</title>
+    <link rel="stylesheet" href="../static/css/showchart.css" type="text/css">
+    <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <script src="../static/js/Chart.min.js"></script>
+    <script src="../static/js/showchart.js"></script>
+</head>
+<body style="background:black;">
+    <div id = "titlebox">
+        <nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+        <nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
+    </div>
+    <div id = "infobox">
+        <img src="../static/img/run02.jpg" style="position:fixed;width:100%;height:100%;"/>
+        <div id = "top"> 
+            <button id="next">后<br>一<br>天</button>
+            <input id = "date" type="date"/>
+            <button id="previous">前<br>一<br>天</button>
+        </div>
+        <div id = "middle">
+            <div id="chart_background">
+            </div>
+            <canvas id = "barChart"></canvas>
+        </div>
+        <div id = "bottom">
+            <button id = "pedometer">返回</button>
+        </div>
+    </div>
+    <script type="text/javascript">
+        changesize();
+        var openID = '{{ openID }}'
+
+    </script>
+</body>
+</html>

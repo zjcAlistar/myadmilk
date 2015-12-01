@@ -18,12 +18,15 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^weixin', 'adWrist.views.handle_msg',name='handle_msg'),
-    url(r'^showinfo', 'adWrist.views.show_info_page',name='show_info_page'),
-    url(r'^showhistory', 'adWrist.views.show_history',name='show_history'),
-    url(r'^changeinfo/$', 'adWrist.views.change_info',name='change_info'),
-    url(r'^checkprevious/$', 'adWrist.views.check_previous',name='check_previous'),
+    url(r'^weixin', 'adWrist.views.handle_msg', name='handle_msg'),
+    url(r'^showinfo', 'adWrist.views.show_info_page', name='show_info_page'),
+    url(r'^changeinfo/$', 'adWrist.views.change_info', name='change_info'),
     url(r'^showchart', 'adWrist.views.show_chart', name='show_chart'),
+    url(r'^showdetails', 'adWrist.views.show_details', name='show_details'),
+    url(r'gobackchart', 'adWrist.views.goback_chart', name='goback_chart'),
+    url(r'^getweekdata', 'adWrist.views.get_week_data', name='get_week_data'),
     url(r'^getsteps', 'adWrist.views.get_steps', name='get_steps'),
-    url(r'^oauth', 'adWrist.views.oauth_test',name='oauth_test'),
+    url(r'^showplan', 'adWrist.views.show_plan', name='show_plan'),
+    url(r'^changeplan', 'adWrist.views.change_plan', name='change_plan'),
+    url(r'^signin', 'adWrist.views.sign_in', name='sign_in'),
 ]

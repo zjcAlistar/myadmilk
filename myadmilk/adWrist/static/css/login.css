@@ -1,0 +1,129 @@
+#titlebox{
+	position: absolute;
+    height:350px;
+    top:0px;
+    left:0px;
+    border-bottom: 1px solid white;
+    color:white;
+    font-family:STXihei;
+    text-align: center;
+}
+
+#infobox{
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    height:350px;
+    background: #F3F3F3;
+    background-image:url(../img/run02.jpg);
+    filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+    -moz-background-size:100% 100%;
+    background-size:100% 100%;
+}
+
+
+::-webkit-inner-spin-button { visibility: hidden; }
+
+#slogan{
+    position: absolute;
+    right: 10%;
+    top: 10%;
+    height: 5%;
+    /*background: blue;*/
+    text-align: right;
+    border-bottom: 5px solid black;
+    color:#68ff71;
+    opacity:0.7;
+}
+
+#userbox{
+    position: absolute;
+    left: 10%;
+    top: 30%;
+    height: 50%;
+    width: 80%;
+    /*border: 1px solid black;*/
+    border-radius: 10px;
+}
+
+.username{
+    position: absolute;
+    top:5%;
+    left: 0%;
+    width:100%;
+    height:25%;
+    border-radius: 10px;
+    border: none;
+    background: #EBEBEB;
+    text-align: center;
+    opacity:0.7;
+    overflow: hidden;
+}
+
+#username{
+    background: #EBEBEB;
+    margin:0;
+    padding:0;
+    width:100%;
+    height:70%;
+    border-radius: 10px;
+    border: none;
+    /*background: #EBEBEB;*/
+    text-align: center;
+    overflow: hidden;
+}
+
+#username_text{
+    position: absolute;
+    bottom: 0%;
+    left: 0;
+    width:100%;
+    height:30%;
+    opacity:1;
+}
+
+.password{
+    position: absolute;
+    top:40%;
+    left: 0%;
+    width:100%;
+    height:25%;
+    border-radius: 10px;
+    border: none;
+    background: #EBEBEB;
+    text-align: center;
+    opacity:0.7;
+    overflow: hidden;
+}
+
+#password{
+    background: #EBEBEB;
+    margin:0;
+    padding:0;
+    width:100%;
+    height:70%;
+    border-radius: 10px;
+    border: none;
+    /*background: #EBEBEB;*/
+    text-align: center;
+    overflow: hidden;
+}
+
+#password_text{
+    position: absolute;
+    bottom: 0%;
+    left: 0;
+    width:100%;
+    height:30%;
+    opacity:1;
+}
+
+#confirm{
+        position:absolute;
+        bottom:10%;
+        font-family:STXihei;
+        border-radius: 100%;
+        background-color:#FFF;
+        border:1px solid #CDCDCD;
+        opacity:0.5;
+    }

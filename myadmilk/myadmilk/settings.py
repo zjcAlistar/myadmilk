@@ -81,7 +81,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql", # Add "postgresql_psycopg2", "postgresql", "mysql", "sqlite3" or "oracle".
         "NAME": "wrist",                       # Or path to database file if using sqlite3.
         "USER": "root",                          # Not used with sqlite3.
-        "PASSWORD": "111",                         # Not used with sqlite3.
+        "PASSWORD": "dhezzjc0117",                         # Not used with sqlite3.
         "HOST": "127.0.0.1",                   # Set to empty string for localhost. Not used with sqlite3.
         "PORT": "",                             # Set to empty string for default. Not used with sqlite3.
     }
@@ -106,8 +106,6 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-
-MEDIA_ROOT = 'usermanager/static/'
 
 import os
 SITE_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)),'..')

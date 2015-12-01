@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>个人信息</title>
+    <title>计步器</title>
     <link rel="stylesheet" href="../static/css/pedometer.css" type="text/css">
     <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
     <script src="../static/js/pedometer.js"></script>
@@ -14,23 +14,29 @@
 		<nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
 	</div>
     <div id = "infobox">
-       	<div id = "top"> 
-	       	<button id="next">next</button>
-	        <input id = "date" type="date"/>
-	        <button id="previous">previous</button>
-       	</div>
-       	<div id = "middle">
-	        <canvas id = "DoughnutChart"></canvas>
-	        <div id="text">
-	        	<a id = "steps">1</a>|<a id="distance">2</a>|<a id="cal">3</a>
-       		</div>
-       	</div>
-	    <div id = "bottom">
-	        <button id = "showchart">showchart</button>
-       	</div>
+     	<div id = "top"> 
+           	<button id="next">next</button>
+            <input id = "date" type="date"/>
+            <button id="previous">previous</button>
+     	</div>
+     	<div id = "middle">
+            <div id="middle_background"></div>
+            <div id="text1">
+                <p id="goal">0</p>
+            </div>
+            <canvas id = "DoughnutChart"></canvas>
+            <div id="text2">
+            	<p id="steps">1</p>
+                <p id="distance">2</p>
+                <p id="cal">3</p>
+     		</div>
+     	</div>
+        <div id = "bottom">
+            <button id = "showchart">showchart</button>
+     	</div>
     </div>
     <script type="text/javascript">
-    	changesize();
+      	changesize();
         var openID = '{{ openID }}'
     </script>
 </body>

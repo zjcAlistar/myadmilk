@@ -5,30 +5,8 @@ import json
 from wechatpy.client import WeChatClient
 import config
 
-serverIP = config.serverIP
 API_ID = config.API_ID
 API_SECRET = config.API_SECRET
-
-menu = {"button":
-            [{"name":"个人信息","sub_button":[
-                {"type":"click","name":"运动建议","key":"sports_advice"},
-                {"type":"view","name":"修改信息","url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-                                                   + API_ID + "&redirect_uri=" + serverIP +
-                                                   "showinfo&response_type=code&scope=snsapi_base&state=1#wechat_redirect"},
-                {"type":"click","name":"查看信息","key":"view_info"}]},
-             {"name":"运动数据","sub_button":[
-                 {"type":"click","name":"添加测试","key":"add_test"},
-                 {"type":"click","name":"查看今日","key":"show_today"},
-                 {"type":"view","name":"查看以往","url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-                                                    + API_ID + "&redirect_uri=" + serverIP +
-                                                    "showhistory&response_type=code&scope=snsapi_base&state=1#wechat_redirect"},
-                 {"type":"view","name":"测试OAuth","url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-                                                       + API_ID + "&redirect_uri=" + serverIP +
-                                                       "oauth&response_type=code&scope=snsapi_base&state=1#wechat_redirect" },
-                 {"type":"view","name":"测试图表","url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-                                                       + API_ID + "&redirect_uri=" + serverIP +
-                                                    "showchart&response_type=code&scope=snsapi_base&state=1#wechat_redirect" }]}]}
-
 
 def menuCreate(body):
     client = WeChatClient(API_ID, API_SECRET)

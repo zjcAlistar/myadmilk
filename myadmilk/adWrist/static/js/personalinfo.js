@@ -1,12 +1,18 @@
 ﻿var Height = $(window).height();
 var Width = $(window).width();
+var edit_state = false;
+var valid_comfirm = true;
 
 function changesize() {
 
 	$("#titlebox").css({
 		"width": Width,
-		"height": Height*0.1
+		"height": Height*0.1,
+		"font-family": "verdana",
+		"lineHeight": Height*0.1+"px"
 	});
+
+	//document.getElementById("titlebox").style.lineHeight="100px";
 
 	$("#titlebox_text1").css("font-size", Height*0.06);
 	$("#titlebox_text2").css("font-size", Height*0.07);
@@ -16,136 +22,101 @@ function changesize() {
 		"height": Height*0.898
 	});
 
-	$(".sex").css({
-		"width": Width*0.35,
-		"height": Width*0.35/0.188*0.107
-	});
-	$("#sex").css({
-		"width": Width*0.35,
-		"height": Width*0.35/0.188*0.107
-	});
-	$("#sex_man").css({
-		"width": Width*0.35,
-		"height": Width*0.35/0.188*0.107
-	});
-	$("#sex_woman").css({
-		"width": Width*0.35,
-		"height": Width*0.35/0.188*0.107
-	});
+
+
 	$("#sex_text").css({
-		"left": 0,
-		"top": Width*0.35/0.188*0.107*0.8,
-		"width": Width*0.35,
-		"height": Width*0.35/0.188*0.107*0.2,
-		 //"line-height": Width*0.35/0.188*0.107*0.5,
-		 // "font-size": Width*0.35/0.188*0.107*0.5
 		"font-size": Width*0.35/0.188*0.107*0.13,
 		"font-family": "SimHei"
 	});
-	$(".age").css({
-		"width": Width*0.35,
-		"height": Width*0.35/0.188*0.107
-	});
+
 	$("#age_text").css({
-		"left": 0,
-		"top": Width*0.35/0.188*0.107*0.8,
-		"width": Width*0.35,
-		"height": Width*0.35/0.188*0.107*0.2,
-		 //"line-height": Width*0.35/0.188*0.107*0.5,
-		 // "font-size": Width*0.35/0.188*0.107*0.5
 		"font-size": Width*0.35/0.188*0.107*0.13,
 		"font-family": "SimHei"
 	});
 	$("#age").css({
-		"width": Width*0.35,
-		"height": Width*0.35/0.188*0.107*0.7,
-		 //"line-height": Width*0.35/0.188*0.107*0.5,
 		 "font-size": Width*0.35/0.188*0.107*0.5
 	});
-	$(".weight").css({
-		"width": Width*0.35,
-		"height": Width*0.35/0.188*0.107
-	});
+
 	$("#weight").css({
-		"width": Width*0.35,
-		"height": Width*0.35/0.188*0.107*0.7,
-		//"line-height": Width*0.35/0.188*0.107*0.5,
 		"font-size": Width*0.35/0.188*0.107*0.5
 	});
 	$("#weight_text").css({
-		"left": 0,
-		"top": Width*0.35/0.188*0.107*0.8,
-		"width": Width*0.35,
-		"height": Width*0.35/0.188*0.107*0.2,
-		 //"line-height": Width*0.35/0.188*0.107*0.5,
-		 // "font-size": Width*0.35/0.188*0.107*0.5
 		"font-size": Width*0.35/0.188*0.107*0.13,
 		"font-family": "SimHei"
 	});
-	$(".height").css({
-		"width": Width*0.35,
-		"height": Width*0.35/0.188*0.107
-	});
+
 	$("#height").css({
-		"width": Width*0.35,
-		"height": Width*0.35/0.188*0.107*0.7,
-		//"line-height": Width*0.35/0.188*0.107*0.5,
 		"font-size": Width*0.35/0.188*0.107*0.5
 	});
 	$("#height_text").css({
-		"left": 0,
-		"top": Width*0.35/0.188*0.107*0.8,
-		"width": Width*0.35,
-		"height": Width*0.35/0.188*0.107*0.2,
-		 //"line-height": Width*0.35/0.188*0.107*0.5,
-		 // "font-size": Width*0.35/0.188*0.107*0.5
 		"font-size": Width*0.35/0.188*0.107*0.13,
 		"font-family": "SimHei"
 	});
+
+
+	$("#exercise_advice_title").css({
+		"font-size": Height*0.023,
+		"lineHeight": Height*0.04+"px"
+	});
+	$("#exercise_advice_text").css({
+		"font-size": Height*0.025,
+		"overflow": "auto"
+	});
 	var Fontsize = $("#confirm").css("height");
-	$("#confirm").css("font-size", parseInt(Fontsize)*0.7);
+	    $("#confirm").css({
+        "font-size": parseInt(Fontsize),
+        "width": Width*0.2,
+        "height": Width* 0.2,
+        "left": Width*0.4  
+    });
 };
 
 var defaultAge;
-var defaultSex;
+var defaultSex = 0;
 var defaultWeight;
 var defaultHeight;
-
-var sex;
 
 window.onload = function(){
 
 	$.get("/changeinfo/",{"openID":openID,"type":"init"},function(ret){
-		defaultAge = ret.age;
-		defaultSex = ret.sex;
-		defaultHeight = ret.height;
-		defaultWeight = ret.weight;
+		defaultAge = Number(ret.age);
+		defaultSex = Number(ret.sex);
+		defaultHeight = Number(ret.height);
+		defaultWeight = Number(ret.weight);
+		var advice = ret.advice;
+		exercise_advice_text.innerHTML = advice;
 		if (defaultAge != -1) {
 			$("#age").val(defaultAge);
+		} else {
+			defaultAge = "";
 		};
 		if (defaultWeight != -1) {
 			$("#weight").val(defaultWeight);
+		} else {
+			defaultWeight = "";
 		};
 		if (defaultHeight != -1) {
 			$("#height").val(defaultHeight);
+		} else {
+			defaultHeight = "";
 		};
-		if(defaultSex) {
+		if (defaultSex == 1) {
 			$('#sex_man').css("visibility", "visible");
 			$('#sex').css("visibility", "hidden");
 			$('#sex_woman').css("visibility", "hidden");
-		}
-		else {
+		} else if(defaultSex == 2) {
 			$('#sex_man').css("visibility", "hidden");
 			$('#sex').css("visibility", "hidden");
 			$('#sex_woman').css("visibility", "visible");
 		}
 		//sex
-	});
+	})
 }
 
-	$(function(){
-		$('.sex').click(function(event){
-			var objLeft = $("#sex").offset().left;//对象x位置
+$(function(){
+	$('.sex').click(function(event){
+		if(edit_state == true){
+			var objLeft = $("#sex").offset().left;//对象y位置
 			var objWidth = $("#sex").width();//对象宽度
 			var mouseX = event.clientX + document.body.scrollLeft;//鼠标x位置
 			//计算点击的相对位置
@@ -154,78 +125,117 @@ window.onload = function(){
 				$('#sex_man').css("visibility", "visible");
 				$('#sex').css("visibility", "hidden");
 				$('#sex_woman').css("visibility", "hidden");
-				sex = true;
+				defaultSex = 1;
 			} else {
 				$('#sex_man').css("visibility", "hidden");
 				$('#sex').css("visibility", "hidden");
 				$('#sex_woman').css("visibility", "visible");
-				sex = false;
+				defaultSex = 2;
 			}
-		});
+		}
 	});
+});
 
 $(function(){
 	$("#age").blur(function(){
 		var age = Number($("#age").val());
-		if(age=="" || !isNaN(age)&&age>0&&age<150){
-			$("#age_data").innerHTML = 'age';
-			$("#age").css("visibility", "visible");
-			
+		if(age == ""){
+			defaultAge = "";
+		} else if(isNaN(age)){
+			alert("请填写数字");
+			valid_comfirm = false;
+			$("#age").val(defaultAge);
+		} else if (age < 0 || age > 150) {
+			alert("请填写真实年龄");
+			valid_comfirm = false;
+			$("#age").val(defaultAge);
+		} else {
+			$("#age").val(parseInt(age));
+			defaultAge = parseInt(age);
 		}
-		else{
-			alert("格式错误");
-			console.info(typeof(age));
-			$("#age").val("");
-		}
+		setTimeout("valid_comfirm = true;", 100);
 	});
 });
 
 $(function(){
 	$("#weight").blur(function(){
 		var weight =  Number($("#weight").val());
-		if(weight=="" || !isNaN(weight)&&weight>0&&weight<300){
-
+		if(weight == ""){
+			defaultWeight = "";
+		} else if(isNaN(weight)){
+			alert("请填写数字");
+			valid_comfirm = false;
+			$("#weight").val(defaultWeight);
+		} else if (weight>300||weight<0) {
+			alert("请填写真实体重");
+			valid_comfirm = false;
+			$("#weight").val(defaultWeight);
+		} else {
+			$("#weight").val(parseInt(weight));
+			defaultWeight = parseInt(weight);
 		}
-		else{
-			alert("格式错误");
-			$("#weight").val("");
-		}
+		setTimeout("valid_comfirm = true;", 100);
 	});
 });
 
 $(function(){
 	$("#height").blur(function(){
 		var height =  Number($("#height").val());
-		if(height=="" || !isNaN(height)&&height>0&&height<250){
-
+		if(height == ""){
+			defaultHeight = "";
+		} else if(isNaN(height)){
+			alert("请填写数字");
+			valid_comfirm = false;
+			$("#height").val(defaultHeight);
+		} else if (height < 0 || height > 250) {
+			alert("请填写真实身高");
+			valid_comfirm = false;
+			$("#height").val(defaultHeight);
+		} else {
+			$("#height").val(parseInt(height));
+			defaultHeight = parseInt(height);
 		}
-		else{
-			alert("格式错误");
-			$("#height").val("");
-		}
-	});
+		setTimeout("valid_comfirm = true;", 100);
+	})
 });
 
 $(function(){
 	$("#confirm").click(function(){
-		var age = Number($("#age").val());
-		var height = Number($("#height").val());
-		var weight = Number($("#weight").val());
-		if (age!=""&&weight!=""&&height!="") {
-			$.get("/changeinfo/",{"openID":openID,"type":"confirm","age":age,"sex":sex,"height":height,"weight":weight},function(ret){
-				if(ret == 'success'){
-					alert("修改成功");
+		if (valid_comfirm == true) {
+			if(edit_state == false) {
+				edit_state = true;
+				$("#age").removeAttr("disabled");
+				$("#weight").removeAttr("disabled");
+				$("#height").removeAttr("disabled");
+				$("#confirm").val("确认");
+			} else if (edit_state == true) {
+				var age = parseInt($("#age").val());
+				var height = parseInt($("#height").val());
+				var weight = parseInt($("#weight").val());
+				if (defaultSex != 0 && !isNaN(age)&&!isNaN(height)&&!isNaN(weight)) {
+					$.get("/changeinfo/",{"openID":openID,"age":age,"sex":defaultSex,"height":height,"weight":weight,"type":"confirm"},function(ret){
+						edit_state = false;
+						$("#age").attr("disabled", "true");
+						$("#weight").attr("disabled", "true");
+						$("#height").attr("disabled", "true");
+						$("#confirm").val("修改");
+						var advice = ret.advice;
+						exercise_advice_text.innerHTML = advice;
+					})
 				}
 				else{
-					alert("修改失败");
+					alert("请填完整的信息");
 				}
-			})
-		}
-		else{
-			alert("请填完整的信息");
-		}
-	});
+			}
+		};
+
+	})
 });
+
+window.onorientationchange  = function(){
+	alert("本页面不支持横屏显示");
+	$("body").css("display","none");
+}
 
 
 
