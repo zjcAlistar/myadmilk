@@ -1,6 +1,8 @@
 from django.db import models
 
 # Create your models here.
+
+
 class userlist(models.Model):
     user_open_id = models.CharField(max_length=128)
     user_username = models.CharField(max_length=128)
@@ -14,6 +16,7 @@ class userlist(models.Model):
     user_dist_goal = models.IntegerField(default=1000)
     user_calorie_goal = models.IntegerField(default=2000)
     user_remind = models.BooleanField(default=False)
+    last_remind_time = models.DateTimeField(auto_now_add=True)
 
 
 class sportrecords(models.Model):
