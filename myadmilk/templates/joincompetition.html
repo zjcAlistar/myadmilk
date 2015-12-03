@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>参加比赛</title>
+    <link rel="stylesheet" href="../static/css/joincompetition.css" type="text/css">
+    <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <script src="../static/js/joincompetition.js"></script>
+</head>
+
+<body style="background:black;">
+	<div id = "titlebox">
+		<nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+		<nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
+	</div>
+	<div id = "infobox">
+		<div id="slogan"><b>参加比赛 —— 与好友一试高下！</b></div>
+		<div id="competitionbox">
+			<div class="competitiontype">
+			    <input type="text" id="competitiontype" disabled="true"/>
+				<div id="competitiontype_text">比赛类型</div>
+	        </div> 
+	        <!-- 步数最多 -->
+	        <div id="comp_distance_box">
+	        	<div class="comp_distance" style="top:0%;">
+	        		<input type="text" class="date_start" id="d_date_start" disabled="true"/>
+	        		<div class="comp_text">开始时间</div>
+	        	</div>
+	        	<div class="comp_distance" style="top:50%;">
+	        		<input type="date" class="date_end" id="d_date_end" disabled="true"/>
+	        		<div class="comp_text">结束时间</div>
+	        	</div>
+	        </div>
+	        <!-- 步数最多 -->
+	        <!-- 时间最短 -->
+	        <div id="comp_time_box">
+	        	<div class="comp_time" style="top:0%;">
+	        		<input type="date" class="date_start" id="t_date_start" disabled="true"/>
+	        		<div class="comp_text">开始时间</div>
+	        	</div>
+	        	<div class="comp_time" style="top:35%;">
+	        		<input type="date" class="date_end"  id="t_date_end" disabled="true"/>
+	        		<div class="comp_text">结束时间</div>
+	        	</div>
+	        	<div class="comp_time" style="top:70%;">
+	            	<input type="number" id="goal_step" disabled="true"/>
+	                <div class="comp_text">目标步数</div>
+	        	</div>
+	        </div>
+	    </div>
+        <!-- 时间最短 -->
+        <input id="confirm" type="submit" name="signup" value="参加"/>  
+	</div>
+	<script>
+    	changesize();
+        var openID = '{{ openID }}'
+        var competitionID = '{{ competitionID }}'
+        $(function(){
+            $("#confirm").click(function(){
+            	$.post("/joincompetition/",{"openID": openID, "competitionID": competitionID}),function(ret){
+            		alert(ret);
+            	}
+            });
+        });
+    </script>
+</body>
+</html>

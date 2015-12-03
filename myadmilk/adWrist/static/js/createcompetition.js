@@ -96,12 +96,12 @@ function loaddatetime () {
 
 function show_competitiontype () {
     if ($("#competitiontype").val() == "comp_distance") {
-        $(comp_distance_box).css("display", "block");
-        $(comp_time_box).css("display", "none");   
+        $("#comp_distance_box").css("display", "block");
+        $("#comp_time_box").css("display", "none");   
     }
     else if($("#competitiontype").val() == "comp_time") {
-        $(comp_distance_box).css("display", "none");
-        $(comp_time_box).css("display", "block");   
+        $("#comp_distance_box").css("display", "none");
+        $("#comp_time_box").css("display", "block");   
     }
 };
 
