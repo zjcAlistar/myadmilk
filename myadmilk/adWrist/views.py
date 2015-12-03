@@ -281,6 +281,7 @@ def goback_chart(request):
     else:
         raise Http404
 
+
 def get_week_data(request):
     if request.method == 'GET':
         openID = request.GET.get('openID')
@@ -361,23 +362,27 @@ def get_steps(request):
         try:
             cur_user = userlist.objects.get(user_open_id = openID)
         except userlist.DoesNotExist:
-            rep = {"goal": 0, "steps": 0, "distance": 0, "cal": 0}
+            rep = {"stepGoal": 0, "calGoal": 0, "distanceGoal": 0, "steps": 0, "distance": 0, "cal": 0}
         else:
             cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user,
                                                sportrecords_end_time__startswith=cur_date)
             if cur_data:
                 walk_quantity = 0
                 walk_calorie = 0
-                goal = cur_data[0].sportrecords_step_goal
+                step_goal = cur_data[0].sportrecords_step_goal
+                dist_goal = cur_data[0].sportrecords_dist_goal
+                cal_goal = cur_data[0].sportrecords_calorie_goal
                 for single_data in cur_data:
                     if single_data.sportrecords_sport_type == '走路':
                         walk_quantity += single_data.sportrecords_quantity
                         walk_calorie += single_data.sportrecords_calorie
                 dist = float(str('%.2f' % (walk_quantity*0.5/1000)))
-                rep = {"goal": goal, "steps": walk_quantity, "distance": dist,  "cal": walk_calorie}
+                rep = {"stepGoal": step_goal, "calGoal": cal_goal, "distanceGoal": dist_goal, "steps": walk_quantity, "distance": dist,  "cal": walk_calorie}
             else:
-                goal = cur_user.user_step_goal
-                rep = {"goal": goal, "steps": 0, "distance": 0, "cal": 0}
+                step_goal = cur_user.user_step_goal
+                dist_goal = cur_user.user_dist_goal
+                cal_goal = cur_user.user_calorie_goal
+                rep = {"stepGoal": step_goal, "calGoal": cal_goal, "distanceGoal": dist_goal, "steps": 0, "distance": 0, "cal": 0}
         if type != 'someday':
             rep['date'] = str(cur_date)
         return JsonResponse(rep)

@@ -1,18 +1,6 @@
-var canvas;
-var ctx;
-var DoughnutChart;
-var goal;
-var steps;
-var distance;
-var cal;
-var date;
-
-
-var Height = $(window).height();
-var Width = $(window).width();
-
 function changesize() {
-
+    var Height = $(window).height();
+    var Width = $(window).width();
     $("#titlebox").css({
         "width": Width,
         "height": Height*0.1,
@@ -49,62 +37,102 @@ function changesize() {
     // $("#confirm").css("font-size", parseInt(Fontsize)*0.7);
 };
 
-function comRate(){
-    if(goal > 0){
-        if (steps/goal > 1) return 1;
-        else return steps/goal;
-    }
-    else return 0.00001;
+function positive(Num){
+    if (Num>0)
+        return Num;
+    else
+        return 0;
 }
+
 window.onload = function(){
-    canvas = document.getElementById("DoughnutChart");
-    ctx = canvas.getContext("2d");
     goal=0;
     steps=0;
     distance=0;
     cal=0;
     $.get("/getsteps/",{"openID":openID,"type":"init"},function(ret){
-        goal = Number(ret.goal);
+        stepGoal = Number(ret.stepGoal);
+        calGoal = Number(ret.calGoal);
+        distanceGoal = Number(ret.distanceGoal);
         steps = Number(ret.steps);
         cal = Number(ret.cal);
         distance = Number(ret.distance);
         date = ret.date;
-        var rate = comRate();
-        var data = [
-            {
-                value: rate,
-                color:"#F7464A",
-                highlight: "#FF5A5E",
-                label: "Red"
+        $(function(){
+            $('#DoughnutChart').highcharts({
+            chart: {
+                type: 'pie'
             },
-            {
-                value: 1-rate,
-                color: "#46BFBD",
-                highlight: "#5AD3D1",
-                label: "Green"
-            }
-        ];
-        DoughnutChart = new Chart(ctx).Doughnut(data,{animationEasing: "easeOutQuart",animationSteps: 25});
-        $("#goal").text("计划: "+goal);
+            title: {
+                text: '健身完成度'
+            },
+            plotOptions: {
+                series:{
+                        states:{
+                            hover:{
+                                halo:false
+                            }
+                        }
+                },
+                pie: {
+                    shadow: true,
+                    center: ['50%', '50%'],
+                    showInLegend: true,
+                    dataLabels: {
+                    enabled: false
+                    },
+                    point:{
+                        events:{
+                                legendItemClick:function(){
+                                return false;
+                            }
+                        }
+                    },
+                }
+            },
+            credits: {
+            enabled: false
+            },
+            series: [{
+                name: '卡路里',
+                data: [['消耗卡路里',cal],['未完成',positive(calGoal-cal)]],
+                size: '40%',
+                innerSize: '20%',
+            }, {
+                name: '距离',
+                data: [['运动距离',distance],['未完成',positive(distanceGoal-distance)]],
+                size: '70%',
+                innerSize: '40%',
+            }, {
+                name: '步数',
+                data: [['步数',steps],['未完成',positive(stepGoal-steps)]],
+                size: '80%',
+                innerSize: '70%',
+            }]
+            });
+        });
+        $("#goal").text("计划: "+stepGoal);
         $("#steps").text("当前步数: "+steps+"步");
         $("#distance").text("当前运动距离: "+distance+"公里");
         $("#cal").text("当前消耗能量: "+cal+"卡路里");
         $("#date").val(date);
-     });
+    });
 }
+
 $(function(){
     $("#next").click(function(){
+        var DoughnutChart = $("#DoughnutChart").highcharts();
         $.get("/getsteps/",{"openID":openID,"date":date,"type":"next"},function(ret){
-            goal = Number(ret.goal);
+            stepGoal = Number(ret.stepGoal);
+            calGoal = Number(ret.calGoal);
+            distanceGoal = Number(ret.distanceGoal);
             steps = Number(ret.steps);
             cal = Number(ret.cal);
             distance = Number(ret.distance);
             date = ret.date;
-            var rate = comRate();
-            DoughnutChart.segments[0].value = rate;
-            DoughnutChart.segments[1].value = 1-rate;
-            DoughnutChart.update();
-            $("#goal").text("当日计划: "+goal+"步");
+            DoughnutChart.series[0].update({data:[['消耗卡路里',cal],['未完成',positive(calGoal-cal)]]});
+            DoughnutChart.series[1].update({data:[['运动距离',distance],['未完成',positive(distanceGoal-distance)]]});
+            DoughnutChart.series[2].update({data:[['步数',steps],['未完成',positive(stepGoal-steps)]]});
+            $("#goal").text("当日计划: "+stepGoal+"步");
             $("#steps").text("当前步数: "+steps+"步");
             $("#distance").text("当前运动距离: "+distance+"公里");
             $("#cal").text("当前消耗能量: "+cal+"卡路里");
@@ -112,19 +140,22 @@ $(function(){
         });
     });
 });
+
 $(function(){
     $("#previous").click(function(){
+        var DoughnutChart = $("#DoughnutChart").highcharts();
         $.get("/getsteps/",{"openID":openID,"date":date,"type":"previous"},function(ret){
-            goal = Number(ret.goal);
+            stepGoal = Number(ret.stepGoal);
+            calGoal = Number(ret.calGoal);
+            distanceGoal = Number(ret.distanceGoal);
             steps = Number(ret.steps);
             cal = Number(ret.cal);
             distance = Number(ret.distance);
             date = ret.date;
-            var rate = comRate();
-            DoughnutChart.segments[0].value = rate;
-            DoughnutChart.segments[1].value = 1-rate;
-            DoughnutChart.update();
-            $("#goal").text("当日计划: "+goal+"步");
+            DoughnutChart.series[0].update({data:[['消耗卡路里',cal],['未完成',positive(calGoal-cal)]]});
+            DoughnutChart.series[1].update({data:[['运动距离',distance],['未完成',positive(distanceGoal-distance)]]});
+            DoughnutChart.series[2].update({data:[['步数',steps],['未完成',positive(stepGoal-steps)]]});
+            $("#goal").text("当日计划: "+stepGoal+"步");
             $("#steps").text("当前步数: "+steps+"步");
             $("#distance").text("当前运动距离: "+distance+"公里");
             $("#cal").text("当前消耗能量: "+cal+"卡路里");
@@ -132,23 +163,27 @@ $(function(){
         });
     });
 });
+
 $(function(){
     $("#date").blur(function(){
+        var DoughnutChart = $("#DoughnutChart").highcharts();
         if ($("#date").val()=="") {
             $("#date").val(date);
         }
         else{
             date = $("#date").val();
             $.get("/getsteps/",{"openID":openID,"date":date,"type":"someday"},function(ret){
-                goal = Number(ret.goal);
+                stepGoal = Number(ret.stepGoal);
+                calGoal = Number(ret.calGoal);
+                distanceGoal = Number(ret.distanceGoal);
                 steps = Number(ret.steps);
                 cal = Number(ret.cal);
                 distance = Number(ret.distance);
-                var rate = comRate();
-                DoughnutChart.segments[0].value = rate;
-                DoughnutChart.segments[1].value = 1-rate;
-                DoughnutChart.update();
-                $("#goal").text("计划: "+goal);
+                date = ret.date;
+                DoughnutChart.series[0].update({data:[['消耗卡路里',cal],['未完成',positive(calGoal-cal)]]});
+                DoughnutChart.series[1].update({data:[['运动距离',distance],['未完成',positive(distanceGoal-distance)]]});
+                DoughnutChart.series[2].update({data:[['步数',steps],['未完成',positive(stepGoal-steps)]]});
+                $("#goal").text("计划: "+stepGoal);
                 $("#steps").text("当前步数: "+steps+"步");
                 $("#distance").text("当前运动距离: "+distance+"公里");
                 $("#cal").text("当前消耗能量: "+cal+"卡路里");
@@ -156,11 +191,10 @@ $(function(){
         }
     });
 });
-window.onbeforeunload = function(){
-    delete DoughnutChart;
-}
+
 $(function(){
     $("#showchart").click(function(){
         location.href = "/showdetails?openID=" + openID;
     });
 });
+

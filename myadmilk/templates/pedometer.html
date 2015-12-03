@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../static/css/pedometer.css" type="text/css">
     <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
     <script src="../static/js/pedometer.js"></script>
-    <script src="../static/js/Chart.min.js"></script>
+    <script src="../static/js/highcharts.js"></script>
 </head>
 <body style="background:black;">
 	<div id = "titlebox">
@@ -22,13 +22,13 @@
      	<div id = "middle">
             <div id="middle_background"></div>
             <div id="text1">
-                <p id="goal">0</p>
+                <p id="goal">goal</p>
             </div>
-            <canvas id = "DoughnutChart"></canvas>
+            <div id = "DoughnutChart"></div>
             <div id="text2">
-            	<p id="steps">1</p>
-                <p id="distance">2</p>
-                <p id="cal">3</p>
+            	<p id="steps">step</p>
+                <p id="distance">distance</p>
+                <p id="cal">calorie</p>
      		</div>
      	</div>
         <div id = "bottom">
