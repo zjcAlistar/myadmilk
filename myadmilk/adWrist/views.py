@@ -446,6 +446,7 @@ def set_remind(openID):
             remind = '提醒关闭'
     return remind
 
+
 def isValidUserName(name):
     try:
         userlist.objects.get(user_username=name)
@@ -454,6 +455,8 @@ def isValidUserName(name):
     else:
         return False
 
+
+@csrf_exempt
 def sign_in(request):
     if request.method == 'POST':
         openID = request.POST.get('openID')
@@ -469,6 +472,8 @@ def sign_in(request):
         return HttpResponse(rep)
     else:
         raise Http404
+
+
 
 
 
