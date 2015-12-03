@@ -11,6 +11,7 @@ from datetime import *
 from urllib.request import *
 import json
 import config
+from wechatpy.client import WeChatClient
 # Create your views here.
 
 
@@ -52,14 +53,17 @@ def handle_msg(request):
             else:
                 rep.content = '!!!'
         else:
-            rep.content = '<a href="http://learn.tsinghua.edu.cn">你好</a>'
+            client = WeChatClient(API_ID, API_SECRET)
+            cur_user = client.user.get(msg.source,lang=u'zh_CN')
+            nickname = cur_user['nickname']
+            rep.content = '你的用户名是'+nickname
         repxml = rep.render()
         return HttpResponse(repxml)
 
 
 def create_newuser(openID):
     try:
-        cur_user = userlist.objects.get(user_open_id=openID)
+        userlist.objects.get(user_open_id=openID)
     except userlist.DoesNotExist:
         new_user = userlist(
             user_open_id = openID
@@ -372,7 +376,8 @@ def get_steps(request):
                 dist = float(str('%.2f' % (walk_quantity*0.5/1000)))
                 rep = {"goal": goal, "steps": walk_quantity, "distance": dist,  "cal": walk_calorie}
             else:
-                rep = {"goal": 0, "steps": 0, "distance": 0, "cal": 0}
+                goal = cur_user.user_step_goal
+                rep = {"goal": goal, "steps": 0, "distance": 0, "cal": 0}
         if type != 'someday':
             rep['date'] = str(cur_date)
         return JsonResponse(rep)

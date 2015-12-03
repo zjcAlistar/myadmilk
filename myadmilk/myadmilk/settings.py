@@ -13,6 +13,13 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+
+import djcelery
+djcelery.setup_loader()
+CELERY_TIMEZONE = 'Asia/Shanghai'
+BROKER_URL = 'django://'
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -38,6 +45,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'adWrist',
+    'djcelery',
+    'kombu.transport.django',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -119,3 +128,14 @@ STATICFILES_DIRS = (
     ("jpg", os.path.join(STATIC_ROOT, 'img')),
     ("bmp", os.path.join(STATIC_ROOT, 'img')),
 )
+
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+
+from datetime import timedelta
+CELERYBEAT_SCHEDULE = {
+    'remind-check-every-1-hour':{
+        'task': 'adWrist.tasks.remind_check',
+        'schedule': timedelta(hours=1),
+        'args': ()
+    },
+}

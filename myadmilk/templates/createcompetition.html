@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建比赛</title>
+    <link rel="stylesheet" href="../static/css/createcompetition.css" type="text/css">
+    <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <script src="../static/js/createcompetition.js"></script>
+
+</head>
+<body style="background:black;">
+	<div id = "titlebox">
+		<nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+		<nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
+	</div>
+    <div id = "infobox">
+
+        <div id="slogan"><b>创建比赛 —— 与好友一试高下！</b></div>
+        <div id="competitionbox">
+             <div class="competitiontype"> 
+                <select id="competitiontype" onchange="show_competitiontype()">
+                	<option value="default" selected="selected" style="display:none;"></option>
+				  	<option value="comp_time">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp时间最短</option>
+				 	<option value="comp_distance"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp步数最多</option>
+				</select>
+				<div id="competitiontype_text">比赛类型</div>
+            </div> 
+            <!-- 步数最多 -->
+            <div id="comp_distance_box">
+            	<div class="comp_distance" style="top:0%;">
+            		<input type="date" class="date_start" id="d_date_start"/>
+            		<input type="time" class="time_start" id="d_time_start"/>
+            		<div class="comp_text">开始时间</div>
+            	</div>
+            	<div class="comp_distance" style="top:50%;">
+            		<input type="date" class="date_end" id="d_date_end"/>
+            		<input type="time" class="time_end" id="d_time_end"/>
+            		<div class="comp_text">结束时间</div>
+            	</div>
+            </div>
+            <!-- 步数最多 -->
+            <!-- 时间最短 -->
+            <div id="comp_time_box">
+            	<div class="comp_time" style="top:0%;">
+            		<input type="date" class="date_start" id="t_date_start"/>
+            		<input type="time" class="time_start" id="t_time_start"/>
+            		<div class="comp_text">开始时间</div>
+            	</div>
+            	<div class="comp_time" style="top:35%;">
+            		<input type="date" class="date_end"  id="t_date_end"/>
+            		<input type="time" class="time_end"  id="t_time_end"/>
+            		<div class="comp_text">结束时间</div>
+            	</div>
+            	<div class="comp_time" style="top:70%;">
+	            	<input type="number" id="goal_step"/>
+	                <div class="comp_text">目标步数</div>
+            	</div>
+            </div>
+            <!-- 时间最短 -->
+        </div>
+        <input id="confirm" type="submit" name="signup" value="发布"/>
+     
+    </div>
+    <script type="text/javascript">
+      	changesize();
+      	loaddatetime();
+        var openID = '{{ openID }}'
+        $(function(){
+            $("#confirm").click(function(){
+
+            	var competitiontype = $("#competitiontype").val();
+
+            	if (competitiontype == "comp_distance") {
+            		var date1 = $("#d_date_start").val();
+	            	var date2 = $("#d_date_end").val();
+	            	var time1 = $("#d_time_start").val();
+	            	var time2 = $("#d_time_end").val();
+	            	var flag = false;
+	            	var date = cmpdate(date1, date2);
+	            	var time = cmptime(time1, time2);
+	            	if ((date < 0 || date == 0) && time < 0) {
+	            		flag = true;
+	            	}
+	           
+	            	if (flag == true) {
+                        alert("比赛创建成功！请点击右上角「分享到朋友圈」，与好友一试高下！");
+	            		$.post("/signin/",{"openID": openID, "competitiontype": competitiontype, "datetime_start": datetime_start, "datetime_end": datetime_end},function(ret){
+	                        alert(ret);
+	                    });
+	            	}
+	            	else {
+	            		alert("日期输入有误，请重新输入！")
+	            	}
+            	}
+
+            	else if (competitiontype == "comp_time"){
+            		var date1 = $("#t_date_start").val();
+	            	var date2 = $("#t_date_end").val();
+	            	var time1 = $("#t_time_start").val();
+	            	var time2 = $("#t_time_end").val();
+	            	var goal_step = parseInt(Number($("#goal_step").val()));
+	            	var flag = false;
+	            	var date = cmpdate(date1, date2);
+	            	var time = cmptime(time1, time2);
+	            	if ((date < 0 || date == 0) && time < 0 && (goal_step != "")) {
+	            		flag = true;
+	            	}
+	            	
+
+	            	if (flag == true) {
+                        alert("比赛创建成功！请点击右上角「分享到朋友圈」，与好友一试高下！");
+	            		$.post("/signin/",{"openID": openID, "competitiontype": competitiontype, "datetime_start": datetime_start, "datetime_end": datetime_end},function(ret){
+	                        alert(ret);
+	                    });
+	            	}
+	            	else {
+	            		if ((goal_step == "")) {
+	            			alert("请填写目标步数！");
+	            		}
+	            		else {
+	            			alert("日期输入有误，请重新输入！")
+	            		}
+	            	}
+            	}
+
+            	
+
+
+            });
+        });
+    </script>
+</body>
+</html>

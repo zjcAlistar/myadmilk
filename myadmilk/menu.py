@@ -12,7 +12,7 @@ menu = {"button":
                 {"type":"click","name":"运动建议","key":"sports_advice"},
                 {"type":"view","name":"修改信息","url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid="
                                                    + API_ID + "&redirect_uri=" + serverIP +
-                                                   "showinfo&response_type=code&scope=snsapi_base&state=1#wechat_redirect"},
+                                                   "showinfo?&response_type=code&scope=snsapi_base&state=1#wechat_redirect"},
                 {"type":"click","name":"查看信息","key":"view_info"}]},
              {"name":"日常计划","sub_button":[
                 {"type":"click","name":"修改提醒","key":"change_remind"},
