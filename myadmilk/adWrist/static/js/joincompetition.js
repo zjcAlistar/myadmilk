@@ -30,7 +30,7 @@ function changesize() {
     });
     
 
-     $("#competitionname_text").css({
+    $("#competitionname_text").css({
         "font-size": Width*0.35/0.188*0.107*0.2,
         "font-family": "SimHei",
         "lineHeight": Height*0.989*0.5*0.25*0.3+"px"

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查看比赛结果</title>
+    <link rel="stylesheet" href="../static/css/resultcompetition.css" type="text/css">
+    <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <script src="../static/js/resultcompetition.js"></script>
+
+</head>
+<body style="background:black;">
+	<div id = "titlebox">
+		<nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+		<nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
+	</div>
+    <div id = "infobox">
+
+        <div id="slogan"><b>查看比赛 —— 在激励中提升自己！</b></div>
+        <div class="competitionname">
+            <input type="text" id="competitionname" onchange="is_valid_name()"/>
+            <div id="competitionname_text">比赛名称</div>  
+        </div>
+        <div id="competitionbox">
+            <div class="competitiontype">
+                <input type="text" id="competitiontype" readonly="true" value="时间最短" />
+                <div id="competitiontype_text">比赛类型</div>
+            </div> 
+            <div class="competitioncreater">
+                <input type="text" id="competitioncreater" readonly="true" value="Django" />
+                <div id="competitioncreater_text">发起者</div>  
+            </div>
+            <div class="currentnumber">
+                <input type="text" id="currentnumber" readonly="true" value="147"/>
+                <div id="currentnumber_text">参与人数</div>  
+            </div>
+            <!-- 步数最多 -->
+            <div id="comp_distance_box">
+                <div class="comp_distance" style="top:0%;">
+                    <input type="text" class="date_start" id="d_date_start" readonly="true" value="2015-01-01"/>
+                    <input type="text" class="time_start" id="d_time_start" readonly="true" value="12:20"/>
+                    <div class="comp_text">开始时间</div>
+                </div>
+                <div class="comp_distance" style="top:50%;">
+                    <input type="text" class="date_end" id="d_date_end" readonly="true" value="2015-01-01"/>
+                    <input type="text" class="time_end" id="d_time_end" readonly="true" value="12:20"/>
+                    <div class="comp_text">结束时间</div>
+                </div>
+            </div>
+            <!-- 步数最多 -->
+            <!-- 时间最短 -->
+            <div id="comp_time_box">
+                <div class="comp_time" style="top:0%;">
+                    <input type="text" class="date_start" id="t_date_start" readonly="true" value="2015-01-01"/>
+                    <input type="text" class="time_start" id="t_time_start" readonly="true" value="12:20"/>
+                    <div class="comp_text">开始时间</div>
+                </div>
+                <div class="comp_time" style="top:35%;">
+                    <input type="text" class="date_end"  id="t_date_end" readonly="true" value="2015-01-01"/>
+                    <input type="text" class="time_end" id="t_time_end" readonly="true" value="12:20"/>
+                    <div class="comp_text">结束时间</div>
+                </div>
+                <div class="comp_time" style="top:70%;">
+                    <input type="number" id="goal_step" readonly="true" value="5000"/>
+                    <div class="comp_text">目标步数</div>
+                </div>
+            </div>
+        </div>
+        <!-- 时间最短 -->
+
+        <div id="resultbox">
+            
+        </div>
+
+
+
+
+    </div>
+    <script type="text/javascript">
+      	changesize();
+        var openID = '{{ openID }}'
+        var competitionID = '{{ competitionID }}'
+        $("#competitionname").val(competitionID);
+        $(function(){
+            $("#confirm").click(function(){
+            
+            });
+        });
+    </script>
+    <div id="Layer1" style="position:fixed; left:0; top:0; width:100%; height:100%; z-index:-1"> 
+    <img src="../static/img/run02.jpg" height="100%" width="100%"/>  
+    </div>
+</body>
+</html>
