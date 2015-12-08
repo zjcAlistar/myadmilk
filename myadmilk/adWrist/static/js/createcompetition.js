@@ -24,6 +24,15 @@ function changesize() {
         "lineHeight": Height*0.05+"px"
     });
 
+    $("#competitionname_text").css({
+        "font-size": Width*0.35/0.188*0.107*0.2,
+        "font-family": "SimHei",
+        "lineHeight": Height*0.989*0.5*0.25*0.3+"px"
+    });
+    $("#competitionname").css({
+         "font-size": Width*0.35/0.188*0.107*0.4
+    });
+
     $("#competitiontype_text").css({
         "font-size": Width*0.35/0.188*0.107*0.2,
         "font-family": "SimHei",
@@ -51,7 +60,7 @@ function changesize() {
          "font-size": Width*0.35/0.188*0.107*0.25
     });
     $("#goal_step").css({
-         "font-size": Width*0.35/0.188*0.107*0.25
+         "font-size": Width*0.35/0.188*0.107*0.4
     });
 
 
@@ -65,6 +74,24 @@ function changesize() {
 
     
 };
+
+
+function is_valid_name () {
+    var name = $("#competitionname").val();
+    if (name.length > 9) {
+        alert("比赛名称过长,请重新输入！");
+        $("#competitionname").val("");
+        return false;
+    }
+    else if (name.length == 0) {
+        alert("比赛名称不能为空！");
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
 
 function loaddatetime () {
     var today = new Date();   

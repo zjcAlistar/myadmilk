@@ -16,6 +16,10 @@
     <div id = "infobox">
 
         <div id="slogan"><b>创建比赛 —— 与好友一试高下！</b></div>
+        <div class="competitionname">
+            <input type="text" id="competitionname" onchange="is_valid_name()"/>
+            <div id="competitionname_text">比赛名称</div>  
+        </div>
         <div id="competitionbox">
              <div class="competitiontype"> 
                 <select id="competitiontype" onchange="show_competitiontype()">
@@ -66,8 +70,14 @@
       	loaddatetime();
         var openID = '{{ openID }}'
         var competitionID = '{{ competitionID }}'
+        $("#competitionname").val(competitionID);
         $(function(){
             $("#confirm").click(function(){
+                
+                var validname = is_valid_name();
+                if (validname == false) {
+                    return 0;
+                }
 
             	var competitiontype = $("#competitiontype").val();
 

@@ -24,13 +24,37 @@ function changesize() {
         "lineHeight": Height*0.05+"px"
     });
 
+    $("#currentnumber").css({
+        "font-size": Height*0.025,
+        "lineHeight": Height*0.05+"px"
+    });
+    
+
+     $("#competitionname_text").css({
+        "font-size": Width*0.35/0.188*0.107*0.2,
+        "font-family": "SimHei",
+        "lineHeight": Height*0.989*0.5*0.25*0.3+"px"
+    });
+    $("#competitionname").css({
+         "font-size": Width*0.35/0.188*0.107*0.35
+    });
+
+    $("#competitioncreater_text").css({
+        "font-size": Width*0.35/0.188*0.107*0.2,
+        "font-family": "SimHei",
+        "lineHeight": Height*0.989*0.5*0.25*0.3+"px"
+    });
+    $("#competitioncreater").css({
+         "font-size": Width*0.35/0.188*0.107*0.4
+    });
+
     $("#competitiontype_text").css({
         "font-size": Width*0.35/0.188*0.107*0.2,
         "font-family": "SimHei",
         "lineHeight": Height*0.989*0.5*0.25*0.3+"px"
     });
     $("#competitiontype").css({
-         "font-size": Width*0.35/0.188*0.107*0.4
+         "font-size": Width*0.35/0.188*0.107*0.35
     });
 
     $(".comp_text").css({
@@ -39,19 +63,19 @@ function changesize() {
         "lineHeight": Height*0.989*0.5*0.25*0.3+"px"
     });
     $(".date_start").css({
-         "font-size": Width*0.35/0.188*0.107*0.25
+         "font-size": Width*0.35/0.188*0.107*0.4
     });
     $(".time_start").css({
-         "font-size": Width*0.35/0.188*0.107*0.25
+         "font-size": Width*0.35/0.188*0.107*0.4
     });
     $(".date_end").css({
-         "font-size": Width*0.35/0.188*0.107*0.25
+         "font-size": Width*0.35/0.188*0.107*0.4
     });
     $(".time_end").css({
-         "font-size": Width*0.35/0.188*0.107*0.25
+         "font-size": Width*0.35/0.188*0.107*0.4
     });
     $("#goal_step").css({
-         "font-size": Width*0.35/0.188*0.107*0.25
+         "font-size": Width*0.35/0.188*0.107*0.4
     });
 
 
