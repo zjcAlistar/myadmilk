@@ -2,7 +2,6 @@ from django.db import models
 
 # Create your models here.
 
-
 class userlist(models.Model):
     user_open_id = models.CharField(max_length=128)
     user_username = models.CharField(max_length=128)
@@ -29,3 +28,19 @@ class sportrecords(models.Model):
     sportrecords_step_goal = models.IntegerField(default=20000)
     sportrecords_dist_goal = models.IntegerField(default=1000)
     sportrecords_calorie_goal = models.IntegerField(default=2000)
+
+
+class matchrecords(models.Model):
+    matchrecords_id = models.IntegerField(default=0)
+    matchrecords_title = models.CharField(max_length=128)
+    matchrecords_relate_person = models.ForeignKey(userlist, related_name='related')
+    matchrecords_originator = models.BooleanField()
+    matchrecords_matchtype = models.CharField(max_length=128)
+    matchrecords_matchstate = models.IntegerField(default=0)
+    matchrecords_messageread = models.BooleanField(default=False)
+    matchrecords_start_time = models.DateTimeField(auto_now_add=True)
+    matchrecords_end_time = models.DateTimeField(auto_now_add=True)
+    matchrecords_steps = models.IntegerField(default=0)
+    matchrecords_target = models.IntegerField(default=0)
+
+

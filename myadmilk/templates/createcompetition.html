@@ -95,7 +95,7 @@
 	           
 	            	if (flag == true) {
                         alert("比赛创建成功！请点击右上角「分享到朋友圈」，与好友一试高下！");
-	            		$.post("/signin/",{"openID": openID, "competitionID": competitionID, "competitiontype": competitiontype, "datetime_start": datetime_start, "datetime_end": datetime_end},function(ret){
+	            		$.post("/creatematch/",{"openID": openID, "competitionID": competitionID, "competitiontype": competitiontype, "datetime_start": date1+" "+time1, "datetime_end": date2+" "+time2},function(ret){
 	                        alert(ret);
 	                    });
 	            	}
@@ -120,7 +120,7 @@
 
 	            	if (flag == true) {
                         alert("比赛创建成功！请点击右上角「分享到朋友圈」，与好友一试高下！");
-	            		$.post("/signin/",{"openID": openID, "competitionID": competitionID, "competitiontype": competitiontype, "datetime_start": datetime_start, "datetime_end": datetime_end},function(ret){
+	            		$.post("/creatematch/",{"openID": openID, "competitionID": competitionID, "competitiontype": competitiontype, "datetime_start": date1+" "+time1, "datetime_end": date2+" "+time2, "goal_step": goal_step},function(ret){
 	                        alert(ret);
 	                    });
 	            	}

@@ -6,7 +6,7 @@ from wechatpy.utils import check_signature
 from wechatpy import parse_message
 from wechatpy.replies import TextReply
 from django.views.decorators.csrf import csrf_exempt
-from adWrist.models import userlist, sportrecords
+from adWrist.models import userlist, sportrecords, matchrecords
 from datetime import *
 from urllib.request import *
 import json
@@ -48,6 +48,8 @@ def handle_msg(request):
                     rep.content = get_datatoday(msg.source)
                 elif msg.key == 'change_remind':
                     rep.content = set_remind(msg.source)
+                elif msg.key == 'build_match':
+                    rep.content = build_match(msg.source)
             elif msg.event == 'subscribe':
                 rep.content = create_newuser(msg.source)
             else:
@@ -80,7 +82,7 @@ def show_info_page(request):
         openID = get_openid(code)
         return render_to_response('personalInfo.html',{'openID':openID },context_instance=RequestContext(request))
     else:
-        raise Http404
+        raise Http404()
 
 
 def add_test(openID):
@@ -220,10 +222,17 @@ def change_info(request):
                 )
                 new_user.save()
                 return JsonResponse({"age": new_user.user_age, "sex": new_user.user_sex, "weight": new_user.user_weight,
-                                     "height": new_user.user_height, "advice": '您还没有填写个人信息'})
+                                     "height": new_user.user_height, "advice": '您还没有填写个人信息', "id": "匿名", "score": 0,
+                                     "avatar": "../static/img/run02.jpg"})
             else:
+                score = 1000
+                client = WeChatClient(API_ID, API_SECRET)
+                cur_user_info = client.user.get(openID,lang=u'zh_CN')
+                nickname = cur_user_info['nickname']
+                avator = cur_user_info['headimgurl']
                 return JsonResponse({"age": cur_user.user_age, "sex": cur_user.user_sex, "weight": cur_user.user_weight,
-                                     "height": cur_user.user_height, "advice": recommend_plan(openID)})
+                                     "height": cur_user.user_height, "advice": recommend_plan(openID), "id": nickname, "score": score,
+                                     "avatar": avator})
         elif type == 'confirm':
             sex = request.GET.get('sex')
             age = request.GET.get('age')
@@ -251,7 +260,7 @@ def change_info(request):
                 cur_user.save()
             return JsonResponse({"advice": recommend_plan(openID)})
     else:
-        raise Http404
+        raise Http404()
 
 
 def show_chart(request):
@@ -261,7 +270,7 @@ def show_chart(request):
         return render_to_response('pedometer.html', {'openID': openID},
                                   context_instance=RequestContext(request))
     else:
-        raise Http404
+        raise Http404()
 
 
 def show_details(request):
@@ -270,7 +279,7 @@ def show_details(request):
         return render_to_response('showchart.html', {'openID': openID},
                                   context_instance=RequestContext(request))
     else:
-        raise Http404
+        raise Http404()
 
 
 def goback_chart(request):
@@ -279,7 +288,7 @@ def goback_chart(request):
         return render_to_response('pedometer.html', {'openID': openID},
                                   context_instance=RequestContext(request))
     else:
-        raise Http404
+        raise Http404()
 
 
 def get_week_data(request):
@@ -312,12 +321,14 @@ def get_week_data(request):
                                                sportrecords_end_time__startswith=cur_date)
                 if cur_data:
                     walk_quantity = 0
+                    step_goal = cur_data[0].sportrecords_step_goal
                     for single_data in cur_data:
                         if single_data.sportrecords_sport_type == '走路':
                             walk_quantity += single_data.sportrecords_quantity
-                    rep = {"date": cur_date, "steps": walk_quantity}
+                    rep = {"date": cur_date, "steps": walk_quantity, "goal": step_goal}
                 else:
-                    rep = {"date": cur_date, "steps": 0}
+                    step_goal = cur_user.user_step_goal
+                    rep = {"date": cur_date, "steps": 0, "goal": step_goal}
             else:
                 rep = []
                 for i in range(7):
@@ -326,15 +337,17 @@ def get_week_data(request):
                                                            sportrecords_end_time__startswith=pre_date)
                     if cur_data:
                         walk_quantity = 0
+                        step_goal = cur_data[0].sportrecords_step_goal
                         for single_data in cur_data:
                             if single_data.sportrecords_sport_type == '走路':
                                 walk_quantity += single_data.sportrecords_quantity
-                        rep.append({"date": pre_date, "steps": walk_quantity})
+                        rep.append({"date": pre_date, "steps": walk_quantity, "goal": step_goal})
                     else:
-                        rep.append({"date": pre_date, "steps": 0})
+                        step_goal = cur_user.sportrecords_step_goal
+                        rep.append({"date": pre_date, "steps": 0,"goal": step_goal})
         return JsonResponse(rep, safe=False)
     else:
-        raise Http404
+        raise Http404()
 
 def get_openid(code):
     url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + API_ID + '&secret=' + API_SECRET + \
@@ -387,7 +400,7 @@ def get_steps(request):
             rep['date'] = str(cur_date)
         return JsonResponse(rep)
     else:
-        raise Http404
+        raise Http404()
 
 def show_plan(request):
     if request.method == 'GET':
@@ -396,7 +409,7 @@ def show_plan(request):
         return render_to_response('sportplan.html', {'openID': openID},
                                   context_instance=RequestContext(request))
     else:
-        raise Http404
+        raise Http404()
 
 @csrf_exempt
 def change_plan(request):
@@ -439,7 +452,7 @@ def change_plan(request):
             rep = {"step_goal": step_goal, "dist_goal": dist_goal, "cal_goal": cal_goal, "advice": advice}
             return JsonResponse(rep)
     else:
-        raise Http404
+        raise Http404()
 
 
 def set_remind(openID):
@@ -456,7 +469,6 @@ def set_remind(openID):
             remind = '提醒关闭'
     return remind
 
-
 def isValidUserName(name):
     try:
         userlist.objects.get(user_username=name)
@@ -465,8 +477,6 @@ def isValidUserName(name):
     else:
         return False
 
-
-@csrf_exempt
 def sign_in(request):
     if request.method == 'POST':
         openID = request.POST.get('openID')
@@ -481,10 +491,117 @@ def sign_in(request):
             rep = '用户名已被使用，请重新注册'
         return HttpResponse(rep)
     else:
-        raise Http404
+        raise Http404()
 
 
+def build_match(openID):
+    try:
+        cur_user = userlist.objects.get(user_open_id=openID)
+    except userlist.DoesNotExist:
+        rep = '您还没有填写个人信息'
+    else:
+        new_match = matchrecords(
+            matchrecords_relate_person = cur_user,
+            matchrecords_originator = True,
+            matchrecords_matchtype = '未定',
+        )
+        new_match.save()
+        new_match.matchrecords_id = new_match.id
+        new_match.save()
+        link = str('https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s'
+                  '&redirect_uri=%s'
+                  'showmatchpage?matchid=%d'
+                  '&response_type=code&scope=snsapi_base&state=1#wechat_redirect' % (API_ID, serverIP, new_match.matchrecords_id))
+        rep = str('<a href="%s">请点击此链接创建比赛</a>' % (link))
+    return rep
+
+def show_match_page(request):
+    if request.method == 'GET':
+        matchid = request.GET.get('matchid')
+        code = request.GET.get('code')
+        openID = get_openid(code)
+        try:
+            userlist.objects.get(user_open_id=openID)
+        except userlist.DoesNotExist:
+            return HttpResponse('您还没有关注admilk应用')
+        else:
+            try:
+                cur_match = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_originator=True)
+            except matchrecords.DoesNotExist:
+                return HttpResponse('比赛还未创建')
+            else:
+                if cur_match.matchrecords_matchstate == 0:
+                    if cur_match.matchrecords_relate_person.user_open_id == openID:
+                        return render_to_response('createcompetition.html', {'openID': openID, 'competitionID': matchid},
+                                  context_instance=RequestContext(request))
+                    else:
+                        return HttpResponse('你没有设置此比赛的权限')
+                elif cur_match.matchrecords_matchstate == 1:
+                    return render_to_response('joincompetition.html', {'openID': openID, 'competitionID': matchid},
+                                  context_instance=RequestContext(request))
+                elif cur_match.matchrecords_matchstate == 2:
+                    return HttpResponse('比赛已经开始，请回公众号->个人中心->我的比赛查看')
+                else:
+                    return HttpResponse('比赛已经开始，请回公众号->个人中心->我的比赛查看')
+    else:
+        raise Http404()
 
 
+@csrf_exempt
+def create_match(request):
+    if request.method == 'POST':
+        openID = request.POST.get('openID')
+        matchid = request.POST.get('competitionID')
+        matchtype = request.POST.get('competitiontype')
+        start_time = request.POST.get('datetime_start')
+        end_time = request.POST.get('datetime_end')
+        try:
+            userlist.objects.get(user_open_id=openID)
+        except userlist.DoesNotExist:
+            return HttpResponse('您还没有关注admilk应用')
+        else:
+            try:
+                cur_match = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_originator=True)
+            except matchrecords.DoesNotExist:
+                return HttpResponse('发生了未知错误')
+            else:
+                if cur_match.matchrecords_matchstate == 0:
+                    cur_match.matchrecords_matchtype = matchtype
+                    cur_match.matchrecords_start_time = start_time
+                    cur_match.matchrecords_end_time = end_time
+                    cur_match.matchrecords_matchstate = 1
+                    cur_match.save()
+                    return HttpResponse('发布成功')
+                else:
+                    return HttpResponse('比赛已经创建')
+    else:
+        raise Http404()
 
 
+def get_matches(request):
+    if request.method == 'GET':
+        openID = request.GET.get('openID')
+        rep = []
+        try:
+            cur_user = userlist.objects.get(user_open_id=openID)
+        except userlist.DoesNotExist:
+            return JsonResponse(rep, safe=False)
+        else:
+            client = WeChatClient(API_ID, API_SECRET)
+            cur_matches = matchrecords.objects.filter(matchrecords_relate_person=cur_user, matchrecords_matchstate__gte=1).order_by("-matchrecords_id")
+            for match in cur_matches:
+                match_title = match.matchrecords_title
+                match_state = match.matchrecords_matchstate
+                match_start_time = match.matchrecords_start_time.date()
+                match_end_time = match.matchrecords_end_time.date()
+                match_originator = matchrecords.objects.get(matchrecords_id=match.matchrecords_id,
+                                                            matchrecords_originator=True).matchrecords_relate_person
+                match_originator_id = match_originator.user_open_id
+                match_originator_info = client.user.get(match_originator_id,lang=u'zh_CN')
+                match_originator_nickname = match_originator_info['nickname']
+                cur_players = matchrecords.objects.filter(matchrecords_id=match.matchrecords_id).count()
+                rep.append({"matchplayers": cur_players, "matchstate": match_state, "matchtitle": match_title,
+                            "matchoriginator": match_originator_nickname,"matchstarttime": match_start_time, "matchendtime": match_end_time})
+            return  JsonResponse(rep, safe=False)
+    else:
+        raise Http404()

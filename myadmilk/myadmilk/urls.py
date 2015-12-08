@@ -28,5 +28,8 @@ urlpatterns = [
     url(r'^getsteps', 'adWrist.views.get_steps', name='get_steps'),
     url(r'^showplan', 'adWrist.views.show_plan', name='show_plan'),
     url(r'^changeplan', 'adWrist.views.change_plan', name='change_plan'),
+    url(r'^showmatchpage', 'adWrist.views.show_match_page', name='show_match_page'),
+    url(r'^creatematch', 'adWrist.views.create_match', name='create_match'),
+    url(r'^getmatches', 'adWrist.views.get_matches', name='get_matches'),
     url(r'^signin', 'adWrist.views.sign_in', name='sign_in'),
 ]

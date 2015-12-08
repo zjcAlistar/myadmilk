@@ -5,22 +5,34 @@ var valid_comfirm = true;
 
 function changesize() {
 
-	$("#titlebox").css({
-		"width": Width,
-		"height": Height*0.1,
-		"font-family": "verdana",
-		"lineHeight": Height*0.1+"px"
-	});
+	// $("#titlebox").css({
+	// 	"width": Width,
+	// 	"height": Height*0.1,
+	// 	"font-family": "verdana",
+	// 	"lineHeight": Height*0.1+"px"
+	// });
 
 	//document.getElementById("titlebox").style.lineHeight="100px";
 
 	$("#titlebox_text1").css("font-size", Height*0.06);
 	$("#titlebox_text2").css("font-size", Height*0.07);
 
-	$("#infobox").css({
-		"width": Width,
-		"height": Height*0.898
+	var avator_height = $("#avatar").height();
+	$("#username").css({
+		"left": Width*0.17+avator_height,
+		"font-size": 0.37*avator_height
 	});
+	var userinfo_height = $("#userinfo").height();
+	$("#userscore").css({
+		"top": userinfo_height*0.3+0.4*avator_height,
+		"left": Width*0.17+avator_height,
+		"font-size": 0.2*avator_height
+	});
+
+	// $("#infobox").css({
+	// 	"width": Width,
+	// 	"height": Height*0.898
+	// });
 
 
 
@@ -55,7 +67,7 @@ function changesize() {
 
 
 	$("#exercise_advice_title").css({
-		"font-size": Height*0.023,
+		"font-size": $("#exercise_advice_title").height()*0.65,
 		"lineHeight": Height*0.04+"px"
 	});
 	$("#exercise_advice_text").css({
@@ -69,6 +81,16 @@ function changesize() {
         "height": Width* 0.2,
         "left": Width*0.4  
     });
+
+	var switch_height = $("#switch").height();
+	$("#switch").css({
+		// "lineHeight":3,
+		"font-size":0.35*switch_height
+	});
+
+	// $("#competition_players").css("font-size", 0.7*$("#competition_players").height());
+	// $("#competition_state").css("font-size", 0.6*$("#competition_state").height());
+	
 };
 
 var defaultAge;
@@ -78,11 +100,17 @@ var defaultHeight;
 
 window.onload = function(){
 
+	//ret test
+	var ret={"age":"12","weight":"45","height":"123","sex":"2","advice":"","id":"Alistar","score":"1998","avatar":"../static/img/touxiang.jpg"};
 	$.get("/changeinfo/",{"openID":openID,"type":"init"},function(ret){
+		defaultScore = ret.score;
 		defaultAge = Number(ret.age);
 		defaultSex = Number(ret.sex);
 		defaultHeight = Number(ret.height);
 		defaultWeight = Number(ret.weight);
+		$("#avatar").attr("src",ret.avatar);
+		$("#username").append(ret.id);
+		$("#userscore").append("积分:"+ret.score);
 		var advice = ret.advice;
 		exercise_advice_text.innerHTML = advice;
 		if (defaultAge != -1) {
@@ -110,7 +138,7 @@ window.onload = function(){
 			$('#sex_woman').css("visibility", "visible");
 		}
 		//sex
-	})
+	});
 }
 
 $(function(){
@@ -213,7 +241,7 @@ $(function(){
 				var height = parseInt($("#height").val());
 				var weight = parseInt($("#weight").val());
 				if (defaultSex != 0 && !isNaN(age)&&!isNaN(height)&&!isNaN(weight)) {
-					$.get("/changeinfo/",{"openID":openID,"age":age,"sex":defaultSex,"height":height,"weight":weight,"type":"confirm"},function(ret){
+					$.post("/changeinfo/",{"openID":openID,"age":age,"sex":defaultSex,"height":height,"weight":weight,"type":"confirm"},function(ret){
 						edit_state = false;
 						$("#age").attr("disabled", "true");
 						$("#weight").attr("disabled", "true");
@@ -230,6 +258,87 @@ $(function(){
 		};
 
 	})
+});
+
+$(function(){
+	$("#personalinfo").click(function(){
+		$("#infobox").css("display","block");
+		$("#personalinfo").css("color","rgb(23,140,250)");
+		$("#competitionbox").css("display","none");
+		$("#competition").css("color","rgb(120,160,190)");
+		$("#competitions").children("li").remove();
+	});
+});
+
+$(function(){
+	$("#competition").click(function(){
+		if(edit_state == true) {
+			alert("请先确认修改");
+		} else {
+			$("#infobox").css("display","none");
+			$("#personalinfo").css("color","rgb(120,160,190)");
+			$("#competitionbox").css("display","block");
+			$("#competition").css("color","rgb(23,140,250)");
+			$.get("/getmatches/",{"openID":openID},function(ret){
+				var num_match = ret.length;
+				for(var i = 0;i < num_match;i++){
+					var match = $('<li>');
+					match.attr({
+						"class": "single_competition",
+						"id":"competition_"+i
+					});
+					match.css("top",(2+22*i)+"%");
+					match.appendTo('#competitions');
+
+					var match_players = $('<div>');
+					match_players.attr("id", "competition_players");
+					match_players.append(ret[i].matchplayers);
+					match_players.appendTo("#competition_"+i);
+					
+					var match_state = $('<div>');	
+					match_state.attr("id", "competition_state");
+					if(Number(ret[i].matchstate) == 1) {
+						match_state.append("即将开始");
+					} else if(Number(ret[i].matchstate) == 2) {
+						match_state.append("进行中");
+					} else if(Number(ret[i].matchstate) == 3) {
+						match_state.append("已结束");
+					} else {
+						alert("比赛状态有误");
+					}
+					match_state.appendTo("#competition_"+i);
+
+					var match_title = $('<div>');
+					match_title.attr("id", "competition_title");
+					match_title.append(ret[i].matchtitle);
+					match_title.appendTo("#competition_"+i);
+
+					var match_author = $('<div>');
+					match_author.attr("id","competition_author");
+					match_author.appendTo("#competition_"+i);
+
+					var match_author_icon = $('<i>');
+					match_author_icon.attr("id","icon_author");
+					match_author_icon.appendTo("#competition_"+i+" #competition_author");
+					
+					var match_author_name = $('<p>');
+					match_author_name.attr("id", "author_name");
+					match_author_name.append(ret[i].matchoriginator);
+					match_author_name.appendTo("#competition_"+i+" #competition_author");
+					
+					var match_starttime = $('<div>');
+					match_starttime.attr("id", "competition_starttime");
+					match_starttime.append("S:"+ret[i].matchstarttime);
+					match_starttime.appendTo("#competition_"+i);
+					
+					var match_endtime = $('<div>');
+					match_endtime.attr("id", "competition_endtime");
+					match_endtime.append("E:"+ret[i].matchendtime);
+					match_endtime.appendTo("#competition_"+i);
+				}
+		    });
+		}
+	});
 });
 
 window.onorientationchange  = function(){

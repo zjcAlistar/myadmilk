@@ -33,8 +33,7 @@ function changesize() {
     $('#text2').css("font-size", Height*0.9*0.6*0.15*0.35);
     $('#showchart').css("font-size", Height*0.9*0.2*0.4*0.5);
     
-    // var Fontsize = $("#confirm").css("height");
-    // $("#confirm").css("font-size", parseInt(Fontsize)*0.7);
+
 };
 
 function positive(Num){
@@ -45,10 +44,6 @@ function positive(Num){
 }
 
 window.onload = function(){
-    goal=0;
-    steps=0;
-    distance=0;
-    cal=0;
     $.get("/getsteps/",{"openID":openID,"type":"init"},function(ret){
         stepGoal = Number(ret.stepGoal);
         calGoal = Number(ret.calGoal);
@@ -60,10 +55,16 @@ window.onload = function(){
         $(function(){
             $('#DoughnutChart').highcharts({
             chart: {
-                type: 'pie'
+                type: 'pie',
+                backgroundColor: 'rgba(0,0,0,0)'
             },
             title: {
-                text: '健身完成度'
+                text: '健身完成度',
+                style:{
+                    "fontSize":"60px"
+                },
+                margin:0,
+                padding:0
             },
             plotOptions: {
                 series:{
@@ -92,28 +93,46 @@ window.onload = function(){
             credits: {
             enabled: false
             },
+            tooltip:{
+                style:{
+                    "fontSize":"24px"
+                },
+                formatter:function(){
+                    return this.key + "：" + this.y;
+                }
+            },
+            legend:{
+                itemStyle:{
+                    "fontSize":"24px"
+                }
+            },
             series: [{
                 name: '卡路里',
+                colors:['#91e8e1', '#434348'],
                 data: [['消耗卡路里',cal],['未完成',positive(calGoal-cal)]],
-                size: '40%',
-                innerSize: '20%',
+                size: '60%',
+                innerSize: '30%',
             }, {
                 name: '距离',
+                colors:['#2b908f', '#434348'],
                 data: [['运动距离',distance],['未完成',positive(distanceGoal-distance)]],
                 size: '70%',
-                innerSize: '40%',
+                innerSize: '60%',
             }, {
                 name: '步数',
+                colors:['#7cb5ec', '#434348'],
                 data: [['步数',steps],['未完成',positive(stepGoal-steps)]],
-                size: '80%',
+                size: '100%',
                 innerSize: '70%',
             }]
             });
         });
-        $("#goal").text("计划: "+stepGoal);
-        $("#steps").text("当前步数: "+steps+"步");
-        $("#distance").text("当前运动距离: "+distance+"公里");
-        $("#cal").text("当前消耗能量: "+cal+"卡路里");
+        $("#stepGoal").text("目标："+stepGoal+"步");
+        $("#calGoal").text("目标："+calGoal+"cal");
+        $("#distanceGoal").text("目标："+distanceGoal+"km");
+        $("#steps").text("当前步数："+steps+"步");
+        $("#distance").text("运动距离："+distance+"km");
+        $("#cal").text("消耗能量："+cal+"cal");
         $("#date").val(date);
     });
 }
@@ -132,11 +151,13 @@ $(function(){
             DoughnutChart.series[0].update({data:[['消耗卡路里',cal],['未完成',positive(calGoal-cal)]]});
             DoughnutChart.series[1].update({data:[['运动距离',distance],['未完成',positive(distanceGoal-distance)]]});
             DoughnutChart.series[2].update({data:[['步数',steps],['未完成',positive(stepGoal-steps)]]});
-            $("#goal").text("当日计划: "+stepGoal+"步");
-            $("#steps").text("当前步数: "+steps+"步");
-            $("#distance").text("当前运动距离: "+distance+"公里");
-            $("#cal").text("当前消耗能量: "+cal+"卡路里");
-            $("#date").val(date);
+            $("#stepGoal").text("目标："+stepGoal+"步");
+        $("#calGoal").text("目标："+calGoal+"cal");
+        $("#distanceGoal").text("目标："+distanceGoal+"km");
+        $("#steps").text("当前步数："+steps+"步");
+        $("#distance").text("运动距离："+distance+"km");
+        $("#cal").text("消耗能量："+cal+"cal");
+        $("#date").val(date);
         });
     });
 });
@@ -155,11 +176,13 @@ $(function(){
             DoughnutChart.series[0].update({data:[['消耗卡路里',cal],['未完成',positive(calGoal-cal)]]});
             DoughnutChart.series[1].update({data:[['运动距离',distance],['未完成',positive(distanceGoal-distance)]]});
             DoughnutChart.series[2].update({data:[['步数',steps],['未完成',positive(stepGoal-steps)]]});
-            $("#goal").text("当日计划: "+stepGoal+"步");
-            $("#steps").text("当前步数: "+steps+"步");
-            $("#distance").text("当前运动距离: "+distance+"公里");
-            $("#cal").text("当前消耗能量: "+cal+"卡路里");
-            $("#date").val(date);
+            $("#stepGoal").text("目标："+stepGoal+"步");
+        $("#calGoal").text("目标："+calGoal+"cal");
+        $("#distanceGoal").text("目标："+distanceGoal+"km");
+        $("#steps").text("当前步数："+steps+"步");
+        $("#distance").text("运动距离："+distance+"km");
+        $("#cal").text("消耗能量："+cal+"cal");
+        $("#date").val(date);
         });
     });
 });
@@ -179,14 +202,15 @@ $(function(){
                 steps = Number(ret.steps);
                 cal = Number(ret.cal);
                 distance = Number(ret.distance);
-                date = ret.date;
                 DoughnutChart.series[0].update({data:[['消耗卡路里',cal],['未完成',positive(calGoal-cal)]]});
                 DoughnutChart.series[1].update({data:[['运动距离',distance],['未完成',positive(distanceGoal-distance)]]});
                 DoughnutChart.series[2].update({data:[['步数',steps],['未完成',positive(stepGoal-steps)]]});
-                $("#goal").text("计划: "+stepGoal);
-                $("#steps").text("当前步数: "+steps+"步");
-                $("#distance").text("当前运动距离: "+distance+"公里");
-                $("#cal").text("当前消耗能量: "+cal+"卡路里");
+                $("#stepGoal").text("目标："+stepGoal+"步");
+                $("#calGoal").text("目标："+calGoal+"cal");
+                $("#distanceGoal").text("目标："+distanceGoal+"km");
+                $("#steps").text("当前步数："+steps+"步");
+                $("#distance").text("运动距离："+distance+"km");
+                $("#cal").text("消耗能量："+cal+"cal");
             });
         }
     });

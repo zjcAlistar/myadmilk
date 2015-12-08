@@ -35,7 +35,7 @@
             $("#confirm").click(function(){
                     var username = $("#username").val();
                     var password = $("#password").val();
-                    $.post("/login/",{"openID": openID, "username": username, "password": password},function(ret){
+                    $.post("/signin/",{"openID": openID, "username": username, "password": password},function(ret){
                         alert(ret);
                     });
             });

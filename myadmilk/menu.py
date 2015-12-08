@@ -9,6 +9,7 @@ API_SECRET = config.API_SECRET
 
 menu = {"button":
             [{"name":"个人信息","sub_button":[
+                {"type":"click","name":"发布比赛","key":"build_match"},
                 {"type":"click","name":"运动建议","key":"sports_advice"},
                 {"type":"view","name":"修改信息","url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid="
                                                    + API_ID + "&redirect_uri=" + serverIP +
