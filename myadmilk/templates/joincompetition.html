@@ -75,7 +75,7 @@
         var competitionID = '{{ competitionID }}'
         $(function(){
             $("#confirm").click(function(){
-            	$.post("/joincompetition/",{"openID": openID, "competitionID": competitionID}),function(ret){
+            	$.post("/joinmatch/",{"openID": openID, "competitionID": competitionID}),function(ret){
             		alert(ret);
             	}
             });

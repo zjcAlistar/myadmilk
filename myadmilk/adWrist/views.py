@@ -577,6 +577,38 @@ def create_match(request):
     else:
         raise Http404()
 
+def join_match(request):
+    if request.method == 'POST':
+        openID = request.POST.get('openID')
+        matchid = request.POST.get('competitionID')
+        try:
+            person = userlist.objects.get(user_open_id=openID)
+        except userlist.DoesNotExist:
+            return HttpResponse('您还没有关注admilk应用')
+        else:
+            try:
+                matchrecords.objects.get(matchrecords_id=matchid, matchrecords_relate_person=person)
+            except:
+                match = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_relate_person=person)
+                newmatchrecord = matchrecords(
+                    matchrecords_id = match.matchrecords_id,
+                    matchrecords_title = match.matchrecords_title,
+                    matchrecords_relate_person = person,
+                    matchrecords_originator = False,
+                    matchrecords_matchtype = match.matchrecords_matchtype,
+                    matchrecords_matchstate = match.matchrecords_matchstate,
+                    matchrecords_start_time = match.matchrecords_start_time,
+                    matchrecords_end_time = match.matchrecords_end_time,
+                    matchrecords_steps = match.matchrecords_steps,
+                    matchrecords_target = match.matchrecords_target
+                )
+                newmatchrecord.save()
+                return HttpResponse('参加成功')
+            else:
+                return HttpResponse('您已经参加了该比赛')
+
+    else:
+        raise Http404()
 
 def get_matches(request):
     if request.method == 'GET':
