@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=no, width=device-width">
+    <title>周总结</title>
+    <link rel="stylesheet" href="../static/css/weekreport.css" type="text/css">
+    <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <script src="../static/js/highcharts.js"></script>
+    <script type="text/javascript" src="../static/js/weekreport.js"></script>
+    
+    
+</head>
+<body style="background:black;">
+    <div id = "titlebox">
+        <nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+        <nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
+    </div>
+    <div id="infobox">
+        <div id="exercise-report">
+            <p><b>总步数：</b><a id="totalStep">123</a></p>
+            <p><b>总距离：</b><a id="totalDistance">123</a></p>
+            <p><b>总卡路里：</b><a id="totalCal">123</a></p>
+        </div>
+        <div id="lineChart">
+        </div>
+        <div id="competition-report" style="overflow:scroll;">
+            <table id="table">
+                <tr>
+                    <th>比赛名称</th>
+                    <th>比赛排名</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+    var openID = '{{ openID }}'
+    changesize();
+    </script>
+</body>
+
+</html>

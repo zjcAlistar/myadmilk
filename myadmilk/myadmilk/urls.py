@@ -31,7 +31,7 @@ urlpatterns = [
     url(r'^showmatchpage', 'adWrist.views.show_match_page', name='show_match_page'),
     url(r'^creatematch', 'adWrist.views.create_match', name='create_match'),
     url(r'^getmatches', 'adWrist.views.get_matches', name='get_matches'),
-    url(r'^signin', 'adWrist.views.sign_in', name='sign_in'),
     url(r'^joinmatch','adWrist.views.join_match', name='join_match'),
     url(r'^getmatchresult','adWrist.views.get_match_result',name='get_match_result'),
+    url(r'^weekreport','adWrist.views.get_week_report', name='get_week_report'),
 ]

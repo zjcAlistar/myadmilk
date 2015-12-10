@@ -307,7 +307,7 @@ def get_week_data(request):
         elif type == 'previous':
                 cur_date += timedelta(days=-1)
         try:
-            cur_user = userlist.objects.get(user_open_id = openID)
+            cur_user = userlist.objects.get(user_open_id=openID)
         except userlist.DoesNotExist:
             if nums == '1':
                 rep = {"date": cur_date, "steps": 0}
@@ -343,7 +343,7 @@ def get_week_data(request):
                                 walk_quantity += single_data.sportrecords_quantity
                         rep.append({"date": pre_date, "steps": walk_quantity, "goal": step_goal})
                     else:
-                        step_goal = cur_user.sportrecords_step_goal
+                        step_goal = cur_user.user_step_goal
                         rep.append({"date": pre_date, "steps": 0,"goal": step_goal})
         return JsonResponse(rep, safe=False)
     else:
@@ -469,30 +469,6 @@ def set_remind(openID):
             remind = '提醒关闭'
     return remind
 
-def isValidUserName(name):
-    try:
-        userlist.objects.get(user_username=name)
-    except userlist.DoesNotExist:
-        return True
-    else:
-        return False
-
-def sign_in(request):
-    if request.method == 'POST':
-        openID = request.POST.get('openID')
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        if isValidUserName(username):
-            cur_user = userlist.objects.get(user_open_id=openID)
-            cur_user.user_username = username
-            cur_user.user_password = password
-            rep = '注册成功'
-        else:
-            rep = '用户名已被使用，请重新注册'
-        return HttpResponse(rep)
-    else:
-        raise Http404()
-
 
 def build_match(openID):
     try:
@@ -514,6 +490,7 @@ def build_match(openID):
                   '&response_type=code&scope=snsapi_base&state=1#wechat_redirect' % (API_ID, serverIP, new_match.matchrecords_id))
         rep = str('<a href="%s">请点击此链接创建比赛</a>' % (link))
     return rep
+
 
 def show_match_page(request):
     if request.method == 'GET':
@@ -571,6 +548,9 @@ def create_match(request):
                     cur_match.matchrecords_end_time = end_time
                     cur_match.matchrecords_matchstate = 1
                     cur_match.save()
+                    if matchtype == 'comp_time':
+                        cur_match.matchrecords_target = request.GET.get('goal_step')
+                        cur_match.save()
                     return HttpResponse('发布成功')
                 else:
                     return HttpResponse('比赛已经创建')
@@ -583,31 +563,31 @@ def join_match(request):
         openID = request.POST.get('openID')
         matchid = request.POST.get('competitionID')
         try:
-            person = userlist.objects.get(user_open_id=openID)
+            cur_user = userlist.objects.get(user_open_id=openID)
         except userlist.DoesNotExist:
             return HttpResponse('您还没有关注admilk应用')
         else:
             try:
-                matchrecords.objects.get(matchrecords_id=matchid, matchrecords_relate_person=person)
+                matchrecords.objects.get(matchrecords_id=matchid, matchrecords_relate_person=cur_user)
             except:
-                match = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_relate_person=person)
-                newmatchrecord = matchrecords(
-                    matchrecords_id = match.matchrecords_id,
-                    matchrecords_title = match.matchrecords_title,
-                    matchrecords_relate_person = person,
-                    matchrecords_originator = False,
-                    matchrecords_matchtype = match.matchrecords_matchtype,
-                    matchrecords_matchstate = match.matchrecords_matchstate,
-                    matchrecords_start_time = match.matchrecords_start_time,
-                    matchrecords_end_time = match.matchrecords_end_time,
-                    matchrecords_steps = match.matchrecords_steps,
-                    matchrecords_target = match.matchrecords_target
+                match = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_originator=True)
+                new_matchrecord = matchrecords(
+                    matchrecords_id=match.matchrecords_id,
+                    matchrecords_title=match.matchrecords_title,
+                    matchrecords_relate_person=cur_user,
+                    matchrecords_originator=False,
+                    matchrecords_matchtype=match.matchrecords_matchtype,
+                    matchrecords_matchstate=match.matchrecords_matchstate,
+                    matchrecords_steps=match.matchrecords_steps,
+                    matchrecords_target=match.matchrecords_target
                 )
-                newmatchrecord.save()
+                new_matchrecord.save()
+                new_matchrecord.matchrecords_matchstate=match.matchrecords_matchstate,
+                new_matchrecord.matchrecords_start_time=match.matchrecords_start_time,
+                new_matchrecord.save()
                 return HttpResponse('参加成功')
             else:
                 return HttpResponse('您已经参加了该比赛')
-
     else:
         raise Http404()
 
@@ -648,3 +628,36 @@ def get_matches(request):
             return  JsonResponse(rep, safe=False)
     else:
         raise Http404()
+
+
+def get_week_report(request):
+    openID = request.GET.get('openID')
+    try:
+        cur_user = userlist.objects.get(user_open_id=openID)
+    except userlist.DoesNotExist:
+        step_array = []
+        for i in range(7):
+            step_array.append({"date": "0000-00-00", "steps": 0})
+        rep = {"total": {"totalStep": 0, "totalDistance": 0, "totalCal": 0},"stepArray": step_array, "competitionArray": []}
+    else:
+        step_array = []
+        total_step = 0
+        total_dist = 0
+        total_cal = 0
+        cur_date = datetime.today().date()
+        for i in range(7):
+            pre_date = cur_date + timedelta(days=-6+i)
+            cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user,
+                                                   sportrecords_end_time__startswith=pre_date)
+            if cur_data:
+                walk_quantity = 0
+                for single_data in cur_data:
+                    if single_data.sportrecords_sport_type == '走路':
+                        walk_quantity += single_data.sportrecords_quantity
+                        total_cal += single_data.sportrecords_calorie
+                step_array.append({"date": pre_date, "steps": walk_quantity})
+            else:
+                step_array.append({"date": pre_date, "steps": 0})
+            total_step += walk_quantity
+            total_dist += float(str('%.2f' % (walk_quantity*0.5/1000)))
+        joined_matches = matchrecords.objects.filter(matchrecords_relate_person=cur_user, matchrecords_matchstate=3)
