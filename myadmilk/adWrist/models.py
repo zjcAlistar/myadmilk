@@ -11,8 +11,8 @@ class userlist(models.Model):
     user_height = models.IntegerField(default=-1)
     user_weight = models.IntegerField(default=-1)
     user_confirmed = models.BooleanField(default=False)
-    user_step_goal = models.IntegerField(default=20000)
-    user_dist_goal = models.IntegerField(default=1000)
+    user_step_goal = models.IntegerField(default=5000)
+    user_dist_goal = models.IntegerField(default=10)
     user_calorie_goal = models.IntegerField(default=2000)
     user_remind = models.BooleanField(default=False)
     last_remind_time = models.DateTimeField(auto_now_add=True)
@@ -25,8 +25,8 @@ class sportrecords(models.Model):
     sportrecords_sport_type = models.CharField(max_length=128)
     sportrecords_quantity = models.IntegerField(default=0)
     sportrecords_calorie = models.IntegerField(default=0)
-    sportrecords_step_goal = models.IntegerField(default=20000)
-    sportrecords_dist_goal = models.IntegerField(default=1000)
+    sportrecords_step_goal = models.IntegerField(default=5000)
+    sportrecords_dist_goal = models.IntegerField(default=10)
     sportrecords_calorie_goal = models.IntegerField(default=2000)
 
 
