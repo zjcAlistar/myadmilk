@@ -577,6 +577,7 @@ def create_match(request):
     else:
         raise Http404()
 
+
 def join_match(request):
     if request.method == 'POST':
         openID = request.POST.get('openID')
@@ -609,6 +610,16 @@ def join_match(request):
 
     else:
         raise Http404()
+
+
+def get_match_result(request):
+    if request.method == 'GET':
+        openID = request.GET.get('openID')
+        competitionID = request.GET.get('competitionID')
+        rep = []
+    else:
+        raise Http404()
+
 
 def get_matches(request):
     if request.method == 'GET':

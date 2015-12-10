@@ -80,6 +80,10 @@ function changesize() {
     $("#goal_step").css({
          "font-size": Width*0.35/0.188*0.107*0.4
     });
+    $("#rank_title").css({
+         "font-size": Width*0.35/0.188*0.107*0.4*0.65
+    });
+    
 };
 
 
@@ -138,3 +142,41 @@ function show_competitiontype () {
         $("#comp_time_box").css("display", "block");   
     }
 };
+
+window.onload = function(){
+
+	//ret test
+	//var ret = {"rank":[{"name":"Django"},{"name":"Alistar"},{"name":"龙骑士尹志平"},{"name":"冬马和纱"},{"name":"厚颜无耻"},{"name":"犀利达达佛"},{"name":"鱼"},{"name":"犬痣聋"},{"name":"EXO"},{"name":"5000"},{"name":"e"},{"name":"r"}],"user_rank":"12"};
+	$.get("/getmatchresult/",{"openID":openID,"competitionID":competitionID},function(ret){
+		var length = ret.rank.length;
+		if (length > 10) {
+			for(var i = 0;i<10;i++) {
+				var singlerank = $('<li>');
+				singlerank.attr({
+					"id":"rank"+(i+1),
+					"class":"rank_class"
+				});
+				singlerank.append(ret.rank[i].name);
+				singlerank.appendTo("#rank");
+			}
+		} else {
+			for(var i = 0;i < length;i++) {
+				var singlerank = $('<li>');
+				singlerank.attr({
+					"id":"rank"+(i+1),
+					"class":"rank_class"
+				});
+				singlerank.append(ret.rank[i].name);
+				singlerank.appendTo("#rank");
+			}
+		}
+		$("#user_rank").empty();
+		$("#user_rank").append("你在本次比赛中排名"+ret.user_rank+"，请继续努力！")
+		$(".rank_class").css({
+	     "font-size": Width*0.35/0.188*0.107*0.4*0.9
+	    });
+	    $("#user_rank").css({
+	         "font-size": Width*0.35/0.188*0.107*0.4*0.7
+	    });
+	});
+}

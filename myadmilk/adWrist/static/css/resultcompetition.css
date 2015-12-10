@@ -327,8 +327,46 @@
     background: #EBEBEB;
     border-radius: 10px;
     opacity:0.7;
+    
 }
 
+#rank{
+    margin: 0;
+    position: absolute;
+    left:20%;
+    top:10%;
+    width:70%;
+    height:60%;
+    list-style-type: decimal;
+    
+}
+
+.rank_class{
+    font-family:"SimHei",Arial;
+   /* font-size: 70px;*/
+    opacity: 1;
+}
+
+#rank_title{
+    position:absolute;
+    top:2%;
+    left:0;
+    width:100%;
+    height:5%;
+/*    font-size: 50px;*/
+    font-family:"SimHei";
+    text-align: center;
+}
+
+#user_rank{
+    position: absolute;
+    top:80%;
+    left:10%;
+    width:80%;
+    height:20%;
+   /* font-size: 60px;*/
+    font-family:"SimHei";
+}
 
 
 
