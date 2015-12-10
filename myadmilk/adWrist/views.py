@@ -595,8 +595,34 @@ def join_match(request):
 def get_match_result(request):
     if request.method == 'GET':
         openID = request.GET.get('openID')
-        competitionID = request.GET.get('competitionID')
-        rep = []
+        matchid = request.GET.get('competitionID')
+        try:
+            cur_user = userlist.objects.get(user_open_id=openID)
+        except userlist.DoesNotExist:
+            return HttpResponse('您还没有关注admilk应用')
+
+        try:
+            matchtype = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_originator=True).matchtype
+        except:
+            return HttpResponse('该比赛不存在')
+        if matchtype == 'comp_distance':
+            try:
+                rank = matchrecords.objects.filter(matchrecords_id=matchid).order_by("matchrecords_steps")
+                for i in range(len(rank)):
+                    rank[i].matchrecords_rank = i
+            except:
+                return HttpResponse('该比赛不存在')
+        else:
+            try:
+                rank1 = matchrecords.objects.filter(matchrecords_id=matchid, matchrecords_finish_flag=True).order_by("-matchrecords_finish_time")
+                rank2 = matchrecords.objects.filter(matchrecords_id=matchid, matchrecords_finish_flag=False).order_by("matchrecords_steps")
+                rank = rank1 + rank2
+                for i in range(len(rank)):
+                    rank[i].matchrecords_rank = i
+            except:
+                return HttpResponse('该比赛不存在')
+            user_rank = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_relate_person=cur_user).matchrecords_rank
+            return JsonResponse({"rank": rank, "user_rank": user_rank})
     else:
         raise Http404()
 
