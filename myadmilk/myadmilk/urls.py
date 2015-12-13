@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^creatematch', 'adWrist.views.create_match', name='create_match'),
     url(r'^getmatches', 'adWrist.views.get_matches', name='get_matches'),
     url(r'^joinmatch','adWrist.views.join_match', name='join_match'),
+    url(r'^showresultpage','adWrist.views.show_result_page',name='show_result_page'),
     url(r'^getmatchresult','adWrist.views.get_match_result',name='get_match_result'),
     url(r'^weekreport','adWrist.views.get_week_report', name='get_week_report'),
 ]

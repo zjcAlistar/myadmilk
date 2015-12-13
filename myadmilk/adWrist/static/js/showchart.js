@@ -30,7 +30,6 @@ function changesize(){
 };
 window.onload = function() {
     $.get("/getweekdata/", {"openID": openID, "type": "init7", "nums": 7}, function (ret) {
-        alert("!!!");
         //var  ret = [{"date":"2015-11-11","steps":"20","goal":"30"},{"date":"2015-11-12","steps":"30","goal":"40"},{"date":"2015-11-13","steps":"50","goal":"30"}];
         stepArray = new Array();
         finishArray = new Array();

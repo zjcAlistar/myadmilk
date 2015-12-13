@@ -94,10 +94,16 @@ window.onload = function(){
     var start_time;
     var end_time;
     var goal_step;
-	$.get("/joincompetition/",{"openID":openID,"competitionID":competitionID},function(ret){
+	$.get("/joinmatch/",{"openID":openID,"competitionID":competitionID},function(ret){
+        if(Number(ret.error) == 1){
+            alert(ret.errormsg);
+            return;
+        }
+        alert("!!!")
         competitiontype = ret.competitiontype;
         start_time = ret.start_time;
         end_time = ret.end_time;
+        alert(end_time);
         if (competitiontype == "comp_distance"){
         	$("#competitiontype").val(competitiontype);
         	$("#d_date_start").val(start_time);

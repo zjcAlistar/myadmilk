@@ -17,7 +17,7 @@
 		<div id="slogan"><b>参加比赛 —— 与好友一试高下！</b></div>
 
 		<div class="competitionname">
-            <input type="text" id="competitionname" readonly="true" value="一起跑步吧" />
+            <input type="text" id="competitionname" readonly="true" value="跑步比赛" />
             <div id="competitionname_text">比赛名称</div>  
         </div>
 
@@ -29,18 +29,18 @@
 				<div id="competitiontype_text">比赛类型</div>
 	        </div> 
 	        <div class="competitioncreater">
-	            <input type="text" id="competitioncreater" readonly="true" value="Django" />
+	            <input type="text" id="competitioncreater" readonly="true" value="admilk" />
 	            <div id="competitioncreater_text">发起者</div>  
 	        </div>
 	        <!-- 步数最多 -->
 	        <div id="comp_distance_box">
 	        	<div class="comp_distance" style="top:0%;">
-	        		<input type="text" class="date_start" id="d_date_start" readonly="true" value="2015-01-01"/>
-	        		<input type="text" class="time_start" id="d_time_start" readonly="true" value="12:20"/>
+	        		<input type="text" class="date_start" id="d_date_start" readonly="true" value="2000-00-00"/>
+	        		<input type="text" class="time_start" id="d_time_start" readonly="true" value="00:00"/>
 	        		<div class="comp_text">开始时间</div>
 	        	</div>
 	        	<div class="comp_distance" style="top:50%;">
-	        		<input type="text" class="date_end" id="d_date_end" readonly="true" value="2015-01-01"/>
+	        		<input type="text" class="date_end" id="d_date_end" readonly="true" value="2000-00-00"/>
 	        		<input type="text" class="time_end" id="d_time_end" readonly="true" value="12:20"/>
 	        		<div class="comp_text">结束时间</div>
 	        	</div>
@@ -49,13 +49,13 @@
 	        <!-- 时间最短 -->
 	        <div id="comp_time_box">
 	        	<div class="comp_time" style="top:0%;">
-	        		<input type="text" class="date_start" id="t_date_start" readonly="true" value="2015-01-01"/>
-	        		<input type="text" class="time_start" id="t_time_start" readonly="true" value="12:20"/>
+	        		<input type="text" class="date_start" id="t_date_start" readonly="true" value="2000-00-00"/>
+	        		<input type="text" class="time_start" id="t_time_start" readonly="true" value="00:00"/>
 	        		<div class="comp_text">开始时间</div>
 	        	</div>
 	        	<div class="comp_time" style="top:35%;">
-	        		<input type="text" class="date_end"  id="t_date_end" readonly="true" value="2015-01-01"/>
-	        		<input type="text" class="time_end" id="t_time_end" readonly="true" value="12:20"/>
+	        		<input type="text" class="date_end"  id="t_date_end" readonly="true" value="2000-00-00"/>
+	        		<input type="text" class="time_end" id="t_time_end" readonly="true" value="00:00"/>
 	        		<div class="comp_text">结束时间</div>
 	        	</div>
 	        	<div class="comp_time" style="top:70%;">
@@ -75,9 +75,9 @@
         var competitionID = '{{ competitionID }}'
         $(function(){
             $("#confirm").click(function(){
-            	$.post("/joinmatch/",{"openID": openID, "competitionID": competitionID}),function(ret){
-            		alert(ret);
-            	}
+            	$.post("/joinmatch/",{"openID": openID, "competitionID": competitionID},function(ret){
+                    alert(ret);
+            	});
             });
         });
     </script>

@@ -283,6 +283,9 @@ $(function(){
 				var num_match = ret.length;
 				for(var i = 0;i < num_match;i++){
 					var match = $('<li>');
+					(function(k){match.click(function(){
+						location.href = k;
+					});})( ret[i].matchurl);
 					match.attr({
 						"class": "single_competition",
 						"id":"competition_"+i
