@@ -145,10 +145,42 @@ function show_competitiontype () {
 
 window.onload = function(){
 
-	//ret test
-	//var ret = {"rank":[{"name":"Django"},{"name":"Alistar"},{"name":"龙骑士尹志平"},{"name":"冬马和纱"},{"name":"厚颜无耻"},{"name":"犀利达达佛"},{"name":"鱼"},{"name":"犬痣聋"},{"name":"EXO"},{"name":"5000"},{"name":"e"},{"name":"r"}],"user_rank":"12"};
 	$.get("/getmatchresult/",{"openID":openID,"competitionID":competitionID},function(ret){
-		var length = ret.rank.length;
+		
+        competitionname = ret.competitionname;
+        competitiontype = ret.competitiontype;
+        start_date = ret.start_date;
+        start_time = ret.start_time;
+        end_date = ret.end-date;
+        end_time = ret.end_time;
+        currentnumber = ret.currentnumber;
+        
+        $("#competitionname").val(competitionname);
+        
+        if (competitiontype == "comp_distance"){
+            $("#competitiontype").val(competitiontype);
+            $("#d_date_start").val(start_date);
+            $("#d_time_start").val(start_time);
+            $("#d_date_end").val(end_date);
+            $("#d_time_end").val(end_time);
+            $("#currentnumber").val(currentnumber);
+            $("#comp_distance_box").css("display", "block");
+            $("#comp_time_box").css("display", "none");
+        }
+        else if (competitiontype == "comp_time"){
+            goal_step = ret.goal_step;
+            $("#competitiontype").val(competitiontype);
+            $("#t_date_start").val(start_date);
+            $("#t_time_start").val(start_time);
+            $("#t_date_end").val(end_date);
+            $("#t_time_end").val(end_time);
+            $("#goal_step").val(goal_step);
+            $("#currentnumber").val(currentnumber);
+            $("#comp_distance_box").css("display", "none");
+            $("#comp_time_box").css("display", "block");
+        }
+
+        var length = ret.rank.length;
 		if (length > 10) {
 			for(var i = 0;i<10;i++) {
 				var singlerank = $('<li>');

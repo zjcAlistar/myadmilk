@@ -90,35 +90,53 @@ function changesize() {
 };
 
 window.onload = function(){
+    $("#comp_time_box").css("display", "block");
 	var competitiontype;
     var start_time;
     var end_time;
     var goal_step;
+    var currentnumber;
 	$.get("/joinmatch/",{"openID":openID,"competitionID":competitionID},function(ret){
         if(Number(ret.error) == 1){
             alert(ret.errormsg);
             return;
         }
-        alert("!!!")
+        competitionname = ret.competitionname;
         competitiontype = ret.competitiontype;
+        start_date = ret.start_date;
         start_time = ret.start_time;
+        end_date = ret.end-date;
         end_time = ret.end_time;
-        alert(end_time);
+        currentnumber = ret.currentnumber;
+        
+        $("#competitionname").val(competitionname);
+        
         if (competitiontype == "comp_distance"){
         	$("#competitiontype").val(competitiontype);
-        	$("#d_date_start").val(start_time);
-        	$("#d_date_end").val(end_time);
+        	$("#d_date_start").val(start_date);
+            $("#d_time_start").val(start_time);
+        	$("#d_date_end").val(end_date);
+            $("#d_time_end").val(end_time);
+            $("#currentnumber").val(currentnumber);
         	$("#comp_distance_box").css("display", "block");
         	$("#comp_time_box").css("display", "none");
         }
         else if (competitiontype == "comp_time"){
             goal_step = ret.goal_step;
             $("#competitiontype").val(competitiontype);
-        	$("#t_date_start").val(start_time);
-        	$("#t_date_end").val(end_time);
+        	$("#t_date_start").val(start_date);
+            $("#t_time_start").val(start_time);
+            $("#t_date_end").val(end_date);
+            $("#t_time_end").val(end_time);
         	$("#goal_step").val(goal_step);
+            $("#currentnumber").val(currentnumber);
             $("#comp_distance_box").css("display", "none");
             $("#comp_time_box").css("display", "block");
         }
 	})
 }
+
+
+
+
+
