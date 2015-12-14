@@ -89,8 +89,11 @@
 	            	var flag = false;
 	            	var date = cmpdate(date1, date2);
 	            	var time = cmptime(time1, time2);
-	            	if ((date < 0 || date == 0) && time < 0) {
+	            	if (date < 0) {
 	            		flag = true;
+	            	}
+	            	else if (date == 0 && time < 0) {
+						flag = true;
 	            	}
 	           
 	            	if (flag == true) {
@@ -113,6 +116,15 @@
 	            	var flag = false;
 	            	var date = cmpdate(date1, date2);
 	            	var time = cmptime(time1, time2);
+
+	            	if (date < 0 && (goal_step != "")) {
+	            		flag = true;
+	            	}
+	            	else if (date == 0 && time < 0 && (goal_step != "")) {
+						flag = true;
+	            	}
+
+
 	            	if ((date < 0 || date == 0) && time < 0 && (goal_step != "")) {
 	            		flag = true;
 	            	}
