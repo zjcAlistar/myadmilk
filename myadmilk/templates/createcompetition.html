@@ -97,13 +97,13 @@
 	            	}
 	           
 	            	if (flag == true) {
-                        alert("比赛创建成功！请点击右上角「分享到朋友圈」，与好友一试高下！");
+                        showmessagebox("比赛创建成功！请点击右上角「分享到朋友圈」，与好友一试高下！");
 	            		$.post("/creatematch/",{"openID": openID, "competitionID": competitionID, "competitiontype": competitiontype, "datetime_start": date1+" "+time1, "datetime_end": date2+" "+time2},function(ret){
-	                        alert(ret);
+	                        showmessagebox(ret);
 	                    });
 	            	}
 	            	else {
-	            		alert("日期输入有误，请重新输入！")
+	            		showmessagebox("日期输入有误，请重新输入！")
 	            	}
             	}
 
@@ -131,17 +131,17 @@
 	            	
 
 	            	if (flag == true) {
-                        alert("比赛创建成功！请点击右上角「分享到朋友圈」，与好友一试高下！");
+                        showmessagebox("比赛创建成功！请点击右上角「分享到朋友圈」，与好友一试高下！");
 	            		$.post("/creatematch/",{"openID": openID, "competitionID": competitionID, "competitiontype": competitiontype, "datetime_start": date1+" "+time1, "datetime_end": date2+" "+time2, "goal_step": goal_step},function(ret){
-	                        alert(ret);
+	                        showmessagebox(ret);
 	                    });
 	            	}
 	            	else {
 	            		if ((goal_step == "")) {
-	            			alert("请填写目标步数！");
+	            			showmessagebox("请填写目标步数！");
 	            		}
 	            		else {
-	            			alert("日期输入有误，请重新输入！")
+	            			showmessagebox("日期输入有误，请重新输入！")
 	            		}
 	            	}
             	}

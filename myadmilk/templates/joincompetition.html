@@ -76,7 +76,7 @@
         $(function(){
             $("#confirm").click(function(){
             	$.post("/joinmatch/",{"openID": openID, "competitionID": competitionID},function(ret){
-                    alert(ret);
+                    showmessagebox(ret);
             	});
             });
         });
