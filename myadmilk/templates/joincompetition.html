@@ -3,71 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <title>参加比赛</title>
+    <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=no, width=device-width">
     <link rel="stylesheet" href="../static/css/joincompetition.css" type="text/css">
     <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js"></script>
     <script src="../static/js/joincompetition.js"></script>
 </head>
 
 <body style="background:black;">
-	<div id = "titlebox">
-		<nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
-		<nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
-	</div>
-	<div id = "infobox">
-		<div id="slogan"><b>参加比赛 —— 与好友一试高下！</b></div>
+	<div id="all">
+		<div id = "titlebox">
+			<nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+			<nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
+		</div>
+		<div id = "infobox">
+			<div id="slogan"><b>参加比赛 —— 与好友一试高下！</b></div>
 
-		<div class="competitionname">
-            <input type="text" id="competitionname" readonly="true"/>
-            <div id="competitionname_text">比赛名称</div>  
-        </div>
-
-        
-
-		<div id="competitionbox">
-			<div class="competitiontype">
-			    <input type="text" id="competitiontype" readonly="true" value="时间最短" />
-				<div id="competitiontype_text">比赛类型</div>
-	        </div> 
-	        <div class="competitioncreater">
-	            <input type="text" id="competitioncreater" readonly="true" value="admilk" />
-	            <div id="competitioncreater_text">发起者</div>  
+			<div class="competitionname">
+	            <input type="text" id="competitionname" readonly="true"/>
+	            <div id="competitionname_text">比赛名称</div>  
 	        </div>
-	        <!-- 步数最多 -->
-	        <div id="comp_distance_box">
-	        	<div class="comp_distance" style="top:0%;">
-	        		<input type="text" class="date_start" id="d_date_start" readonly="true" value="2000-00-00"/>
-	        		<input type="text" class="time_start" id="d_time_start" readonly="true" value="00:00"/>
-	        		<div class="comp_text">开始时间</div>
-	        	</div>
-	        	<div class="comp_distance" style="top:50%;">
-	        		<input type="text" class="date_end" id="d_date_end" readonly="true" value="2000-00-00"/>
-	        		<input type="text" class="time_end" id="d_time_end" readonly="true" value="12:20"/>
-	        		<div class="comp_text">结束时间</div>
-	        	</div>
-	        </div>
-	        <!-- 步数最多 -->
+
+	        
+
+			<div id="competitionbox">
+				<div class="competitiontype">
+				    <input type="text" id="competitiontype" readonly="true" value="时间最短" />
+					<div id="competitiontype_text">比赛类型</div>
+		        </div> 
+		        <div class="competitioncreater">
+		            <input type="text" id="competitioncreater" readonly="true" value="admilk" />
+		            <div id="competitioncreater_text">发起者</div>  
+		        </div>
+		        <!-- 步数最多 -->
+		        <div id="comp_distance_box">
+		        	<div class="comp_distance" style="top:0%;">
+		        		<input type="text" class="date_start" id="d_date_start" readonly="true" value="2000-00-00"/>
+		        		<input type="text" class="time_start" id="d_time_start" readonly="true" value="00:00"/>
+		        		<div class="comp_text">开始时间</div>
+		        	</div>
+		        	<div class="comp_distance" style="top:50%;">
+		        		<input type="text" class="date_end" id="d_date_end" readonly="true" value="2000-00-00"/>
+		        		<input type="text" class="time_end" id="d_time_end" readonly="true" value="12:20"/>
+		        		<div class="comp_text">结束时间</div>
+		        	</div>
+		        </div>
+		        <!-- 步数最多 -->
+		        <!-- 时间最短 -->
+		        <div id="comp_time_box">
+		        	<div class="comp_time" style="top:0%;">
+		        		<input type="text" class="date_start" id="t_date_start" readonly="true" value="2000-00-00"/>
+		        		<input type="text" class="time_start" id="t_time_start" readonly="true" value="00:00"/>
+		        		<div class="comp_text">开始时间</div>
+		        	</div>
+		        	<div class="comp_time" style="top:35%;">
+		        		<input type="text" class="date_end"  id="t_date_end" readonly="true" value="2000-00-00"/>
+		        		<input type="text" class="time_end" id="t_time_end" readonly="true" value="00:00"/>
+		        		<div class="comp_text">结束时间</div>
+		        	</div>
+		        	<div class="comp_time" style="top:70%;">
+		            	<input type="number" id="goal_step" readonly="true" value="5000"/>
+		                <div class="comp_text">目标步数</div>
+		        	</div>
+		        </div>
+		    </div>
 	        <!-- 时间最短 -->
-	        <div id="comp_time_box">
-	        	<div class="comp_time" style="top:0%;">
-	        		<input type="text" class="date_start" id="t_date_start" readonly="true" value="2000-00-00"/>
-	        		<input type="text" class="time_start" id="t_time_start" readonly="true" value="00:00"/>
-	        		<div class="comp_text">开始时间</div>
-	        	</div>
-	        	<div class="comp_time" style="top:35%;">
-	        		<input type="text" class="date_end"  id="t_date_end" readonly="true" value="2000-00-00"/>
-	        		<input type="text" class="time_end" id="t_time_end" readonly="true" value="00:00"/>
-	        		<div class="comp_text">结束时间</div>
-	        	</div>
-	        	<div class="comp_time" style="top:70%;">
-	            	<input type="number" id="goal_step" readonly="true" value="5000"/>
-	                <div class="comp_text">目标步数</div>
-	        	</div>
-	        </div>
-	    </div>
-        <!-- 时间最短 -->
-        <input id="confirm" type="submit" name="signup" value="参加"/>  
-        <input id="currentnumber" value="当前参加人数："/>
-        
+	        <input id="confirm" type="submit" name="signup" value="参加"/>  
+	        <input id="currentnumber" value="当前参加人数："/>
+	        
+		</div>
 	</div>
 	<script>
     	changesize();

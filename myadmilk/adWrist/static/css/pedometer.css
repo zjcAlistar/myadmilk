@@ -34,16 +34,43 @@
     position: absolute;
     top: 20%;
     right:5%;
-    border-radius: 10px;
-    opacity: 0.7;
+    width:15%;
+    height:60%;
+    opacity:0.7;
+    
+
+    border-style: none;
+    BACKGROUND-COLOR: transparent;
+    
+    color: white;
+    text-align: center;
 }
 
 #previous {
     position: absolute;
     top: 20%;
     left:5%;
-    border-radius: 10px;
+    width:15%;
+    height:60%;
     opacity:0.7;
+    border-style: none;
+    BACKGROUND-COLOR: transparent;
+    
+    color: white;
+    text-align: center;
+}
+
+#date {
+    BACKGROUND-COLOR: transparent;
+    position: absolute;
+    top: 20%;
+    left: 25%;
+    height: 60%;
+    width: 50%;
+    border-style: none;
+    opacity: 0.7;
+    color: white;
+    text-align: center;
 }
 
 #date {

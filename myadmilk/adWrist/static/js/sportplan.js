@@ -3,7 +3,13 @@ var Width = $(window).width();
 var edit_state = false;
 
 function changesize() {
-
+    $("#all").css({
+        "position":"absolute",
+        "top":"0",
+        "left":"0",
+        "height": Height,
+        "width": Width
+    });
     $("#titlebox").css({
         "width": Width,
         "height": Height*0.1,
@@ -61,7 +67,7 @@ function changesize() {
     });
     var Fontsize = $("#confirm").css("height");
         $("#confirm").css({
-        "font-size": parseInt(Fontsize)*2.5,
+        "font-size": parseInt(Fontsize),
         "width": Width*0.2,
         "height": Width* 0.2,
         "left": Width*0.4  

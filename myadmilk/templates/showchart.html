@@ -9,24 +9,25 @@
     <script type="text/javascript" src="../static/js/showchart.js"></script>
 </head>
 <body style="background:black;">
-    <div id = "titlebox">
-        <nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
-        <nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
-    </div>
-    <div id = "infobox">
-        <img src="../static/img/run02.jpg" style="position:fixed;width:100%;height:100%;"/>
-        <div id = "top"> 
-            <button id="next">后<br>一<br>天</button>
-            <input id = "date" type="date"/>
-            <button id="previous">前<br>一<br>天</button>
+    <div id="all">
+        <div id = "titlebox">
+            <nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+            <nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
         </div>
-        <div id = "middle">
-            <div id="chart_background">
+        <div id = "infobox">
+            <div id = "top"> 
+                <button id="next">&gt</button>
+                <input id = "date" type="date"/>
+                <button id="previous">&lt</button>
             </div>
-            <div id = "barChart"></div>
-        </div>
-        <div id = "bottom">
-            <button id = "pedometer">返回</button>
+            <div id = "middle">
+                <div id="chart_background">
+                </div>
+                <div id = "barChart"></div>
+            </div>
+            <div id = "bottom">
+                <button id = "pedometer">返回</button>
+            </div>
         </div>
     </div>
     <script type="text/javascript">

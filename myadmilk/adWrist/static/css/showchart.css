@@ -13,9 +13,12 @@
     position: absolute;
     left: 0px;
     bottom: 0px;
-    border-radius: 50px;
     height:350px;
     background: #F3F3F3;
+    background-image:url(../img/run02.jpg);
+    filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+    -moz-background-size:100% 100%;
+    background-size:100% 100%;
 }
 
 #top {
@@ -33,7 +36,13 @@
     width:15%;
     height:60%;
     opacity:0.7;
-    writing-mode:lr-tb
+    
+
+    border-style: none;
+    BACKGROUND-COLOR: transparent;
+    
+    color: white;
+    text-align: center;
 }
 
 #previous {
@@ -43,18 +52,24 @@
     width:15%;
     height:60%;
     opacity:0.7;
+    border-style: none;
+    BACKGROUND-COLOR: transparent;
+    
+    color: white;
+    text-align: center;
 }
 
 #date {
+    BACKGROUND-COLOR: transparent;
     position: absolute;
-    top:20%;
-    left:25%;
-    height:60%;
-    width:50%;
-    /*font-size: 60px;*/
-    /*line-height: 150px; */
-    border-style: none;  
-    opacity:0.7;
+    top: 20%;
+    left: 25%;
+    height: 60%;
+    width: 50%;
+    border-style: none;
+    opacity: 0.7;
+    color: white;
+    text-align: center;
 }
 
 ::-webkit-inner-spin-button { visibility: hidden; }
@@ -71,19 +86,19 @@
     position: absolute;
     background: white;
     border-radius: 5%;
-    top:16%;
+    top:1%;
     left:6%;
     width:88%;
-    height:74%;
+    height:98%;
     opacity:0.7;
 }
 
 #barChart {
     position: absolute;
-    top:20%;
+    top:5%;
     left:10%;
     width:80%;
-    height:70%;
+    height:90%;
     opacity:1;
 }
 
@@ -107,8 +122,15 @@
 }
 
 #pedometer{
-    position: absolute;
+    /*position: absolute;
     bottom:25%;
-    border-radius: 100%;
-    opacity:0.7;
+    border-radius: 50%;
+    opacity:0.7;*/
+    position: absolute;
+    bottom:15%;
+    left:20%;
+    height:40%;
+    width:60%;
+    border-radius: 10px;
+    opacity: 0.7;    
 }

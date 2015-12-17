@@ -2,7 +2,13 @@ var Height = $(window).height();
 var Width = $(window).width();
 
 function changesize() {
-
+    $("#all").css({
+        "position":"absolute",
+        "top":"0",
+        "left":"0",
+        "height": Height,
+        "width": Width
+    });
     $("#titlebox").css({
         "width": Width,
         "height": Height*0.1,
@@ -66,13 +72,11 @@ function changesize() {
 
     var Fontsize = $("#confirm").css("height");
     $("#confirm").css({
-        "font-size": parseInt(Fontsize)*2.5,
+        "font-size": parseInt(Fontsize),
         "width": Width*0.2,
         "height": Width* 0.2,
         "left": Width*0.4  
     });
-
-    
 };
 
 
@@ -170,7 +174,7 @@ function showmessagebox (str) {
 
     var message = document.createElement("div");
     message.setAttribute("id", "message");
-    message.style.cssText = "top:20%;left:5%;height:60%;width:90%;position:absolute;font-family:SimHei;font-size:20px; text-align:center;line-height:25px;"
+    message.style.cssText = "top:20%;left:5%;height:60%;width:90%;position:absolute;font-family:SimHei;font-size:20px; text-align:center;line-height:20px;"
     message.innerHTML = str;
     messagebox.appendChild(message);
 

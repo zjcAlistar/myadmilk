@@ -144,6 +144,7 @@
     /*background: blue;*/
     text-align: center;
     overflow: hidden;
+    font-family: "SimHei";
 }
 
 #competitiontype_text{
@@ -282,7 +283,7 @@
 
 #confirm{
     position:absolute;
-    bottom:9%;
+    bottom:8%;
     font-family:STXihei;
     border-radius: 100%;
     background-color:#FFF;

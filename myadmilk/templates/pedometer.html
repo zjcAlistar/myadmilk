@@ -9,37 +9,39 @@
     <script src="../static/js/highcharts.js"></script>
 </head>
 <body style="background:black;">
-	<div id = "titlebox">
-		<nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
-		<nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
-	</div>
-    <div id = "infobox">
-     	<div id = "top"> 
-           	<button id="next">next</button>
-            <input id = "date" type="date"/>
-            <button id="previous">previous</button>
-     	</div>
-     	<div id = "middle">
-            <div id="middle_background"></div>
-            <div id = "DoughnutChart"></div>
-            <table id="text2">
-                <tr>
-                    <td id="steps"></td>
-                    <td id="stepGoal"></td>
-                </tr>
-                <tr>
-                    <td id="distance"></td>
-                    <td id="distanceGoal"></td>
-                </tr>
-                <tr>
-                    <td id="cal"></td>
-                    <td id="calGoal"></td>
-                </tr>
-     		</table>
-     	</div>
-        <div id = "bottom">
-            <button id = "showchart">showchart</button>
-     	</div>
+  <div id="all">
+  	<div id = "titlebox">
+  		<nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+  		<nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
+  	</div>
+      <div id = "infobox">
+       	<div id = "top"> 
+             	<button id="next">&gt</button>
+              <input id = "date" type="date"/>
+              <button id="previous">&lt</button>
+       	</div>
+       	<div id = "middle">
+              <div id="middle_background"></div>
+              <div id = "DoughnutChart"></div>
+              <table id="text2">
+                  <tr>
+                      <td id="steps"></td>
+                      <td id="stepGoal"></td>
+                  </tr>
+                  <tr>
+                      <td id="distance"></td>
+                      <td id="distanceGoal"></td>
+                  </tr>
+                  <tr>
+                      <td id="cal"></td>
+                      <td id="calGoal"></td>
+                  </tr>
+       		</table>
+       	</div>
+          <div id = "bottom">
+              <button id = "showchart">showchart</button>
+       	</div>
+      </div>
     </div>
     <script type="text/javascript">
       	changesize();

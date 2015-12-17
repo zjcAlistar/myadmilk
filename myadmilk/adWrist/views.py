@@ -81,9 +81,32 @@ def show_info_page(request):
     if request.method == 'GET':
         code = request.GET.get('code')
         openID = get_openid(code)
-        return render_to_response('personalInfo.html',{'openID':openID },context_instance=RequestContext(request))
+        if openID == 0:
+            raise Http404()
+        else:
+            return render_to_response('personalInfo.html',{'openID':openID },context_instance=RequestContext(request))
     else:
         raise Http404()
+
+
+def add_test_new(openID):
+    try:
+        cur_user = userlist.objects.get(user_open_id = openID)
+    except userlist.DoesNotExist:
+        rep = '好像出问题了，请填写信息'
+    else:
+        random_step = random.randint(0, 2000)
+        new_record = sportrecords(
+            sportrecords_person_id=cur_user,
+            sportrecords_type=2,
+            sportrecords_subtype=4,
+            sportrecords_quantity=random_step,
+            sportrecords_calorie=int(random_step/16),
+            sportrecords_dist=int(random_step*0.8)
+        )
+        new_record.save()
+        rep = '添加成功'
+    return rep
 
 
 def add_test(openID):
@@ -94,47 +117,22 @@ def add_test(openID):
     else:
         date = datetime.now()
         for i in range(7):
-            new_record1 = sportrecords(
+            random_step = random.randint(0, 10000)
+            new_record = sportrecords(
                 sportrecords_person_id=cur_user,
-                sportrecords_sport_type='慢跑',
-                sportrecords_quantity=2000,
-                sportrecords_calorie=500
+                sportrecords_type=2,
+                sportrecords_subtype=4,
+                sportrecords_quantity=random_step,
+                sportrecords_calorie=int(random_step/16),
+                sportrecords_dist=int(random_step*0.8/1000)
             )
-            new_record2 = sportrecords(
-                sportrecords_person_id=cur_user,
-                sportrecords_sport_type='走路',
-                sportrecords_quantity=1000,
-                sportrecords_calorie=200
-            )
-            new_record1.save()
-            new_record2.save()
-            new_record1.sportrecords_end_time = date + timedelta(days=-i)
-            new_record2.sportrecords_end_time = date + timedelta(days=-i)
-            new_record1.save()
-            new_record2.save()
+            new_record.save()
+            new_record.sportrecords_start_time = date + timedelta(days=-i)
+            new_record.sportrecords_end_time = date + timedelta(days=-i)
+            new_record.save()
         rep = '添加成功'
     return rep
 
-
-def add_test_new(openID):
-    try:
-        cur_user = userlist.objects.get(user_open_id = openID)
-    except userlist.DoesNotExist:
-        rep = '好像出问题了，请填写信息'
-    else:
-        date = datetime.now()
-        randomstep = random.randint(0, 10000)
-        new_record = sportrecords(
-            sportrecords_person_id=cur_user,
-            sportrecords_type=2,
-            sportrecords_subtype=4,
-            sportrecords_quantity=randomstep,
-            sportrecords_calorie=int(randomstep/16),
-            sportrecords_dist=int(randomstep*0.8)
-        )
-        new_record.save()
-        rep = '添加成功'
-    return rep
 
 def get_datatoday(openID):
     try:
@@ -142,22 +140,32 @@ def get_datatoday(openID):
     except userlist.DoesNotExist:
         rep = '好像出问题了，请填写信息'
     else:
-        cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user,
-                                               sportrecords_end_time__startswith=datetime.today().date())
-        if cur_data :
-            walk_quantity = 0
-            slow_run_quantity = 0
-            walk_calorie = 0
-            slow_run_calorie = 0
-            for single_data in cur_data:
-                if single_data.sportrecords_sport_type == '慢跑':
-                    slow_run_quantity += single_data.sportrecords_quantity
-                    slow_run_calorie += single_data.sportrecords_calorie
-                elif single_data.sportrecords_sport_type == '走路':
-                    walk_quantity += single_data.sportrecords_quantity
-                    walk_calorie += single_data.sportrecords_calorie
-            rep = '您今天慢跑:\n'+str(slow_run_quantity)+'步\n消耗卡路里:\n'+str(slow_run_calorie)+'大卡\n您今天走路:\n'+str(walk_quantity)+'步\n消耗卡路里:\n'+str(walk_calorie)+'大卡'
-        else:
+        cur_date = datetime.today().date()
+        cur_date_begin = datetime(year=cur_date.year, month=cur_date.month, day=cur_date.day, hour=0, minute=0, second=0)
+        cur_date_end = datetime(year=cur_date.year, month=cur_date.month, day=cur_date.day, hour=23, minute=59, second=59)
+        rep = ''
+        for subtype in range(1, 7):
+            rep_head = ''
+            if subtype == 1:
+                rep_head = '您今天进行热身运动\n'
+            elif subtype == 2:
+                rep_head = '您今天进行健走运动\n'
+            elif subtype == 3:
+                rep_head = '您今天进行球类运动\n'
+            elif subtype == 4:
+                rep_head = '您今天进行跑步运动\n'
+            elif subtype == 5:
+                rep_head = '您今天进行游泳运动\n'
+            elif subtype == 6:
+                rep_head = '您今天进行骑车运动\n'
+            data_gathered = gather_data(cur_user, cur_date_begin, cur_date_end, subtype)
+            if data_gathered['steps'] == 0 and data_gathered['dist'] == 0 and data_gathered['cal'] == 0:
+                continue
+            else:
+                rep_info = str('%s运动步数：%d步\n经过距离：%d千米\n消耗能量：%d大卡\n' %(rep_head, data_gathered['steps'],
+                                                                      data_gathered['dist'], data_gathered['cal']))
+            rep += rep_info
+        if rep == '':
             rep = '没查到数据'
     return rep
 
@@ -178,7 +186,7 @@ def get_info(openID):
                 sex = '未定'
             weight = cur_user.user_weight
             height = cur_user.user_height
-            rep = '您的年龄:'+str(age)+'\n您的性别:'+sex+'\n您的身高:'+str(height)+'cm\n您的体重:'+str(weight)+'kg'
+            rep = str('您的年龄:%d\n您的性别:%s\n您的身高:%dcm\n您的体重:%dkg' % (age, sex, height, weight))
         else:
             rep = '您还没有填写个人信息'
     return rep
@@ -286,8 +294,10 @@ def show_chart(request):
     if request.method == 'GET':
         code = request.GET.get('code')
         openID = get_openid(code)
-        return render_to_response('pedometer.html', {'openID': openID},
-                                  context_instance=RequestContext(request))
+        if openID == 0:
+            raise Http404()
+        else:
+            return render_to_response('pedometer.html', {'openID': openID},context_instance=RequestContext(request))
     else:
         raise Http404()
 
@@ -336,15 +346,16 @@ def get_week_data(request):
                     rep.append({"date": (cur_date+timedelta(days=-6+i)), "steps": 0})
         else:
             if nums == '1':
-                cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user,
-                                               sportrecords_end_time__startswith=cur_date)
+                cur_date_begin = datetime(year=cur_date.year, month=cur_date.month, day=cur_date.day, hour=0, minute=0, second=0)
+                cur_date_end = datetime(year=cur_date.year, month=cur_date.month, day=cur_date.day, hour=23, minute=59, second=59)
+                cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user, sportrecords_type=2, sportrecords_subtype=4,
+                                                       sportrecords_start_time__gte=cur_date_begin, sportrecords_start_time__lte=cur_date_end)
                 if cur_data:
-                    walk_quantity = 0
+                    quantity = 0
                     step_goal = cur_data[0].sportrecords_step_goal
                     for single_data in cur_data:
-                        if single_data.sportrecords_sport_type == '走路':
-                            walk_quantity += single_data.sportrecords_quantity
-                    rep = {"date": cur_date, "steps": walk_quantity, "goal": step_goal}
+                        quantity += single_data.sportrecords_quantity
+                    rep = {"date": cur_date, "steps": quantity, "goal": step_goal}
                 else:
                     step_goal = cur_user.user_step_goal
                     rep = {"date": cur_date, "steps": 0, "goal": step_goal}
@@ -352,15 +363,16 @@ def get_week_data(request):
                 rep = []
                 for i in range(7):
                     pre_date = cur_date + timedelta(days=-6+i)
-                    cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user,
-                                                           sportrecords_end_time__startswith=pre_date)
+                    cur_date_begin = datetime(year=pre_date.year, month=pre_date.month, day=pre_date.day, hour=0, minute=0, second=0)
+                    cur_date_end = datetime(year=pre_date.year, month=pre_date.month, day=pre_date.day, hour=23, minute=59, second=59)
+                    cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user, sportrecords_type=2, sportrecords_subtype=4,
+                                                       sportrecords_start_time__gte=cur_date_begin, sportrecords_start_time__lte=cur_date_end)
                     if cur_data:
-                        walk_quantity = 0
+                        quantity = 0
                         step_goal = cur_data[0].sportrecords_step_goal
                         for single_data in cur_data:
-                            if single_data.sportrecords_sport_type == '走路':
-                                walk_quantity += single_data.sportrecords_quantity
-                        rep.append({"date": pre_date, "steps": walk_quantity, "goal": step_goal})
+                            quantity += single_data.sportrecords_quantity
+                        rep.append({"date": pre_date, "steps": quantity, "goal": step_goal})
                     else:
                         step_goal = cur_user.user_step_goal
                         rep.append({"date": pre_date, "steps": 0,"goal": step_goal})
@@ -368,14 +380,19 @@ def get_week_data(request):
     else:
         raise Http404()
 
+
 def get_openid(code):
-    url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + API_ID + '&secret=' + API_SECRET + \
-              '&code=' + code + '&grant_type=authorization_code'
+    url = str('https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s'
+              '&grant_type=authorization_code' % (API_ID, API_SECRET, code))
     res_data = urlopen(url)
     res = res_data.read()
     resj = json.loads(res.decode('utf-8'))
-    openID = resj['openid']
-    return openID
+    if 'openid' in resj:
+        openID = resj['openid']
+        return openID
+    else:
+        return 0
+
 
 def get_steps(request):
     if request.method == 'GET':
@@ -392,24 +409,26 @@ def get_steps(request):
             elif type == 'previous':
                 cur_date += timedelta(days=-1)
         try:
-            cur_user = userlist.objects.get(user_open_id = openID)
+            cur_user = userlist.objects.get(user_open_id=openID)
         except userlist.DoesNotExist:
             rep = {"stepGoal": 0, "calGoal": 0, "distanceGoal": 0, "steps": 0, "distance": 0, "cal": 0}
         else:
+            cur_date_begin = datetime(year=cur_date.year, month=cur_date.month, day=cur_date.day, hour=0, minute=0, second=0)
+            cur_date_end = datetime(year=cur_date.year, month=cur_date.month, day=cur_date.day, hour=23, minute=59, second=59)
             cur_data = sportrecords.objects.filter(sportrecords_person_id=cur_user,
-                                               sportrecords_end_time__startswith=cur_date)
+                                                   sportrecords_start_time__gte=cur_date_begin, sportrecords_end_time__lte=cur_date_end)
             if cur_data:
-                walk_quantity = 0
-                walk_calorie = 0
+                quantity = 0
+                calorie = 0
+                dist = 0
                 step_goal = cur_data[0].sportrecords_step_goal
                 dist_goal = cur_data[0].sportrecords_dist_goal
                 cal_goal = cur_data[0].sportrecords_calorie_goal
                 for single_data in cur_data:
-                    if single_data.sportrecords_sport_type == '走路':
-                        walk_quantity += single_data.sportrecords_quantity
-                        walk_calorie += single_data.sportrecords_calorie
-                dist = float(str('%.2f' % (walk_quantity*0.5/1000)))
-                rep = {"stepGoal": step_goal, "calGoal": cal_goal, "distanceGoal": dist_goal, "steps": walk_quantity, "distance": dist,  "cal": walk_calorie}
+                    quantity += single_data.sportrecords_quantity
+                    calorie += single_data.sportrecords_calorie
+                    dist += single_data.sportrecords_dist
+                rep = {"stepGoal": step_goal, "calGoal": cal_goal, "distanceGoal": dist_goal, "steps": quantity, "distance": dist,  "cal": calorie}
             else:
                 step_goal = cur_user.user_step_goal
                 dist_goal = cur_user.user_dist_goal
@@ -425,8 +444,10 @@ def show_plan(request):
     if request.method == 'GET':
         code = request.GET.get('code')
         openID = get_openid(code)
-        return render_to_response('sportplan.html', {'openID': openID},
-                                  context_instance=RequestContext(request))
+        if openID == 0:
+            raise Http404()
+        else:
+            return render_to_response('sportplan.html', {'openID': openID},context_instance=RequestContext(request))
     else:
         raise Http404()
 
@@ -453,7 +474,6 @@ def change_plan(request):
                 single_data.sportrecords_dist_goal = cur_user.user_dist_goal
                 single_data.sportrecords_calorie_goal = cur_user.user_calorie_goal
                 single_data.save()
-
             rep = '修改成功'
         return HttpResponse(rep)
     elif request.method == 'GET':
@@ -517,6 +537,8 @@ def show_match_page(request):
         matchid = request.GET.get('matchid')
         code = request.GET.get('code')
         openID = get_openid(code)
+        if openID == 0:
+            return Http404
         try:
             userlist.objects.get(user_open_id=openID)
         except userlist.DoesNotExist:
@@ -550,6 +572,7 @@ def create_match(request):
         openID = request.POST.get('openID')
         matchid = request.POST.get('competitionID')
         matchtype = request.POST.get('competitiontype')
+        matchtitle = request.POST.get('competitionname')
         start_time = request.POST.get('datetime_start')
         end_time = request.POST.get('datetime_end')
         try:
@@ -564,6 +587,7 @@ def create_match(request):
             else:
                 if cur_match.matchrecords_matchstate == 0:
                     cur_match.matchrecords_matchtype = matchtype
+                    cur_match.matchrecords_title = matchtitle
                     cur_match.matchrecords_start_time = start_time
                     cur_match.matchrecords_end_time = end_time
                     cur_match.matchrecords_matchstate = 1
@@ -571,7 +595,7 @@ def create_match(request):
                     if matchtype == 'comp_time':
                         cur_match.matchrecords_target = request.GET.get('goal_step')
                         cur_match.save()
-                    return HttpResponse('发布成功')
+                    return HttpResponse('比赛创建成功!请点击右上角「分享到朋友圈」，与好友一试高下!')
                 else:
                     return HttpResponse('比赛已经创建')
     else:
@@ -622,8 +646,15 @@ def join_match(request):
             except matchrecords.DoesNotExist:
                 return JsonResponse({"error": 1, "errormsg": '找不到该比赛'})
             else:
+                cur_players = matchrecords.objects.filter(matchrecords_id=cur_match.matchrecords_id).count()
+                client = WeChatClient(API_ID, API_SECRET)
+                match_originator_info = client.user.get(cur_match.matchrecords_relate_person.user_open_id, lang=u'zh_CN')
+                match_originator_nickname = match_originator_info['nickname']
                 return JsonResponse({"error": 0, "competitiontype": cur_match.matchrecords_matchtype,
-                                     "start_time": cur_match.matchrecords_start_time.date(), "end_time": cur_match.matchrecords_end_time.date(),
+                                     "start_date": cur_match.matchrecords_start_time.date(), "end_date": cur_match.matchrecords_end_time.date(),
+                                     "start_time": cur_match.matchrecords_start_time.time(), "end_time": cur_match.matchrecords_end_time.time(),
+                                     "competitionname": cur_match.matchrecords_title, "currentnumber": cur_players,
+                                     "originator": match_originator_nickname,
                                      "goal_step": cur_match.matchrecords_target})
     else:
         raise Http404()
@@ -633,27 +664,44 @@ def get_match_result(request):
     if request.method == 'GET':
         openID = request.GET.get('openID')
         matchid = request.GET.get('competitionID')
-        cur_user = 0
         ranks = []
         try:
             cur_user = userlist.objects.get(user_open_id=openID)
         except userlist.DoesNotExist:
-            error_flag = True
+            return JsonResponse({"competitiontype": "comp_distance",
+                          "start_date": "0000-00-00", "end_date": "0000-00-00",
+                          "start_time": "00:00", "end_time": "00:00",
+                          "competitionname": "没有填写用户个人信息", "currentnumber": 0,
+                          "originator": "","goal_step": 0,
+                          "rank": ranks, "user_rank": 0})
         else:
             try:
                 match = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_originator=True)
             except matchrecords.DoesNotExist:
-                error_flag = True
+                return JsonResponse({"competitiontype": "comp_distance",
+                          "start_date": "0000-00-00", "end_date": "0000-00-00",
+                          "start_time": "00:00", "end_time": "00:00",
+                          "competitionname": "比赛没有创建", "currentnumber": 0,
+                          "originator": "","goal_step": 0,
+                          "rank": ranks, "user_rank": 0})
             else:
+                cur_players = matchrecords.objects.filter(matchrecords_id=match.matchrecords_id).count()
+                client = WeChatClient(API_ID, API_SECRET)
+                match_originator_info = client.user.get(match.matchrecords_relate_person.user_open_id, lang=u'zh_CN')
+                match_originator_nickname = match_originator_info['nickname']
                 if match.matchrecords_matchstate <= 1:
-                    error_flag = True
+                    return JsonResponse({"competitiontype": match.matchrecords_matchtype,
+                          "start_date": match.matchrecords_start_time.date(), "end_date": match.matchrecords_end_time.date(),
+                          "start_time": match.matchrecords_start_time.time(), "end_time": match.matchrecords_end_time.time(),
+                          "competitionname": match.matchrecords_title+"尚未开始", "currentnumber": cur_players,
+                          "originator": match_originator_nickname,"goal_step": match.matchrecords_target,
+                          "rank": ranks, "user_rank": 0})
                 else:
                     if match.matchrecords_matchtype == 'comp_distance':
                         ranks = matchrecords.objects.filter(matchrecords_id=matchid).order_by("-matchrecords_steps")
                         for i in range(len(ranks)):
                             ranks[i].matchrecords_rank = i+1
                             ranks[i].save()
-                        error_flag = False
                     elif match.matchrecords_matchtype == 'comp_time':
                         ranks1 = matchrecords.objects.filter(matchrecords_id=matchid, matchrecords_finish_flag=True).order_by("matchrecords_finish_time")
                         ranks2 = matchrecords.objects.filter(matchrecords_id=matchid, matchrecords_finish_flag=False).order_by("-matchrecords_steps")
@@ -661,24 +709,27 @@ def get_match_result(request):
                         for i in range(len(ranks)):
                             ranks[i].matchrecords_rank = i+1
                             ranks[i].save()
-                        error_flag = False
                     else:
-                        error_flag = True
-        if error_flag:
-            rank = []
-            for i in range(10):
-                rank.append({"name": '无'})
-            return JsonResponse({"rank": rank, "user_rank": 0})
-        else:
-            user_rank = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_relate_person=cur_user).matchrecords_rank
-            rank10 = ranks[0:9]
-            rank = []
-            for x in rank10:
-                client = WeChatClient(API_ID, API_SECRET)
-                match_player_info = client.user.get(x.matchrecords_relate_person.user_open_id,lang=u'zh_CN')
-                match_player_nickname = match_player_info['nickname']
-                rank.append({"name": match_player_nickname})
-            return JsonResponse({"rank": rank, "user_rank": user_rank})
+                        return JsonResponse({"competitiontype": match.matchrecords_matchtype,
+                          "start_date": match.matchrecords_start_time.date(), "end_date": match.matchrecords_end_time.date(),
+                          "start_time": match.matchrecords_start_time.time(), "end_time": match.matchrecords_end_time.time(),
+                          "competitionname": "提交的比赛类型错误", "currentnumber": cur_players,
+                          "originator": match_originator_nickname,"goal_step": match.matchrecords_target,
+                          "rank": ranks, "user_rank": 0})
+                    user_rank = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_relate_person=cur_user).matchrecords_rank
+                    rank10 = ranks[0:9]
+                    rank = []
+                    for x in rank10:
+                        client = WeChatClient(API_ID, API_SECRET)
+                        match_player_info = client.user.get(x.matchrecords_relate_person.user_open_id,lang=u'zh_CN')
+                        match_player_nickname = match_player_info['nickname']
+                        rank.append({"name": match_player_nickname})
+                    return JsonResponse({"competitiontype": match.matchrecords_matchtype,
+                          "start_date": match.matchrecords_start_time.date(), "end_date": match.matchrecords_end_time.date(),
+                          "start_time": match.matchrecords_start_time.time(), "end_time": match.matchrecords_end_time.time(),
+                          "competitionname": match.matchrecords_title, "currentnumber": cur_players,
+                          "originator": match_originator_nickname,"goal_step": match.matchrecords_target,
+                          "rank": rank, "user_rank": user_rank})
     else:
         raise Http404()
 
@@ -766,10 +817,17 @@ def get_week_report(request):
     return JsonResponse(rep)
 
 
-def gather_data(user, start_time, end_time):
-    data_list = sportrecords.objects.filter(sportrecords_person_id=user,
-                                            sportrecords_start_time__gte=start_time, sportrecords_end_time__lte=end_time)
+def gather_data(user, start_time, end_time, subtype):
+    data_list = sportrecords.objects.filter(sportrecords_person_id=user, sportrecords_subtype=subtype,
+                                            sportrecords_type=2, sportrecords_start_time__gte=start_time,
+                                            sportrecords_end_time__lte=end_time)
     steps = 0
     dist = 0
     cal = 0
-    return 1
+    for single_data in data_list:
+        steps += single_data.sportrecords_quantity
+        dist += single_data.sportrecords_dist
+        cal += single_data.sportrecords_calorie
+    return {"steps": steps, "dist": dist, "cal": cal}
+
+

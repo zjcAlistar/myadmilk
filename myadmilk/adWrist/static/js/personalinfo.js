@@ -13,7 +13,13 @@ function changesize() {
 	// });
 
 	//document.getElementById("titlebox").style.lineHeight="100px";
-
+	$("#all").css({
+		"position":"absolute",
+		"top":"0",
+		"left":"0",
+		"height": Height,
+		"width": Width
+	});
 	$("#titlebox_text1").css("font-size", Height*0.06);
 	$("#titlebox_text2").css("font-size", Height*0.07);
 
@@ -101,7 +107,8 @@ var defaultHeight;
 window.onload = function(){
 
 	//ret test
-	$.get("/changeinfo/",{"openID":openID},function(ret){
+	// var ret={"age":"12","weight":"45","height":"123","sex":"2","advice":"","id":"Alistar","score":"1998","avatar":"http://img0.bdstatic.com/img/image/shitulogo-r.png"};
+	$.get("/changeinfo/",{"openID":openID,"type":"init"},function(ret){
 		defaultScore = ret.score;
 		defaultAge = Number(ret.age);
 		defaultSex = Number(ret.sex);
@@ -240,7 +247,7 @@ $(function(){
 				var height = parseInt($("#height").val());
 				var weight = parseInt($("#weight").val());
 				if (defaultSex != 0 && !isNaN(age)&&!isNaN(height)&&!isNaN(weight)) {
-					$.post("/changeinfo/",{"openID":openID,"age":age,"sex":defaultSex,"height":height,"weight":weight},function(ret){
+					$.post("/changeinfo/",{"openID":openID,"age":age,"sex":defaultSex,"height":height,"weight":weight,"type":"confirm"},function(ret){
 						edit_state = false;
 						$("#age").attr("disabled", "true");
 						$("#weight").attr("disabled", "true");
@@ -274,6 +281,7 @@ $(function(){
 		if(edit_state == true) {
 			alert("请先确认修改");
 		} else {
+			$("#competitions").children("li").remove();
 			$("#infobox").css("display","none");
 			$("#personalinfo").css("color","rgb(120,160,190)");
 			$("#competitionbox").css("display","block");
@@ -359,7 +367,7 @@ function showmessagebox (str) {
 
 	var message = document.createElement("div");
 	message.setAttribute("id", "message");
-	message.style.cssText = "top:20%;left:5%;height:60%;width:90%;position:absolute;font-family:SimHei;font-size:20px; text-align:center;line-height:25px;"
+	message.style.cssText = "top:20%;left:5%;height:60%;width:90%;position:absolute;font-family:SimHei;font-size:20px; text-align:center;line-height:20px;"
 	message.innerHTML = str;
 	messagebox.appendChild(message);
 

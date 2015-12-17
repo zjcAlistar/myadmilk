@@ -3,74 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <title>创建比赛</title>
+    <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=no, width=device-width">
     <link rel="stylesheet" href="../static/css/createcompetition.css" type="text/css">
     <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js"></script>
     <script src="../static/js/createcompetition.js"></script>
 
 </head>
 <body style="background:black;">
-	<div id = "titlebox">
-		<nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
-		<nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
-	</div>
-    <div id = "infobox">
+    <div id="all">
+    	<div id = "titlebox">
+    		<nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+    		<nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
+    	</div>
+        <div id = "infobox">
 
-        <div id="slogan"><b>创建比赛 —— 与好友一试高下！</b></div>
-        <div class="competitionname">
-            <input type="text" id="competitionname" onchange="is_valid_name()"/>
-            <div id="competitionname_text">比赛名称</div>  
-        </div>
-        <div id="competitionbox">
-             <div class="competitiontype"> 
-                <select id="competitiontype" onchange="show_competitiontype()">
-                	<option value="default" selected="selected" style="display:none;"></option>
-				  	<option value="comp_time">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp时间最短</option>
-				 	<option value="comp_distance"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp步数最多</option>
-				</select>
-				<div id="competitiontype_text">比赛类型</div>
-            </div> 
-            <!-- 步数最多 -->
-            <div id="comp_distance_box">
-            	<div class="comp_distance" style="top:0%;">
-            		<input type="date" class="date_start" id="d_date_start"/>
-            		<input type="time" class="time_start" id="d_time_start"/>
-            		<div class="comp_text">开始时间</div>
-            	</div>
-            	<div class="comp_distance" style="top:50%;">
-            		<input type="date" class="date_end" id="d_date_end"/>
-            		<input type="time" class="time_end" id="d_time_end"/>
-            		<div class="comp_text">结束时间</div>
-            	</div>
+            <div id="slogan"><b>创建比赛 —— 与好友一试高下！</b></div>
+            <div class="competitionname">
+                <input type="text" id="competitionname" onchange="is_valid_name()"/>
+                <div id="competitionname_text">比赛名称</div>  
             </div>
-            <!-- 步数最多 -->
-            <!-- 时间最短 -->
-            <div id="comp_time_box">
-            	<div class="comp_time" style="top:0%;">
-            		<input type="date" class="date_start" id="t_date_start"/>
-            		<input type="time" class="time_start" id="t_time_start"/>
-            		<div class="comp_text">开始时间</div>
-            	</div>
-            	<div class="comp_time" style="top:35%;">
-            		<input type="date" class="date_end"  id="t_date_end"/>
-            		<input type="time" class="time_end"  id="t_time_end"/>
-            		<div class="comp_text">结束时间</div>
-            	</div>
-            	<div class="comp_time" style="top:70%;">
-	            	<input type="number" id="goal_step"/>
-	                <div class="comp_text">目标步数</div>
-            	</div>
+            <div id="competitionbox">
+                 <div class="competitiontype"> 
+                    <select id="competitiontype" onchange="show_competitiontype()">
+                    	<option value="default" selected="selected" style="display:none;"></option>
+    				  	<option value="comp_time">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp时间最短</option>
+    				 	<option value="comp_distance"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp步数最多</option>
+    				</select>
+    				<div id="competitiontype_text">比赛类型</div>
+                </div> 
+                <!-- 步数最多 -->
+                <div id="comp_distance_box">
+                	<div class="comp_distance" style="top:0%;">
+                		<input type="date" class="date_start" id="d_date_start"/>
+                		<input type="time" class="time_start" id="d_time_start"/>
+                		<div class="comp_text">开始时间</div>
+                	</div>
+                	<div class="comp_distance" style="top:50%;">
+                		<input type="date" class="date_end" id="d_date_end"/>
+                		<input type="time" class="time_end" id="d_time_end"/>
+                		<div class="comp_text">结束时间</div>
+                	</div>
+                </div>
+                <!-- 步数最多 -->
+                <!-- 时间最短 -->
+                <div id="comp_time_box">
+                	<div class="comp_time" style="top:0%;">
+                		<input type="date" class="date_start" id="t_date_start"/>
+                		<input type="time" class="time_start" id="t_time_start"/>
+                		<div class="comp_text">开始时间</div>
+                	</div>
+                	<div class="comp_time" style="top:35%;">
+                		<input type="date" class="date_end"  id="t_date_end"/>
+                		<input type="time" class="time_end"  id="t_time_end"/>
+                		<div class="comp_text">结束时间</div>
+                	</div>
+                	<div class="comp_time" style="top:70%;">
+    	            	<input type="number" id="goal_step"/>
+    	                <div class="comp_text">目标步数</div>
+                	</div>
+                </div>
+                <!-- 时间最短 -->
             </div>
-            <!-- 时间最短 -->
+            <input id="confirm" type="submit" name="signup" value="发布"/>
+         
         </div>
-        <input id="confirm" type="submit" name="signup" value="发布"/>
-     
     </div>
     <script type="text/javascript">
       	changesize();
       	loaddatetime();
         var openID = '{{ openID }}'
         var competitionID = '{{ competitionID }}'
-        $("#competitionname").val(competitionID);
+        $("#competitionname").val("比赛"+competitionID);
         $(function(){
             $("#confirm").click(function(){
                 
@@ -80,6 +83,7 @@
                 }
 
             	var competitiontype = $("#competitiontype").val();
+                var competitionname = $("#competitionname").val();
 
             	if (competitiontype == "comp_distance") {
             		var date1 = $("#d_date_start").val();
@@ -95,10 +99,8 @@
 	            	else if (date == 0 && time < 0) {
 						flag = true;
 	            	}
-	           
 	            	if (flag == true) {
-                        showmessagebox("比赛创建成功！请点击右上角「分享到朋友圈」，与好友一试高下！");
-	            		$.post("/creatematch/",{"openID": openID, "competitionID": competitionID, "competitiontype": competitiontype, "datetime_start": date1+" "+time1, "datetime_end": date2+" "+time2},function(ret){
+	            		$.post("/creatematch/",{"openID": openID, "competitionID": competitionID, "competitiontype": competitiontype, "datetime_start": date1+" "+time1, "datetime_end": date2+" "+time2, "competitionname": competitionname},function(ret){
 	                        showmessagebox(ret);
 	                    });
 	            	}
@@ -131,8 +133,7 @@
 	            	
 
 	            	if (flag == true) {
-                        showmessagebox("比赛创建成功！请点击右上角「分享到朋友圈」，与好友一试高下！");
-	            		$.post("/creatematch/",{"openID": openID, "competitionID": competitionID, "competitiontype": competitiontype, "datetime_start": date1+" "+time1, "datetime_end": date2+" "+time2, "goal_step": goal_step},function(ret){
+	            		$.post("/creatematch/",{"openID": openID, "competitionID": competitionID, "competitiontype": competitiontype, "datetime_start": date1+" "+time1, "datetime_end": date2+" "+time2, "goal_step": goal_step, "competitionname": competitionname},function(ret){
 	                        showmessagebox(ret);
 	                    });
 	            	}

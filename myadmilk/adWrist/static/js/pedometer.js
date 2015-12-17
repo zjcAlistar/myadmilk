@@ -1,6 +1,13 @@
 function changesize() {
     var Height = $(window).height();
     var Width = $(window).width();
+    $("#all").css({
+        "position":"absolute",
+        "top":"0",
+        "left":"0",
+        "height": Height,
+        "width": Width
+    });
     $("#titlebox").css({
         "width": Width,
         "height": Height*0.1,
@@ -16,18 +23,18 @@ function changesize() {
         "height": Height*0.898
     });
 
-    $("#next").css({
-        "width": Width*0.17,
-        "height": Width*0.17
-    });
+    // $("#next").css({
+    //     "width": Width*0.17,
+    //     "height": Width*0.17
+    // });
 
-    $("#previous").css({
-        "width": Width*0.17,
-        "height": Width*0.17
-    });
+    // $("#previous").css({
+    //     "width": Width*0.17,
+    //     "height": Width*0.17
+    // });
 
-    $('#previous').css("font-size", Height*0.9*0.2*0.6*0.2);
-    $('#next').css("font-size", Height*0.9*0.2*0.6*0.2);
+    $('#previous').css("font-size", Height*0.9*0.2*0.6*0.5);
+    $('#next').css("font-size", Height*0.9*0.2*0.6*0.5);
     $('#date').css("font-size", Height*0.9*0.2*0.6*0.35);
     $('#text').css("font-size", Height*0.9*0.6*0.15*0.35);
     $('#text2').css("font-size", Height*0.9*0.6*0.15*0.35);

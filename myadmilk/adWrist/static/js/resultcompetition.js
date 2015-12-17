@@ -2,7 +2,13 @@ var Height = $(window).height();
 var Width = $(window).width();
 
 function changesize() {
-
+    $("#all").css({
+        "position":"absolute",
+        "top":"0",
+        "left":"0",
+        "height": Height,
+        "width": Width
+    });
     $("#titlebox").css({
         "width": Width,
         "height": Height*0.1,
@@ -144,11 +150,12 @@ function show_competitiontype () {
 };
 
 window.onload = function(){
-
-	$.get("/getmatchresult/",{"openID":openID,"competitionID":competitionID},function(ret){
+   //ret={"rank":[{"name":"无","score":"10","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"}],"user_rank":"1","user_scorethistime":"12","user_score":"123"};
+	$.get("/getmatchresult/",{"openID": openID, "competitionID": competitionID},function(ret){
 		
         competitionname = ret.competitionname;
         competitiontype = ret.competitiontype;
+        originator = ret.originator;
         start_date = ret.start_date;
         start_time = ret.start_time;
         end_date = ret.end_date;
@@ -156,9 +163,10 @@ window.onload = function(){
         currentnumber = ret.currentnumber;
         
         $("#competitionname").val(competitionname);
+         $("#competitioncreater").val(originator);
         
         if (competitiontype == "comp_distance"){
-            $("#competitiontype").val(competitiontype);
+            $("#competitiontype").val("距离最长");
             $("#d_date_start").val(start_date);
             $("#d_time_start").val(start_time);
             $("#d_date_end").val(end_date);
@@ -169,7 +177,7 @@ window.onload = function(){
         }
         else if (competitiontype == "comp_time"){
             goal_step = ret.goal_step;
-            $("#competitiontype").val(competitiontype);
+            $("#competitiontype").val("时间最短");
             $("#t_date_start").val(start_date);
             $("#t_time_start").val(start_time);
             $("#t_date_end").val(end_date);
@@ -181,34 +189,58 @@ window.onload = function(){
         }
 
         var length = ret.rank.length;
-		if (length > 10) {
-			for(var i = 0;i<10;i++) {
-				var singlerank = $('<li>');
-				singlerank.attr({
-					"id":"rank"+(i+1),
-					"class":"rank_class"
-				});
-				singlerank.append(ret.rank[i].name);
-				singlerank.appendTo("#rank");
-			}
-		} else {
-			for(var i = 0;i < length;i++) {
-				var singlerank = $('<li>');
-				singlerank.attr({
-					"id":"rank"+(i+1),
-					"class":"rank_class"
-				});
-				singlerank.append(ret.rank[i].name);
-				singlerank.appendTo("#rank");
-			}
-		}
+        for(var i = 0;i<length;i++) {
+            if(i>=10){
+                break;
+            }
+            var singlerank = $('<li>');
+            singlerank.attr({
+                "id":"rank"+(i+1),
+                "class":"rank_class"
+            });
+            singlerank.append(ret.rank[i].name);
+            singlerank.appendTo("#rank");
+            var singlerankscore = $('<li>');
+            singlerankscore.attr({
+                "id":"rank"+(i+1),
+                "class":"rank_score_class"
+            });
+            singlerankscore.append(ret.rank[i].score+"(+"+ret.rank[i].scorethistime+")");
+            singlerankscore.appendTo("#rank_score");
+        }
+		// if (length > 10) {
+		// 	for(var i = 0;i<10;i++) {
+		// 		var singlerank = $('<li>');
+		// 		singlerank.attr({
+		// 			"id":"rank"+(i+1),
+		// 			"class":"rank_class"
+		// 		});
+		// 		singlerank.append(ret.rank[i].name);
+		// 		singlerank.appendTo("#rank");
+		// 	}
+		// } else {
+		// 	for(var i = 0;i < length;i++) {
+		// 		var singlerank = $('<li>');
+		// 		singlerank.attr({
+		// 			"id":"rank"+(i+1),
+		// 			"class":"rank_class"
+		// 		});
+		// 		singlerank.append(ret.rank[i].name);
+		// 		singlerank.appendTo("#rank");
+		// 	}
+		// }
 		$("#user_rank").empty();
-		$("#user_rank").append("你在本次比赛中排名"+ret.user_rank+"，请继续努力！")
+		$("#user_rank").append("本次比赛您的排名："+ret.user_rank+"<br/>本次获得积分："+ret.user_scorethistime+"<br/>您的当前积分为："+ret.user_score+"<br/>请继续努力！");
 		$(".rank_class").css({
-	     "font-size": Width*0.35/0.188*0.107*0.4*0.9
+	       "font-size": Width*0.35/0.188*0.107*0.4*0.6,
+           "line-height": Width*0.35/0.188*0.107*0.4*0.8+"px"
 	    });
+        $(".rank_score_class").css({
+           "font-size": Width*0.35/0.188*0.107*0.4*0.5,
+           "line-height": Width*0.35/0.188*0.107*0.4*0.8+"px"
+        });
 	    $("#user_rank").css({
-	         "font-size": Width*0.35/0.188*0.107*0.4*0.7
+	         "font-size": Width*0.35/0.188*0.107*0.4*0.5
 	    });
 	});
 }

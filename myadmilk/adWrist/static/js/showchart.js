@@ -9,9 +9,18 @@ function positive(Num){
 function changesize(){
     var Height = $(window).height();
     var Width = $(window).width();
+    $("#all").css({
+        "position":"absolute",
+        "top":"0",
+        "left":"0",
+        "height": Height,
+        "width": Width
+    });
     $("#titlebox").css({
         "width": Width,
-        "height": Height*0.1
+        "height": Height*0.1,
+        "font-family": "verdana",
+        "lineHeight": Height*0.1+"px"
     });
     $("#titlebox_text1").css("font-size", Height*0.06);
     $("#titlebox_text2").css("font-size", Height*0.07);
@@ -19,8 +28,8 @@ function changesize(){
         "width": Width,
         "height": Height*0.898
     });
-    $('#previous').css("font-size", Height*0.9*0.2*0.6*0.25);
-    $('#next').css("font-size", Height*0.9*0.2*0.6*0.25);
+    $('#previous').css("font-size", Height*0.9*0.2*0.6*0.5);
+    $('#next').css("font-size", Height*0.9*0.2*0.6*0.5);
     $('#date').css("font-size", Height*0.9*0.2*0.6*0.35);
     $('#text').css("font-size", Height*0.9*0.6*0.15*0.35);
     $('#pedometer').css("font-size", Height*0.9*0.2*0.4*0.5);
@@ -29,14 +38,20 @@ function changesize(){
     // $("#confirm").css("font-size", parseInt(Fontsize)*0.7);
 };
 window.onload = function() {
+    Highcharts.Pointer.prototype.onContainerMouseDown = function (e) {
+        e = this.normalize(e);
+        this.dragStart(e);
+    };
+
     $.get("/getweekdata/", {"openID": openID, "type": "init7", "nums": 7}, function (ret) {
-        //var  ret = [{"date":"2015-11-11","steps":"20","goal":"30"},{"date":"2015-11-12","steps":"30","goal":"40"},{"date":"2015-11-13","steps":"50","goal":"30"}];
+        //var  ret = [{"date":"2015-11-11","steps":"200","goal":"30"},{"date":"2015-11-12","steps":"30","goal":"40"},{"date":"2015-11-13","steps":"50","goal":"30"},{"date":"2015-11-12","steps":"30","goal":"40"},{"date":"2015-11-12","steps":"30","goal":"40"},{"date":"2015-11-12","steps":"30","goal":"40"},{"date":"2015-11-12","steps":"30","goal":"40"}];
         stepArray = new Array();
         finishArray = new Array();
         for (var i = 0; i < ret.length; i++) {
-            stepArray.push([ret[i].date, Number(ret[i].steps)]);
-            finishArray.push([ret[i].date, positive(Number(ret[i].goal) - Number(ret[i].steps))]);
+            stepArray.push([ret[i].date.slice(5),Number(ret[i].steps)]);
+            finishArray.push([ret[i].date.slice(5),positive(Number(ret[i].goal)- Number(ret[i].steps))]);
         }
+        console.log(stepArray);
         $("#barChart").highcharts({
             chart: {
                 type: 'column',
@@ -50,7 +65,7 @@ window.onload = function() {
             },
             tooltip: {
                 style: {
-                    "fontSize": "24px"
+                    "fontSize": "36px"
                 }
             },
             legend: {
@@ -61,24 +76,24 @@ window.onload = function() {
             credits: {
                 enabled: false
             },
+
             xAxis: {
-                type: 'category',
-                lables: {
-                    style: {
-                        fontSize: "24px"
+                labels: {
+                    style:{
+                        fontSize:"24px"
                     }
-                }
+                },
+                type: 'category'
+                
             },
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'steps'
+                    text: ''
                 },
-                stackLabels: {
-                    enabled: true,
+                labels: {
                     style: {
-                        fontWeight: 'bold',
-                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                        fontSize: "28px"
                     }
                 }
             },
@@ -96,14 +111,28 @@ window.onload = function() {
             },
             series: [{
                 name: '未完成',
-                data: finishArray
+                data: finishArray,
+                dataLabels:{
+                    enabled: true,
+                    style: {
+                        fontSize: "24px",
+                        fontWeight: 'bold'
+                    }
+                }
             }, {
                 name: '步数',
-                data: stepArray
+                data: stepArray,
+                dataLabels:{
+                    enabled: true,
+                    style: {
+                        fontSize: "24px",
+                        fontWeight: 'bold'
+                    }
+                }
             }]
         });
         $("#date").val(ret[ret.length - 1].date);
-    })
+    });
 
 }
     
@@ -117,9 +146,9 @@ $(function(){
     $.get("/getweekdata/",{"openID":openID, "type":"next","date":date,"nums": 1},function(ret){
     //var ret = {"date":"2015-11-14","steps":"500","goal":"600"};
         stepArray.shift();
-        stepArray.push([ret.date,Number(ret.steps)]);
+        stepArray.push([ret.date.slice(5),Number(ret.steps)]);
         finishArray.shift();
-        finishArray.push([ret.date,positive(Number(ret.goal)-Number(ret.steps))]);
+        finishArray.push([ret.date.slice(5),positive(Number(ret.goal)-Number(ret.steps))]);
         barChart.series[0].update({data:finishArray});
         barChart.series[1].update({data:stepArray});
         $("#date").val(ret.date);
@@ -135,9 +164,9 @@ $(function(){
     var date = $("#date").val();
     $.get("/getweekdata/",{"openID":openID,"type":"previous","date":date,"nums":1},function(ret){
         stepArray.pop();
-        stepArray.unshift([ret.date,Number(ret.steps)]);
+        stepArray.unshift([ret.date.slice(5),Number(ret.steps)]);
         finishArray.pop();
-        finishArray.unshift([ret.date,positive(Number(ret.goal)-Number(ret.steps))]);
+        finishArray.unshift([ret.date.slice(5),positive(Number(ret.goal)-Number(ret.steps))]);
         barChart.series[0].update({data:finishArray});
         barChart.series[1].update({data:stepArray});
         $("#date").val(ret.date);
@@ -160,8 +189,8 @@ $(function(){
             stepArray = [];
             finishArray = [];
             for(var i = 0;i<ret.length;i++){
-                stepArray.push([ret[i].date,Number(ret[i].steps)]);
-                finishArray.push([ret[i].date,positive(Number(ret[i].goal)- Number(ret[i].steps))]);
+                stepArray.push([ret[i].date.slice(5),Number(ret[i].steps)]);
+                finishArray.push([ret[i].date.slice(5),positive(Number(ret[i].goal)- Number(ret[i].steps))]);
             };
             barChart.series[0].update({data:finishArray});
             barChart.series[1].update({data:stepArray});
