@@ -4,8 +4,6 @@ from django.db import models
 
 class userlist(models.Model):
     user_open_id = models.CharField(max_length=128)
-    user_username = models.CharField(max_length=128)
-    user_password = models.CharField(max_length=128)
     user_age = models.IntegerField(default=-1)
     user_sex = models.IntegerField(default=0)
     user_height = models.IntegerField(default=-1)
@@ -25,6 +23,10 @@ class sportrecords(models.Model):
     sportrecords_sport_type = models.CharField(max_length=128)
     sportrecords_quantity = models.IntegerField(default=0)
     sportrecords_calorie = models.IntegerField(default=0)
+    sportrecords_dist = models.IntegerField(default=0)
+    sportrecords_type = models.IntegerField(default=0)
+    sportrecords_subtype = models.IntegerField(default=0)
+    sportrecords_points = models.IntegerField(default=0)
     sportrecords_step_goal = models.IntegerField(default=5000)
     sportrecords_dist_goal = models.IntegerField(default=10)
     sportrecords_calorie_goal = models.IntegerField(default=2000)
@@ -45,5 +47,4 @@ class matchrecords(models.Model):
     matchrecords_finish_time = models.DateTimeField(auto_now_add=True)
     matchrecords_finish_flag = models.BooleanField(default=False)
     matchrecords_rank = models.IntegerField(default=0)
-
 

@@ -208,57 +208,55 @@ def recommend_plan(openID):
     return plan
 
 
-
+@csrf_exempt
 def change_info(request):
     if request.method == 'GET':
         openID = request.GET.get('openID')
-        type = request.GET.get('type')
-        if type == 'init':
-            try:
-                cur_user = userlist.objects.get(user_open_id=openID)
-            except userlist.DoesNotExist:
-                new_user = userlist(
-                    user_open_id=openID
-                )
-                new_user.save()
-                return JsonResponse({"age": new_user.user_age, "sex": new_user.user_sex, "weight": new_user.user_weight,
-                                     "height": new_user.user_height, "advice": '您还没有填写个人信息', "id": "匿名", "score": 0,
-                                     "avatar": "../static/img/run02.jpg"})
-            else:
-                score = 1000
-                client = WeChatClient(API_ID, API_SECRET)
-                cur_user_info = client.user.get(openID,lang=u'zh_CN')
-                nickname = cur_user_info['nickname']
-                avator = cur_user_info['headimgurl']
-                return JsonResponse({"age": cur_user.user_age, "sex": cur_user.user_sex, "weight": cur_user.user_weight,
-                                     "height": cur_user.user_height, "advice": recommend_plan(openID), "id": nickname, "score": score,
-                                     "avatar": avator})
-        elif type == 'confirm':
-            sex = request.GET.get('sex')
-            age = request.GET.get('age')
-            height = request.GET.get('height')
-            weight = request.GET.get('weight')
-
-            try:
-                cur_user = userlist.objects.get(user_open_id=openID)
-            except userlist.DoesNotExist:
-                newuser = userlist(
-                    user_open_id=openID,
-                    user_age=age,
-                    user_sex=sex,
-                    user_height=height,
-                    user_weight=weight,
-                    user_confirmed=True
-                )
-                newuser.save()
-            else:
-                cur_user.user_age = age
-                cur_user.user_sex = sex
-                cur_user.user_height = height
-                cur_user.user_weight = weight
-                cur_user.user_confirmed = True
-                cur_user.save()
-            return JsonResponse({"advice": recommend_plan(openID)})
+        try:
+            cur_user = userlist.objects.get(user_open_id=openID)
+        except userlist.DoesNotExist:
+            new_user = userlist(
+                user_open_id=openID
+            )
+            new_user.save()
+            return JsonResponse({"age": new_user.user_age, "sex": new_user.user_sex, "weight": new_user.user_weight,
+                                 "height": new_user.user_height, "advice": '您还没有填写个人信息', "id": "匿名", "score": 0,
+                                 "avatar": "../static/img/run02.jpg"})
+        else:
+            score = 1000
+            client = WeChatClient(API_ID, API_SECRET)
+            cur_user_info = client.user.get(openID,lang=u'zh_CN')
+            nickname = cur_user_info['nickname']
+            avator = cur_user_info['headimgurl']
+            return JsonResponse({"age": cur_user.user_age, "sex": cur_user.user_sex, "weight": cur_user.user_weight,
+                                 "height": cur_user.user_height, "advice": recommend_plan(openID), "id": nickname, "score": score,
+                                 "avatar": avator})
+    elif request.method == 'POST':
+        openID = request.POST.get('openID')
+        sex = request.POST.get('sex')
+        age = request.POST.get('age')
+        height = request.POST.get('height')
+        weight = request.POST.get('weight')
+        try:
+            cur_user = userlist.objects.get(user_open_id=openID)
+        except userlist.DoesNotExist:
+            newuser = userlist(
+                user_open_id=openID,
+                user_age=age,
+                user_sex=sex,
+                user_height=height,
+                user_weight=weight,
+                user_confirmed=True
+            )
+            newuser.save()
+        else:
+            cur_user.user_age = age
+            cur_user.user_sex = sex
+            cur_user.user_height = height
+            cur_user.user_weight = weight
+            cur_user.user_confirmed = True
+            cur_user.save()
+        return JsonResponse({"advice": recommend_plan(openID)})
     else:
         raise Http404()
 
@@ -483,6 +481,7 @@ def build_match(openID):
         )
         new_match.save()
         new_match.matchrecords_id = new_match.id
+        new_match.matchrecords_title = str('比赛%d' % new_match.id)
         new_match.save()
         link = str('https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s'
                   '&redirect_uri=%s'
@@ -558,6 +557,7 @@ def create_match(request):
         raise Http404()
 
 
+@csrf_exempt
 def join_match(request):
     if request.method == 'POST':
         openID = request.POST.get('openID')
@@ -588,6 +588,22 @@ def join_match(request):
                 return HttpResponse('参加成功')
             else:
                 return HttpResponse('您已经参加了该比赛')
+    elif request.method == 'GET':
+        openID = request.GET.get('openID')
+        matchid = request.GET.get('competitionID')
+        try:
+            userlist.objects.get(user_open_id=openID)
+        except userlist.DoesNotExist:
+            return JsonResponse({"error": 1, "errormsg": '您还没有关注admilk应用'})
+        else:
+            try:
+                cur_match = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_originator=True)
+            except matchrecords.DoesNotExist:
+                return JsonResponse({"error": 1, "errormsg": '找不到该比赛'})
+            else:
+                return JsonResponse({"error": 0, "competitiontype": cur_match.matchrecords_matchtype,
+                                     "start_time": cur_match.matchrecords_start_time.date(), "end_time": cur_match.matchrecords_end_time.date(),
+                                     "goal_step": cur_match.matchrecords_target})
     else:
         raise Http404()
 
@@ -596,32 +612,51 @@ def get_match_result(request):
     if request.method == 'GET':
         openID = request.GET.get('openID')
         matchid = request.GET.get('competitionID')
+        cur_user = 0
+        ranks = []
         try:
             cur_user = userlist.objects.get(user_open_id=openID)
         except userlist.DoesNotExist:
-            return HttpResponse('您还没有关注admilk应用')
-
-        try:
-            matchtype = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_originator=True).matchtype
-        except:
-            return HttpResponse('该比赛不存在')
-        if matchtype == 'comp_distance':
-            try:
-                rank = matchrecords.objects.filter(matchrecords_id=matchid).order_by("matchrecords_steps")
-                for i in range(len(rank)):
-                    rank[i].matchrecords_rank = i
-            except:
-                return HttpResponse('该比赛不存在')
+            error_flag = True
         else:
             try:
-                rank1 = matchrecords.objects.filter(matchrecords_id=matchid, matchrecords_finish_flag=True).order_by("-matchrecords_finish_time")
-                rank2 = matchrecords.objects.filter(matchrecords_id=matchid, matchrecords_finish_flag=False).order_by("matchrecords_steps")
-                rank = rank1 + rank2
-                for i in range(len(rank)):
-                    rank[i].matchrecords_rank = i
-            except:
-                return HttpResponse('该比赛不存在')
+                match = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_originator=True)
+            except matchrecords.DoesNotExist:
+                error_flag = True
+            else:
+                if match.matchrecords_matchstate <= 1:
+                    error_flag = True
+                else:
+                    if match.matchrecords_matchtype == 'comp_distance':
+                        ranks = matchrecords.objects.filter(matchrecords_id=matchid).order_by("-matchrecords_steps")
+                        for i in range(len(ranks)):
+                            ranks[i].matchrecords_rank = i+1
+                            ranks[i].save()
+                        error_flag = False
+                    elif match.matchrecords_matchtype == 'comp_time':
+                        ranks1 = matchrecords.objects.filter(matchrecords_id=matchid, matchrecords_finish_flag=True).order_by("matchrecords_finish_time")
+                        ranks2 = matchrecords.objects.filter(matchrecords_id=matchid, matchrecords_finish_flag=False).order_by("-matchrecords_steps")
+                        ranks = ranks1 | ranks2
+                        for i in range(len(ranks)):
+                            ranks[i].matchrecords_rank = i+1
+                            ranks[i].save()
+                        error_flag = False
+                    else:
+                        error_flag = True
+        if error_flag:
+            rank = []
+            for i in range(10):
+                rank.append({"name": '无'})
+            return JsonResponse({"rank": rank, "user_rank": 0})
+        else:
             user_rank = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_relate_person=cur_user).matchrecords_rank
+            rank10 = ranks[0:9]
+            rank = []
+            for x in rank10:
+                client = WeChatClient(API_ID, API_SECRET)
+                match_player_info = client.user.get(x.matchrecords_relate_person.user_open_id,lang=u'zh_CN')
+                match_player_nickname = match_player_info['nickname']
+                rank.append({"name": match_player_nickname})
             return JsonResponse({"rank": rank, "user_rank": user_rank})
     else:
         raise Http404()
@@ -639,6 +674,7 @@ def get_matches(request):
             client = WeChatClient(API_ID, API_SECRET)
             cur_matches = matchrecords.objects.filter(matchrecords_relate_person=cur_user, matchrecords_matchstate__gte=1).order_by("-matchrecords_id")
             for match in cur_matches:
+                match_id = match.matchrecords_id
                 match_title = match.matchrecords_title
                 match_state = match.matchrecords_matchstate
                 match_start_time = match.matchrecords_start_time.date()
@@ -649,12 +685,23 @@ def get_matches(request):
                 match_originator_info = client.user.get(match_originator_id,lang=u'zh_CN')
                 match_originator_nickname = match_originator_info['nickname']
                 cur_players = matchrecords.objects.filter(matchrecords_id=match.matchrecords_id).count()
+                match_url = str('%s'
+                                'showresultpage?openID=%s'
+                                '&matchID=%d' % (serverIP, openID, match_id))
                 rep.append({"matchplayers": cur_players, "matchstate": match_state, "matchtitle": match_title,
-                            "matchoriginator": match_originator_nickname,"matchstarttime": match_start_time, "matchendtime": match_end_time})
+                            "matchoriginator": match_originator_nickname,"matchstarttime": match_start_time, "matchendtime": match_end_time,
+                            "matchurl": match_url})
             return  JsonResponse(rep, safe=False)
     else:
         raise Http404()
 
+
+def show_result_page(request):
+    if request.method == 'GET':
+        openID = request.GET.get('openID')
+        matchID = request.GET.get('matchID')
+        return render_to_response('resultcompetition.html', {'openID': openID, 'competitionID': matchID},
+                                  context_instance=RequestContext(request))
 
 def get_week_report(request):
     openID = request.GET.get('openID')
@@ -686,4 +733,22 @@ def get_week_report(request):
                 step_array.append({"date": pre_date, "steps": 0})
             total_step += walk_quantity
             total_dist += float(str('%.2f' % (walk_quantity*0.5/1000)))
-        joined_matches = matchrecords.objects.filter(matchrecords_relate_person=cur_user, matchrecords_matchstate=3)
+        time_now = datetime.now()
+        time_before = time_now+timedelta(days=(-7))
+        joined_matches = matchrecords.objects.filter(matchrecords_relate_person=cur_user, matchrecords_matchstate=3,
+                                                     matchrecords_end_time__range=(time_before,time_now))
+        competitionArray = []
+        for match in joined_matches:
+            competitionArray.append({"name":match.matchrecords_title, "rank": match.matchrecords_rank})
+        rep = {"total": {"totalStep": total_step, "totalDistance": total_dist, "totalCal": total_cal},
+               "stepArray": step_array, "competitionArray": competitionArray}
+    return JsonResponse(rep)
+
+
+def gather_data(user, start_time, end_time):
+    data_list = sportrecords.objects.filter(sportrecords_person_id=user,
+                                            sportrecords_start_time__gte=start_time, sportrecords_end_time__lte=end_time)
+    steps = 0
+    dist = 0
+    cal = 0
+    return 1
