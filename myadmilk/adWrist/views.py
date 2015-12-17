@@ -11,6 +11,7 @@ from datetime import *
 from urllib.request import *
 import json
 import config
+import random
 from wechatpy.client import WeChatClient
 # Create your views here.
 
@@ -114,6 +115,26 @@ def add_test(openID):
         rep = '添加成功'
     return rep
 
+
+def add_test_new(openID):
+    try:
+        cur_user = userlist.objects.get(user_open_id = openID)
+    except userlist.DoesNotExist:
+        rep = '好像出问题了，请填写信息'
+    else:
+        date = datetime.now()
+        randomstep = random.randint(0, 10000)
+        new_record = sportrecords(
+            sportrecords_person_id=cur_user,
+            sportrecords_type=2,
+            sportrecords_subtype=4,
+            sportrecords_quantity=randomstep,
+            sportrecords_calorie=int(randomstep/16),
+            sportrecords_dist=int(randomstep*0.8)
+        )
+        new_record.save()
+        rep = '添加成功'
+    return rep
 
 def get_datatoday(openID):
     try:
