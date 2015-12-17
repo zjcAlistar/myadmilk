@@ -151,7 +151,7 @@ window.onload = function(){
         competitiontype = ret.competitiontype;
         start_date = ret.start_date;
         start_time = ret.start_time;
-        end_date = ret.end-date;
+        end_date = ret.end_date;
         end_time = ret.end_time;
         currentnumber = ret.currentnumber;
         

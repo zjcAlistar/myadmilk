@@ -208,57 +208,55 @@ def recommend_plan(openID):
     return plan
 
 
-
+@csrf_exempt
 def change_info(request):
     if request.method == 'GET':
         openID = request.GET.get('openID')
-        type = request.GET.get('type')
-        if type == 'init':
-            try:
-                cur_user = userlist.objects.get(user_open_id=openID)
-            except userlist.DoesNotExist:
-                new_user = userlist(
-                    user_open_id=openID
-                )
-                new_user.save()
-                return JsonResponse({"age": new_user.user_age, "sex": new_user.user_sex, "weight": new_user.user_weight,
-                                     "height": new_user.user_height, "advice": '您还没有填写个人信息', "id": "匿名", "score": 0,
-                                     "avatar": "../static/img/run02.jpg"})
-            else:
-                score = 1000
-                client = WeChatClient(API_ID, API_SECRET)
-                cur_user_info = client.user.get(openID,lang=u'zh_CN')
-                nickname = cur_user_info['nickname']
-                avator = cur_user_info['headimgurl']
-                return JsonResponse({"age": cur_user.user_age, "sex": cur_user.user_sex, "weight": cur_user.user_weight,
-                                     "height": cur_user.user_height, "advice": recommend_plan(openID), "id": nickname, "score": score,
-                                     "avatar": avator})
-        elif type == 'confirm':
-            sex = request.GET.get('sex')
-            age = request.GET.get('age')
-            height = request.GET.get('height')
-            weight = request.GET.get('weight')
-
-            try:
-                cur_user = userlist.objects.get(user_open_id=openID)
-            except userlist.DoesNotExist:
-                newuser = userlist(
-                    user_open_id=openID,
-                    user_age=age,
-                    user_sex=sex,
-                    user_height=height,
-                    user_weight=weight,
-                    user_confirmed=True
-                )
-                newuser.save()
-            else:
-                cur_user.user_age = age
-                cur_user.user_sex = sex
-                cur_user.user_height = height
-                cur_user.user_weight = weight
-                cur_user.user_confirmed = True
-                cur_user.save()
-            return JsonResponse({"advice": recommend_plan(openID)})
+        try:
+            cur_user = userlist.objects.get(user_open_id=openID)
+        except userlist.DoesNotExist:
+            new_user = userlist(
+                user_open_id=openID
+            )
+            new_user.save()
+            return JsonResponse({"age": new_user.user_age, "sex": new_user.user_sex, "weight": new_user.user_weight,
+                                 "height": new_user.user_height, "advice": '您还没有填写个人信息', "id": "匿名", "score": 0,
+                                 "avatar": "../static/img/run02.jpg"})
+        else:
+            score = 1000
+            client = WeChatClient(API_ID, API_SECRET)
+            cur_user_info = client.user.get(openID,lang=u'zh_CN')
+            nickname = cur_user_info['nickname']
+            avator = cur_user_info['headimgurl']
+            return JsonResponse({"age": cur_user.user_age, "sex": cur_user.user_sex, "weight": cur_user.user_weight,
+                                 "height": cur_user.user_height, "advice": recommend_plan(openID), "id": nickname, "score": score,
+                                 "avatar": avator})
+    elif request.method == 'POST':
+        openID = request.POST.get('openID')
+        sex = request.POST.get('sex')
+        age = request.POST.get('age')
+        height = request.POST.get('height')
+        weight = request.POST.get('weight')
+        try:
+            cur_user = userlist.objects.get(user_open_id=openID)
+        except userlist.DoesNotExist:
+            newuser = userlist(
+                user_open_id=openID,
+                user_age=age,
+                user_sex=sex,
+                user_height=height,
+                user_weight=weight,
+                user_confirmed=True
+            )
+            newuser.save()
+        else:
+            cur_user.user_age = age
+            cur_user.user_sex = sex
+            cur_user.user_height = height
+            cur_user.user_weight = weight
+            cur_user.user_confirmed = True
+            cur_user.save()
+        return JsonResponse({"advice": recommend_plan(openID)})
     else:
         raise Http404()
 
@@ -594,7 +592,7 @@ def join_match(request):
         openID = request.GET.get('openID')
         matchid = request.GET.get('competitionID')
         try:
-            cur_user = userlist.objects.get(user_open_id=openID)
+            userlist.objects.get(user_open_id=openID)
         except userlist.DoesNotExist:
             return JsonResponse({"error": 1, "errormsg": '您还没有关注admilk应用'})
         else:
@@ -687,7 +685,6 @@ def get_matches(request):
                 match_originator_info = client.user.get(match_originator_id,lang=u'zh_CN')
                 match_originator_nickname = match_originator_info['nickname']
                 cur_players = matchrecords.objects.filter(matchrecords_id=match.matchrecords_id).count()
-                print("!!!")
                 match_url = str('%s'
                                 'showresultpage?openID=%s'
                                 '&matchID=%d' % (serverIP, openID, match_id))
@@ -697,6 +694,7 @@ def get_matches(request):
             return  JsonResponse(rep, safe=False)
     else:
         raise Http404()
+
 
 def show_result_page(request):
     if request.method == 'GET':
@@ -745,3 +743,12 @@ def get_week_report(request):
         rep = {"total": {"totalStep": total_step, "totalDistance": total_dist, "totalCal": total_cal},
                "stepArray": step_array, "competitionArray": competitionArray}
     return JsonResponse(rep)
+
+
+def gather_data(user, start_time, end_time):
+    data_list = sportrecords.objects.filter(sportrecords_person_id=user,
+                                            sportrecords_start_time__gte=start_time, sportrecords_end_time__lte=end_time)
+    steps = 0
+    dist = 0
+    cal = 0
+    return 1

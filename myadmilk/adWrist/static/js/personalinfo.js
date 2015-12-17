@@ -101,8 +101,7 @@ var defaultHeight;
 window.onload = function(){
 
 	//ret test
-	var ret={"age":"12","weight":"45","height":"123","sex":"2","advice":"","id":"Alistar","score":"1998","avatar":"../static/img/touxiang.jpg"};
-	$.get("/changeinfo/",{"openID":openID,"type":"init"},function(ret){
+	$.get("/changeinfo/",{"openID":openID},function(ret){
 		defaultScore = ret.score;
 		defaultAge = Number(ret.age);
 		defaultSex = Number(ret.sex);
@@ -241,7 +240,7 @@ $(function(){
 				var height = parseInt($("#height").val());
 				var weight = parseInt($("#weight").val());
 				if (defaultSex != 0 && !isNaN(age)&&!isNaN(height)&&!isNaN(weight)) {
-					$.post("/changeinfo/",{"openID":openID,"age":age,"sex":defaultSex,"height":height,"weight":weight,"type":"confirm"},function(ret){
+					$.post("/changeinfo/",{"openID":openID,"age":age,"sex":defaultSex,"height":height,"weight":weight},function(ret){
 						edit_state = false;
 						$("#age").attr("disabled", "true");
 						$("#weight").attr("disabled", "true");

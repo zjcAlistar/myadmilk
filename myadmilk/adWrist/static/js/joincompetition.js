@@ -92,8 +92,11 @@ function changesize() {
 window.onload = function(){
     $("#comp_time_box").css("display", "block");
 	var competitiontype;
+    var competitionname;
     var start_time;
     var end_time;
+    var start_date;
+    var end_date;
     var goal_step;
     var currentnumber;
 	$.get("/joinmatch/",{"openID":openID,"competitionID":competitionID},function(ret){
@@ -105,7 +108,7 @@ window.onload = function(){
         competitiontype = ret.competitiontype;
         start_date = ret.start_date;
         start_time = ret.start_time;
-        end_date = ret.end-date;
+        end_date = ret.end_date;
         end_time = ret.end_time;
         currentnumber = ret.currentnumber;
         
