@@ -34,5 +34,8 @@ urlpatterns = [
     url(r'^joinmatch','adWrist.views.join_match', name='join_match'),
     url(r'^showresultpage','adWrist.views.show_result_page',name='show_result_page'),
     url(r'^getmatchresult','adWrist.views.get_match_result',name='get_match_result'),
+    url(r'^showreport','adWrist.views.show_report', name='show_report'),
     url(r'^weekreport','adWrist.views.get_week_report', name='get_week_report'),
+    url(r'^showrank','adWrist.views.show_rank', name='show_rank'),
+    url(r'^getranklist','adWrist.views.get_ranklist', name='get_ranklist'),
 ]

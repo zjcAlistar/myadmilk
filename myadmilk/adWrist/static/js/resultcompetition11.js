@@ -150,9 +150,8 @@ function show_competitiontype () {
 };
 
 window.onload = function(){
-   //ret={"rank":[{"name":"无","score":"10","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"},{"name":"无","score":"1000","scorethistime":"10"}],"user_rank":"1","user_scorethistime":"12","user_score":"123"};
+   //ret={"state":"3","rank":[{"name":"无","result":"10"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"},{"name":"无","result":"1000"}],"user_rank":"1","user_scorethistime":"12","user_score":"123"};
 	$.get("/getmatchresult/",{"openID": openID, "competitionID": competitionID},function(ret){
-		
         competitionname = ret.competitionname;
         competitiontype = ret.competitiontype;
         originator = ret.originator;
@@ -160,6 +159,7 @@ window.onload = function(){
         start_time = ret.start_time;
         end_date = ret.end_date;
         end_time = ret.end_time;
+        state = ret.state;
         currentnumber = ret.currentnumber;
         
         $("#competitionname").val(competitionname);
@@ -200,13 +200,13 @@ window.onload = function(){
             });
             singlerank.append(ret.rank[i].name);
             singlerank.appendTo("#rank");
-            var singlerankscore = $('<li>');
-            singlerankscore.attr({
-                "id":"rank"+(i+1),
-                "class":"rank_score_class"
+            var singlerankresult = $('<li>');
+            singlerankresult.attr({
+                "id":"result"+(i+1),
+                "class":"rank_result_class"
             });
-            singlerankscore.append(ret.rank[i].score+"(+"+ret.rank[i].scorethistime+")");
-            singlerankscore.appendTo("#rank_score");
+            singlerankresult.append(ret.rank[i].result);
+            singlerankresult.appendTo("#rank_result");
         }
 		// if (length > 10) {
 		// 	for(var i = 0;i<10;i++) {
@@ -230,12 +230,18 @@ window.onload = function(){
 		// 	}
 		// }
 		$("#user_rank").empty();
-		$("#user_rank").append("本次比赛您的排名："+ret.user_rank+"<br/>本次获得积分："+ret.user_scorethistime+"<br/>您的当前积分为："+ret.user_score+"<br/>请继续努力！");
+        if (state == "1") {
+            $("#user_rank").append("比赛还未开始");
+        } else if (state == "2") {
+            $("#user_rank").append("比赛进行中。<br/>当前您的排名："+ret.user_rank+"<br/>请继续努力！");
+        } else {
+            $("#user_rank").append("本次比赛您的排名："+ret.user_rank+"<br/>本次获得积分："+ret.user_scorethistime+"<br/>您的当前积分为："+ret.user_score+"<br/>请继续努力！");
+        }
 		$(".rank_class").css({
 	       "font-size": Width*0.35/0.188*0.107*0.4*0.6,
            "line-height": Width*0.35/0.188*0.107*0.4*0.8+"px"
 	    });
-        $(".rank_score_class").css({
+        $(".rank_result_class").css({
            "font-size": Width*0.35/0.188*0.107*0.4*0.5,
            "line-height": Width*0.35/0.188*0.107*0.4*0.8+"px"
         });

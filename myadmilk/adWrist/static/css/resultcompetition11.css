@@ -332,20 +332,22 @@
 
 #rank{
     margin: 0;
+    padding: 0;
     position: absolute;
-    left:20%;
+    left:10%;
     top:13%;
-    width:50%;
+    width:60%;
     height:60%;
     list-style-type: decimal;
 }
 
-#rank_score{
+#rank_result{
     margin: 0;
+    padding: 0;
     position: absolute;
-    left:50%;
+    left:60%;
     top:13%;
-    width:35%;
+    width:30%;
     height:60%;
     list-style-type: none;
     text-align: right;
@@ -358,7 +360,7 @@
    /* font-size: 70px;*/
     opacity: 1;
 }
-.rank_score_class{
+.rank_result_class{
     font-family:"SimHei";
    /* font-size: 70px;*/
     opacity: 1;
@@ -386,10 +388,6 @@
     height:20%;
    /* font-size: 60px;*/
     font-family:"SimHei";
-}
-
-#rank1{
-    color:;
 }
 
 

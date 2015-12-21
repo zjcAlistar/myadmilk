@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=no, width=device-width">
+    <title>排行榜</title>
+    <link rel="stylesheet" href="../static/css/rankList.css" type="text/css">
+    <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../static/js/rankList.js"></script>
+</head>
+<body style="background:black;">
+    <div id = "titlebox">
+        <nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+        <nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
+    </div>
+    <div id="infobox">
+        <div id="userInfo">
+            <p><b>我的积分：</b><a id="userScore">-</a></p>
+            <p><b>我的排行：</b><a id="userRank">-</a></p>
+        </div>
+        <div id="rankList" style="overflow:scroll;">
+            <table id="table">
+            	<caption align="top"><b style="font-size:28px">排行榜</b></caption>
+                <tr style="font-size:18px">
+                    <th>排名</th>
+                    <th>昵称</th>
+                    <th>积分</th>
+                </tr>
+            </table>
+        </div>
+        <div id="nav">
+            <button id="previous">&lt</button>
+            <button id="around">我的位置</button>
+            <button id="next">&gt</button>
+        </div>
+        <div id="rules">
+        	<p>bulabula...</p>
+        </div>
+    </div>
+    <script>
+    var openID = '{{ openID }}'
+    changesize();
+    </script>
+</body>
+</html>
