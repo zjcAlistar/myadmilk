@@ -4,7 +4,7 @@ from django.template import RequestContext
 from django.http import HttpResponse, JsonResponse, Http404
 from wechatpy.utils import check_signature
 from wechatpy import parse_message
-from wechatpy.replies import TextReply
+from wechatpy.replies import TextReply, ArticlesReply
 from django.views.decorators.csrf import csrf_exempt
 from adWrist.models import userlist, sportrecords, matchrecords
 from datetime import *
@@ -56,7 +56,17 @@ def handle_msg(request):
                 elif msg.key == 'change_remind':
                     rep.content = set_remind(msg.source)
                 elif msg.key == 'build_match':
-                    rep.content = build_match(msg.source)
+                    article_rep = ArticlesReply()
+                    article_rep.source = msg.target
+                    article_rep.target = msg.source
+                    article_rep.add_article({
+                        'title': '创建比赛',
+                        'description': '点此链接以创建比赛',
+                        'image': serverIP+'static/img/run02.jpg',
+                        'url': build_match(msg.source)
+                    })
+                    repxml = article_rep.render()
+                    return HttpResponse(repxml)
             elif msg.event == 'subscribe':
                 rep.content = create_newuser(msg.source)
             else:
@@ -547,11 +557,10 @@ def build_match(openID):
         new_match.matchrecords_id = new_match.id
         new_match.matchrecords_title = str('比赛%d' % new_match.id)
         new_match.save()
-        link = str('https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s'
+        rep = str('https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s'
                   '&redirect_uri=%s'
                   'showmatchpage?matchid=%d'
                   '&response_type=code&scope=snsapi_base&state=1#wechat_redirect' % (API_ID, serverIP, new_match.matchrecords_id))
-        rep = str('<a href="%s">请点击此链接创建比赛</a>' % (link))
     return rep
 
 
