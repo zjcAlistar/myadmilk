@@ -1,0 +1,215 @@
+.competitionname{
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width:80%;
+    height:14%;
+    border-radius: 10px;
+    border: none;
+    background: #EBEBEB;
+    text-align: center;
+    opacity:0.7;
+    overflow: hidden;
+}
+
+#competitionname{
+    background: #EBEBEB;
+    margin:0;
+    padding:0;
+    width:100%;
+    height:70%;
+    border-radius: 10px;
+    border: none;
+    /*background: blue;*/
+    text-align: center;
+    overflow: hidden;
+}
+
+#competitionname_text{
+    position: absolute;
+    bottom: 0%;
+    left: 0;
+    width:100%;
+    height:30%;
+    opacity:1;
+}
+
+#competitionbox{
+    position: absolute;
+    left: 10%;
+    top: 28%;
+    height: 58%;
+    width: 80%;
+    /*border: 4px solid black;*/
+    border-radius: 10px;
+}
+
+.competitiontype{
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width:100%;
+    height:25%;
+    border-radius: 10px;
+    border: none;
+    background: #EBEBEB;
+    text-align: center;
+    opacity:0.7;
+    overflow: hidden;
+}
+
+#competitiontype{
+    background: #EBEBEB;
+    margin:0;
+    padding:0;
+    width:100%;
+    height:70%;
+    border-radius: 10px;
+    border: none;
+    /*background: blue;*/
+    text-align: center;
+    overflow: hidden;
+}
+
+#competitiontype_text{
+    position: absolute;
+    bottom: 0%;
+    left: 0;
+    width:100%;
+    height:30%;
+    opacity:1;
+}
+
+
+#comp_distance_box{
+    position: absolute;
+    left: 0%;
+    top: 35%;
+    height: 65%;
+    width: 100%;
+    /*border: 4px solid black;*/
+    display: none;
+}
+
+.comp_distance{
+    position: absolute;
+    left: 0%;
+    width:100%;
+    height:35%;
+    border-radius: 10px;
+    border: none;
+    background: #EBEBEB;
+    opacity:0.7;
+    overflow: hidden;
+}
+
+.date_start{
+    position: absolute;
+    background: #EBEBEB;
+    top:0%;
+    left: 0%;
+    width:60%;
+    height:70%;
+    border-radius: 10px;
+    border: none;
+    /*background: blue;*/
+    overflow: hidden;
+    text-align: center;
+}
+
+.time_start{
+    position: absolute;
+    background: #EBEBEB;
+    top:0%;
+    right: 0%;
+    width:40%;
+    height:70%;
+    border-radius: 10px;
+    border: none;
+    /*background: red;*/
+    overflow: hidden;
+    text-align: center;
+}
+
+.date_end{
+    position: absolute;
+    background: #EBEBEB;
+    top:0%;
+    left: 0%;
+    width:60%;
+    height:70%;
+    border-radius: 10px;
+    border: none;
+    /*background: blue;*/
+    overflow: hidden;
+    text-align: center;
+}
+
+.time_end{
+    position: absolute;
+    background: #EBEBEB;
+    top:0%;
+    right: 0%;
+    width:40%;
+    height:70%;
+    border-radius: 10px;
+    border: none;
+    /*background: red;*/
+    overflow: hidden;
+    text-align: center;
+}
+
+.comp_text{
+    position: absolute;
+    bottom: 0%;
+    left: 0;
+    width:100%;
+    height:30%;
+    opacity:1;
+    text-align: center;
+}
+
+#comp_time_box{
+    position: absolute;
+    left: 0%;
+    top: 31%;
+    height: 65%;
+    width: 100%;
+    /*border: 4px solid black;*/
+    display: none;
+}
+
+.comp_time{
+    position: absolute;
+    left: 0%;
+    width:100%;
+    height:30%;
+    border-radius: 10px;
+    border: none;
+    background: #EBEBEB;
+    opacity:0.7;
+    overflow: hidden;
+}
+
+#goal_step{
+    background: #EBEBEB;
+    margin:0;
+    padding:0;
+    width:100%;
+    height:70%;
+    border-radius: 10px;
+    border: none;
+    /*background: #EBEBEB;*/
+    text-align: center;
+    overflow: hidden;
+}
+
+#confirm{
+    position:absolute;
+    bottom:2%;
+    font-family:STXihei;
+    border-radius: 100%;
+    background-color:#FFF;
+    border:1px solid #CDCDCD;
+    opacity:0.5;
+}

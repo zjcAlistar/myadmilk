@@ -1,0 +1,46 @@
+#exercise-report{
+    font-family:STXihei;
+    position: absolute;
+    left: 10%;
+    top: 10%;
+    height: 20%;
+    width: 80%;
+    background-color:#FFF;
+    border-radius: 10px;
+    opacity:0.5;
+    padding: 2px;
+}
+
+#table{
+    font-family:STXihei;
+    width:100%;
+    height: 100%;
+
+}
+#rules{
+  bottom: 20%;
+  left: 10%;
+  position: absolute;
+  font-family:STXihei;
+}
+button{
+  border: 0;
+  background: transparent;
+  font-weight: bold;
+  font-size: 24px;
+}
+#nav{
+  position: absolute;
+  bottom: 5%;
+  width: 50%;
+  left: 25%;
+}
+#userInfo{
+  position: absolute;
+  left: 10%;
+}
+#rankList{
+  top:14%;
+  width: 100%;
+  position: absolute;
+}
