@@ -73,7 +73,7 @@ window.onload=function(){
         $("#totalCal").html(ret.total.totalCal+"cal");
         var stepArray = new Array();
         for(var i = 0;i<7;i++){
-            stepArray.push([ret.stepArray[i].date,Number(ret.stepArray[i].steps)]);  
+            stepArray.push([ret.stepArray[i].date.slice(5),Number(ret.stepArray[i].steps)]);  
         };
         for(var i = 0;i<ret.competitionArray.length;i++){
             var newline = $("<tr/>");
@@ -101,8 +101,7 @@ window.onload=function(){
             },
             legend:{
                 itemStyle:{
-                    "font-family":"STXihei",
-                    "fontSize":"18px"
+                    "fontSize":"12px"
                 }
             },
             credits: {
@@ -110,17 +109,18 @@ window.onload=function(){
             },
             xAxis:{
              type: 'category',
-             lables:{
+             labels:{
                  style:{
-                     fontSize:"24px"
+                     fontSize:"10px"
                  }
              }
             },
             yAxis:{
                 min:0,
                 title: {
-                    text: 'steps'
+                    text: ''
                 },
+                
                 stackLabels: {
                     enabled: true,
                     style: {

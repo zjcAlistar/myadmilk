@@ -89,7 +89,7 @@ function changesize() {
     $("#rank_title").css({
          "font-size": Width*0.35/0.188*0.107*0.4*0.65
     });
-    
+    $('#gobackinfo').css("font-size", Height*0.9*0.2*0.4*0.5);
 };
 
 
@@ -250,3 +250,10 @@ window.onload = function(){
 	    });
 	});
 }
+
+
+$(function(){
+    $("#gobackinfo").click(function(){
+        location.href = "/gobackinfo?openID=" + openID;
+    });
+})

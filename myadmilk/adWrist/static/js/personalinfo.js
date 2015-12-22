@@ -20,10 +20,12 @@ function changesize() {
 		"height": Height,
 		"width": Width
 	});
+
 	$("#titlebox_text1").css("font-size", Height*0.06);
 	$("#titlebox_text2").css("font-size", Height*0.07);
 
 	var avator_height = $("#avatar").height();
+	// $("#avatar").css("width",avator_height);
 	$("#username").css({
 		"left": Width*0.17+avator_height,
 		"font-size": 0.37*avator_height
@@ -286,6 +288,7 @@ $(function(){
 			$("#personalinfo").css("color","rgb(120,160,190)");
 			$("#competitionbox").css("display","block");
 			$("#competition").css("color","rgb(23,140,250)");
+			var ret=[];
 			$.get("/getmatches/",{"openID":openID},function(ret){
 				var num_match = ret.length;
 				for(var i = 0;i < num_match;i++){
@@ -346,11 +349,16 @@ $(function(){
 					match_endtime.append("E:"+ret[i].matchendtime);
 					match_endtime.appendTo("#competition_"+i);
 				}
+				if(num_match == 0) {
+					var nomatch_tip = $('<div>');
+					nomatch_tip.attr("id","nomatch_tip");
+					nomatch_tip.append("暂无比赛");
+					nomatch_tip.appendTo('#competitions');
+				}
 		    });
 		}
 	});
 });
-
 
 
 function showmessagebox (str) {

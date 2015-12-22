@@ -112,6 +112,7 @@ window.onload = function(){
             return;
         }
         competitionname = ret.competitionname;
+        document.title=competitionname;
         competitiontype = ret.competitiontype;
         originator = ret.originator;
         start_date = ret.start_date;

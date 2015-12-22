@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from adWrist.models import userlist, sportrecords, matchrecords
 from datetime import *
 from urllib.request import *
+import urllib.parse
+import urllib.request
 import json
 import config
 import random
@@ -43,6 +45,8 @@ def handle_msg(request):
                     rep.content = recommend_plan(msg.source)
                 elif msg.key == 'view_info':
                     rep.content = get_info(msg.source)
+                elif msg.key == 'add_bong':
+                    rep.content = add_bong(msg.source)
                 elif msg.key == 'add_test':
                     rep.content = add_test(msg.source)
                 elif msg.key == 'add_test_new':
@@ -72,9 +76,9 @@ def create_newuser(openID):
         nickname = cur_user_info['nickname']
         avator = cur_user_info['headimgurl']
         new_user = userlist(
-            user_open_id = openID,
-            user_nick_name = nickname,
-            user_avator = avator
+            user_open_id=openID,
+            user_nick_name =nickname,
+            user_avator=avator
         )
         new_user.save()
         return '欢迎你，'+nickname
@@ -100,6 +104,14 @@ def show_info_page(request):
         raise Http404()
 
 
+def goback_info(request):
+    if request.method == 'GET':
+        openID = request.GET.get('openID')
+        return render_to_response('personalInfo.html', {'openID': openID }, context_instance=RequestContext(request))
+    else:
+        raise Http404()
+
+
 def add_test_new(openID):
     try:
         cur_user = userlist.objects.get(user_open_id=openID)
@@ -117,7 +129,7 @@ def add_test_new(openID):
         )
         new_record.save()
         re_collect_match(cur_user)
-        rep = '添加成功'
+        rep = str('添加成功,你一瞬间跑了%d步' % (new_record.sportrecords_quantity))
     return rep
 
 
@@ -267,7 +279,7 @@ def change_info(request):
                                  "avatar": "../static/img/run02.jpg"})
         else:
             nickname = cur_user.user_nick_name
-            avator = cur_user.user_nick_name
+            avator = cur_user.user_avator
             return JsonResponse({"age": cur_user.user_age, "sex": cur_user.user_sex, "weight": cur_user.user_weight,
                                  "height": cur_user.user_height, "advice": recommend_plan(openID), "id": nickname, "score": cur_user.user_points,
                                  "avatar": avator})
@@ -553,12 +565,14 @@ def show_match_page(request):
         try:
             userlist.objects.get(user_open_id=openID)
         except userlist.DoesNotExist:
-            return HttpResponse('您还没有关注admilk应用')
+            return render_to_response('error.html', {'errorMessage': '您还没有关注admilk应用'},
+                                  context_instance=RequestContext(request))
         else:
             try:
                 cur_match = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_originator=True)
             except matchrecords.DoesNotExist:
-                return HttpResponse('比赛还未创建')
+                return render_to_response('error.html', {'errorMessage': '比赛还未创建'},
+                                  context_instance=RequestContext(request))
             else:
                 time_now = datetime.now()
                 if not cur_match.matchrecords_created:
@@ -571,9 +585,11 @@ def show_match_page(request):
                     return render_to_response('joincompetition.html', {'openID': openID, 'competitionID': matchid},
                                   context_instance=RequestContext(request))
                 elif cur_match.matchrecords_end_time < time_now:
-                    return HttpResponse('比赛已经结束，请回公众号->个人中心->我的比赛查看')
+                    return render_to_response('error.html', {'errorMessage': '比赛已经结束，请回公众号->个人中心->我的比赛查看'},
+                                  context_instance=RequestContext(request))
                 else:
-                    return HttpResponse('比赛已经开始，请回公众号->个人中心->我的比赛查看')
+                    return render_to_response('error.html', {'errorMessage': '比赛已经开始，请回公众号->个人中心->我的比赛查看'},
+                                  context_instance=RequestContext(request))
     else:
         raise Http404()
 
@@ -626,19 +642,22 @@ def join_match(request):
         else:
             try:
                 matchrecords.objects.get(matchrecords_id=matchid, matchrecords_relate_person=cur_user)
-            except:
+            except matchrecords.DoesNotExist:
                 match = matchrecords.objects.get(matchrecords_id=matchid, matchrecords_originator=True)
                 new_matchrecord = matchrecords(
                     matchrecords_id=match.matchrecords_id,
                     matchrecords_title=match.matchrecords_title,
                     matchrecords_relate_person=cur_user,
+                    matchrecords_created=match.matchrecords_created,
                     matchrecords_originator=False,
                     matchrecords_matchtype=match.matchrecords_matchtype,
                     matchrecords_steps=match.matchrecords_steps,
                     matchrecords_target=match.matchrecords_target
                 )
                 new_matchrecord.save()
-                new_matchrecord.matchrecords_start_time=match.matchrecords_start_time,
+                new_matchrecord.matchrecords_start_time = match.matchrecords_start_time
+                new_matchrecord.matchrecords_end_time = match.matchrecords_end_time
+                new_matchrecord.matchrecords_scored = match.matchrecords_scored
                 new_matchrecord.save()
                 return HttpResponse('参加成功')
             else:
@@ -751,6 +770,7 @@ def get_match_result(request):
                         user_scorethistime = 10*(11-user_rank)
                     else:
                         user_scorethistime = 0
+                    cur_user = userlist.objects.get(user_open_id=openID)
                     return JsonResponse({"competitiontype": match.matchrecords_matchtype,
                           "start_date": match.matchrecords_start_time.date(), "end_date": match.matchrecords_end_time.date(),
                           "start_time": match.matchrecords_start_time.time(), "end_time": match.matchrecords_end_time.time(),
@@ -870,7 +890,7 @@ def re_collect_match(user):
     matchrecords_need_collect = matchrecords.objects.filter(matchrecords_created=True, matchrecords_relate_person=user,
                                                             matchrecords_start_time__lte=time_now, matchrecords_end_time__gte=time_now)
     for single_match in matchrecords_need_collect:
-        matchtype = matchrecords.matchrecords_matchtype
+        matchtype = single_match.matchrecords_matchtype
         time_begin = single_match.matchrecords_start_time
         time_end = single_match.matchrecords_end_time
         if matchtype == 'comp_time':
@@ -894,7 +914,8 @@ def re_collect_match(user):
                         single_match.save()
         elif matchtype == 'comp_distance':
             temp_steps = gather_data(user, time_begin, time_end, 4)['steps']
-            single_match.matchrecords_steps += temp_steps
+            single_match.matchrecords_steps = temp_steps
+            single_match.save()
 
 
 def give_score(matchid):
@@ -926,7 +947,7 @@ def show_rank(request):
         else:
             return render_to_response('rankList.html', {'openID': openID},context_instance=RequestContext(request))
     else:
-        raise  Http404()
+        raise Http404()
 
 
 def show_report(request):
@@ -938,7 +959,7 @@ def show_report(request):
         else:
             return render_to_response('weekreport.html', {'openID': openID},context_instance=RequestContext(request))
     else:
-        raise  Http404()
+        raise Http404()
 
 
 def get_ranklist(request):
@@ -957,15 +978,15 @@ def get_ranklist(request):
                 page = 1
                 rep_list = all_list[0:9]
             elif type == 'previos':
-                page = request.GET.get('page')
-                page = page - 1
+                page = int(request.GET.get('page'))
+                page -= 1
                 if page >= 0:
                     rep_list = []
                 else:
                     rep_list = all_list[10*(page-1):(10*page-1)]
             elif type == 'next':
-                page = request.GET.get('page')
-                page = page + 1
+                page = int(request.GET.get('page'))
+                page += 1
                 rep_list = all_list[10*(page-1):(10*page-1)]
             else:
                 page = 0
@@ -975,4 +996,53 @@ def get_ranklist(request):
             for single_person in rep_list:
                 i += 1
                 rep.append({"rank": 10*(page-1)+i, "name": single_person.user_nick_name, "score": single_person.user_points})
-            return  JsonResponse({"userRank": user_rank, "userScore": user_score, "rankArray": rep})
+            return JsonResponse({"userRank": user_rank, "userScore": user_score, "rankArray": rep})
+
+
+def add_bong(openID):
+    try:
+        cur_user = userlist.objects.get(user_open_id=openID)
+    except userlist.DoesNotExist:
+        rep = '你还没有关注admilk应用'
+    else:
+        time_before = cur_user.last_sync_time.strftime("%Y-%m-%d %H:%M:%S")
+        time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        get_new_data(time_before, time_now, cur_user.id-1)
+        cur_user.last_sync_time = datetime.now()
+        cur_user.save()
+        re_collect_match(cur_user)
+        rep = '同步完成'
+    return rep
+
+
+def get_new_data(starttime, endtime, user):
+    print(starttime)
+    print(endtime)
+    if user >= 100:
+        params = urllib.parse.urlencode({'startTime': starttime, 'endTime': endtime})
+    else:
+        params = urllib.parse.urlencode({'startTime': starttime, 'endTime': endtime, 'user': user})
+    result = urllib.request.urlopen("http://wrist.ssast2015.com/bongdata?%s" % params)
+    cur_data = result.read()
+    cur_data_j = json.loads(cur_data.decode('utf-8'))
+    print(cur_data_j)
+    for single_data in cur_data_j:
+        try:
+            cur_user = userlist.objects.get(id=user+1)
+        except userlist.DoesNotExist:
+            return
+        new_record = sportrecords(
+            sportrecords_person_id=cur_user,
+            sportrecords_step_goal=cur_user.user_step_goal,
+            sportrecords_dist_goal=cur_user.user_dist_goal,
+            sportrecords_calorie_goal=cur_user.user_calorie_goal,
+            sportrecords_type=single_data['type'],
+            sportrecords_subtype=single_data['subType'],
+            sportrecords_quantity=single_data['steps'],
+            sportrecords_calorie=int(single_data['calories']/4.184),
+            sportrecords_dist=int(single_data['distance']/1000)
+        )
+        new_record.save()
+        new_record.sportrecords_start_time = single_data['startTime']
+        new_record.sportrecords_end_time = single_data['endTime']
+        new_record.save()

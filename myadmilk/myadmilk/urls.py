@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^showchart', 'adWrist.views.show_chart', name='show_chart'),
     url(r'^showdetails', 'adWrist.views.show_details', name='show_details'),
     url(r'gobackchart', 'adWrist.views.goback_chart', name='goback_chart'),
+    url(r'gobackinfo', 'adWrist.views.goback_info', name='goback_info'),
     url(r'^getweekdata', 'adWrist.views.get_week_data', name='get_week_data'),
     url(r'^getsteps', 'adWrist.views.get_steps', name='get_steps'),
     url(r'^showplan', 'adWrist.views.show_plan', name='show_plan'),

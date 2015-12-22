@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>错误</title>
+    <link rel="stylesheet" href="../static/css/error.css" type="text/css">
+    <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../static/js/error.js"></script>
+</head>
+<body style="background:black;">
+    <div id="all">
+        <div id = "titlebox">
+            <nobr id="titlebox_text1"style="color:#9F79EE;">AD   </nobr>
+            <nobr id="titlebox_text2"style="color:white;"> Milk</nobr>
+        </div>
+        <div id = "infobox">
+
+        </div>
+    </div>
+    <script type="text/javascript">
+        changesize();
+        var openID = '{{ openID }}'
+        var errormessage = '{{ errorMessage }}'
+        // var errormessage = "比赛已经开始" ;
+        showmessagebox(errormessage);
+    </script>
+</body>
+</html>

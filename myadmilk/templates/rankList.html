@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=no, width=device-width">
     <title>排行榜</title>
-    <link rel="stylesheet" href="../static/css/public.css" type="text/css">
-    <script type="text/javascript" src="../static/js/public.js"></script>
     <link rel="stylesheet" href="../static/css/rankList.css" type="text/css">
     <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="../static/js/rankList.js"></script>
@@ -35,8 +33,9 @@
             <button id="around">我的位置</button>
             <button id="next">&gt</button>
         </div>
-        <div id="rules">
-        	<p>bulabula...</p>
+        <div id="rules" style="overflow:scroll;">
+        	<h3 style="margin:1px">比赛规则:</h3>
+            <p style="margin:1px">只有通过比赛才能获得积分，1~10名分别获得100~10分，依次减10</p>
         </div>
     </div>
     <script>

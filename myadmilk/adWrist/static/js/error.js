@@ -1,3 +1,29 @@
+function changesize(){
+    var Height = $(window).height();
+    var Width = $(window).width();
+    $("#all").css({
+        "position":"absolute",
+        "top":"0",
+        "left":"0",
+        "height": Height,
+        "width": Width
+    });
+    $("#titlebox").css({
+        "width": Width,
+        "height": Height*0.1,
+        "font-family": "verdana",
+        "lineHeight": Height*0.1+"px"
+    });
+    $("#titlebox_text1").css("font-size", Height*0.06);
+    $("#titlebox_text2").css("font-size", Height*0.07);
+    $("#infobox").css({
+        "width": Width,
+        "height": Height*0.898
+    });
+};
+
+
+
 function showmessagebox (str) {
     var shadow = document.createElement("div");
     shadow.setAttribute("id", "shadow");

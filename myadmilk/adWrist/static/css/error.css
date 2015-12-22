@@ -19,17 +19,4 @@
     filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
     -moz-background-size:100% 100%;
     background-size:100% 100%;
-
-::-webkit-inner-spin-button { visibility: hidden; }
-
-#slogan{
-    position: absolute;
-    right: 10%;
-    top: 3%;
-    height: 5%;
-    /*background: blue;*/
-    text-align: right;
-    border-bottom: 5px solid black;
-    color:#68ff71;
-    opacity:0.7;
 }

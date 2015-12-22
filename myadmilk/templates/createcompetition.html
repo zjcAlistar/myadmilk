@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>创建比赛</title>
-    <link rel="stylesheet" href="../static/css/public.css" type="text/css">
-    <script type="text/javascript" src="../static/js/public.js"></script>
     <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=no, width=device-width">
-    <link rel="stylesheet" href="../static/css/createcompetition.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/createcompetition6.css" type="text/css">
     <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js"></script>
-    <script src="../static/js/createcompetition.js"></script>
+    <script src="../static/js/createcompetition6.js"></script>
 
 </head>
 <body style="background:black;">
@@ -103,6 +101,7 @@
 	            	}
 	            	if (flag == true) {
 	            		$.post("/creatematch/",{"openID": openID, "competitionID": competitionID, "competitiontype": competitiontype, "datetime_start": date1+" "+time1, "datetime_end": date2+" "+time2, "competitionname": competitionname},function(ret){
+                            document.title=$("#competitionname").val();
 	                        showmessagebox(ret);
 	                    });
 	            	}
@@ -137,6 +136,7 @@
 	            	if (flag == true) {
 	            		$.post("/creatematch/",{"openID": openID, "competitionID": competitionID, "competitiontype": competitiontype, "datetime_start": date1+" "+time1, "datetime_end": date2+" "+time2, "goal_step": goal_step, "competitionname": competitionname},function(ret){
 	                        showmessagebox(ret);
+                            document.title=$("#competitionname").val();
 	                    });
 	            	}
 	            	else {

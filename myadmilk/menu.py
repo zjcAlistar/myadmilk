@@ -27,6 +27,7 @@ menu = {"button":
                                                     + API_ID + "&redirect_uri=" + serverIP +
                                                     "showplan&response_type=code&scope=snsapi_base&state=1#wechat_redirect"}]},
              {"name":"运动数据","sub_button":[
+                 {"type":"click","name":"添加bong数据","key":"add_bong"},
                  {"type":"click","name":"添加一周测试","key":"add_test"},
                  {"type":"click","name":"添加一条测试","key":"add_test_new"},
                  {"type":"click","name":"查看今日","key":"show_today"},

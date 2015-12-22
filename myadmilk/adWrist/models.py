@@ -17,6 +17,7 @@ class userlist(models.Model):
     user_points = models.IntegerField(default=0)
     user_remind = models.BooleanField(default=False)
     last_remind_time = models.DateTimeField(auto_now_add=True)
+    last_sync_time = models.DateTimeField(auto_now_add=True)
 
 
 class sportrecords(models.Model):

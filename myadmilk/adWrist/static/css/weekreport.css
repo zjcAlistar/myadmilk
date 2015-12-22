@@ -24,7 +24,7 @@
     font-family:STXihei;
     position: absolute;
     left: 10%;
-    top: 10%;
+    top: 5%;
     height: 20%;
     width: 80%;
     background-color:#FFF;
@@ -35,7 +35,7 @@
 #lineChart{
     position: absolute;
     left: 10%;
-    top: 33%;
+    top: 28%;
     height: 40%;
     width: 81%;
 }
@@ -44,7 +44,7 @@
     left: 10%;
     width: 80%;
     height: 30%;
-    top: 75%;
+    top: 70%;
 }
 #table{
     font-family:STXihei;

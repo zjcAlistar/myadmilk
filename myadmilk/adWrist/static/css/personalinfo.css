@@ -419,6 +419,18 @@
 	font-family: "SimHei";
 }
 
+#nomatch_tip{
+	text-align: center;
+	position:absolute;
+	top:40%;
+	left:0;
+	height:20%;
+	width:100%;
+	font-size: 20px;
+	font-family: "SimHei";
+	color:rgb(120,160,190);
+}
+
 /*#competition_1{
 	top:2%;
 }
@@ -481,4 +493,6 @@
 	text-align: center;
 	/*color:white;*/
 }
+
+
 
