@@ -621,7 +621,7 @@ def create_match(request):
                     cur_match.matchrecords_created = True
                     cur_match.save()
                     if matchtype == 'comp_time':
-                        cur_match.matchrecords_target = request.GET.get('goal_step')
+                        cur_match.matchrecords_target = int(request.POST.get('goal_step'))
                         cur_match.save()
                     return HttpResponse('比赛创建成功!请点击右上角「分享到朋友圈」，与好友一试高下!')
                 else:
@@ -759,7 +759,7 @@ def get_match_result(request):
                             result = x.matchrecords_steps
                         elif match.matchrecords_matchtype == 'comp_time':
                             if x.matchrecords_finish_flag:
-                                result = str(x.matchrecords_finish_time)
+                                result = str(x.matchrecords_finish_time.date())
                             else:
                                 result = str(x.matchrecords_steps)
                         else:
@@ -899,14 +899,14 @@ def re_collect_match(user):
             else:
                 data_list = sportrecords.objects.filter(sportrecords_person_id=user, sportrecords_subtype=4,
                                             sportrecords_type=2, sportrecords_start_time__gte=single_match.matchrecords_start_time,
-                                            sportrecords_end_time__lte=single_match.matchrecords_end_time).order_by('matchrecords_end_time')
+                                            sportrecords_end_time__lte=single_match.matchrecords_end_time).order_by('sportrecords_end_time')
                 temp_steps = 0
                 for single_data in data_list:
                     temp_steps += single_data.sportrecords_quantity
                     if temp_steps >= single_match.matchrecords_target:
                         single_match.matchrecords_steps = temp_steps
                         single_match.matchrecords_finish_flag = True
-                        single_match.matchrecords_end_time = single_data.sportrecords_end_time
+                        single_match.matchrecords_finish_time = single_data.sportrecords_end_time
                         single_match.save()
                         break
                     else:
@@ -1016,8 +1016,6 @@ def add_bong(openID):
 
 
 def get_new_data(starttime, endtime, user):
-    print(starttime)
-    print(endtime)
     if user >= 100:
         params = urllib.parse.urlencode({'startTime': starttime, 'endTime': endtime})
     else:
@@ -1025,7 +1023,6 @@ def get_new_data(starttime, endtime, user):
     result = urllib.request.urlopen("http://wrist.ssast2015.com/bongdata?%s" % params)
     cur_data = result.read()
     cur_data_j = json.loads(cur_data.decode('utf-8'))
-    print(cur_data_j)
     for single_data in cur_data_j:
         try:
             cur_user = userlist.objects.get(id=user+1)
