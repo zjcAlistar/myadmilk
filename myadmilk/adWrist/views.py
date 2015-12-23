@@ -760,7 +760,7 @@ def get_match_result(request):
                               "competitionname": "提交的比赛类型错误", "currentnumber": cur_players,
                               "originator": match_originator_nickname,"goal_step": match.matchrecords_target,
                               "rank": ranks, "user_rank": 0, "state": 1})
-                    rank10 = ranks[0:9]
+                    rank10 = ranks[0:10]
                     rank = []
                     for x in rank10:
                         match_player_nickname = x.matchrecords_relate_person.user_nick_name
@@ -844,7 +844,7 @@ def get_week_report(request):
         step_array = []
         for i in range(7):
             step_array.append({"date": "0000-00-00", "steps": 0})
-        rep = {"total": {"totalStep": 0, "totalDistance": 0, "totalCal": 0},"stepArray": step_array, "competitionArray": []}
+        rep = {"total": {"totalStep": 0, "totalDistance": 0, "totalCal": 0}, "stepArray": step_array, "competitionArray": []}
     else:
         step_array = []
         total_step = 0
@@ -983,20 +983,31 @@ def get_ranklist(request):
             all_list = list(userlist.objects.all().order_by('-user_points'))
             user_rank = all_list.index(cur_user)+1
             user_score = cur_user.user_points
-            if type == 'init':
+            if type == 'init' or type == 'head':
                 page = 1
-                rep_list = all_list[0:9]
-            elif type == 'previos':
+                rep_list = all_list[0:10]
+            elif type == 'previous':
                 page = int(request.GET.get('page'))
                 page -= 1
-                if page >= 0:
+                if page <= 0:
                     rep_list = []
                 else:
-                    rep_list = all_list[10*(page-1):(10*page-1)]
+                    rep_list = all_list[10*(page-1):(10*page-1)+1]
             elif type == 'next':
                 page = int(request.GET.get('page'))
                 page += 1
-                rep_list = all_list[10*(page-1):(10*page-1)]
+                rep_list = all_list[10*(page-1):(10*page-1)+1]
+            elif type == 'around':
+                cur_rank = all_list.index(cur_user)
+                page = int(cur_rank/10) + 1
+                rep_list = all_list[10*(page-1):(10*page-1)+1]
+            elif type == 'tail':
+                list_len = len(all_list)
+                if list_len % 10 == 0:
+                    page = int(list_len/10)
+                else:
+                    page = int(list_len/10)+1
+                rep_list = all_list[10*(page-1):(10*page-1)+1]
             else:
                 page = 0
                 rep_list = []
@@ -1005,7 +1016,7 @@ def get_ranklist(request):
             for single_person in rep_list:
                 i += 1
                 rep.append({"rank": 10*(page-1)+i, "name": single_person.user_nick_name, "score": single_person.user_points})
-            return JsonResponse({"userRank": user_rank, "userScore": user_score, "rankArray": rep})
+            return JsonResponse({"userRank": user_rank, "userScore": user_score, "rankArray": rep, "page": page})
 
 
 def add_bong(openID):

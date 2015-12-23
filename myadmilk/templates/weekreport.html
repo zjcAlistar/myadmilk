@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=no, width=device-width">
     <title>周总结</title>
-    <link rel="stylesheet" href="../static/css/weekreport.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/weekreport1.css" type="text/css">
     <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js"></script>
     <script src="../static/js/highcharts.js"></script>
     <script type="text/javascript" src="../static/js/weekreport.js"></script>
@@ -22,8 +22,9 @@
         </div>
         <div id="lineChart">
         </div>
-        <div id="competition-report" style="overflow:scroll;">
-            <table id="table">
+        <div id="competition-report"  style="overflow:scroll;">
+            <table id="table" class="altrowstable">
+                <caption align="top"><span style="font-size:24px">上周比赛</span></caption>
                 <tr>
                     <th>比赛名称</th>
                     <th>比赛排名</th>
@@ -35,6 +36,9 @@
     var openID = '{{ openID }}'
     changesize();
     </script>
+    <div id="Layer1" style="position:fixed; left:0; top:0; width:100%; height:100%; z-index:-1"> 
+        <img src="../static/img/run02.jpg" height="100%" width="100%"/>  
+    </div>
 </body>
 
 </html>

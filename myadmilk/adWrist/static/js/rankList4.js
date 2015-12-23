@@ -109,7 +109,7 @@ $(function(){
             }
             else{
                 page = page + 1;
-                $("#table  tr:not(:first)").html("");
+                $("#table  tr:not(:first)").remove();
                 for(var i = 0;i<ret.rankArray.length;i++){
                     var newline = $("<tr/>");
                     newline.append($("<td/>").html(ret.rankArray[i].rank));
@@ -135,7 +135,7 @@ $(function(){
             }
             else{
                 page = page - 1;
-                $("#table  tr:not(:first)").html("");
+                $("#table  tr:not(:first)").remove();
                 for(var i = 0;i<ret.rankArray.length;i++){
                     var newline = $("<tr/>");
                     newline.append($("<td/>").html(ret.rankArray[i].rank));
@@ -153,7 +153,39 @@ $(function(){
         var rankList = $("#table");
         $.get("/getranklist/",{"openID":openID,"type":"around"},function(ret){
             page = ret.page;
-            $("#table  tr:not(:first)").html("");
+            $("#table  tr:not(:first)").remove();
+            for(var i = 0;i<ret.rankArray.length;i++){
+                var newline = $("<tr/>");
+                newline.append($("<td/>").html(ret.rankArray[i].rank));
+                newline.append($("<td/>").html(ret.rankArray[i].name));
+                newline.append($("<td/>").html(ret.rankArray[i].score));
+                rankList.append(newline);
+            };   
+        });
+    })
+})
+$(function(){
+    $("#head").click(function(){
+        var rankList = $("#table");
+        $.get("/getranklist/",{"openID":openID,"type":"head"},function(ret){
+            page = ret.page;
+            $("#table  tr:not(:first)").remove();
+            for(var i = 0;i<ret.rankArray.length;i++){
+                var newline = $("<tr/>");
+                newline.append($("<td/>").html(ret.rankArray[i].rank));
+                newline.append($("<td/>").html(ret.rankArray[i].name));
+                newline.append($("<td/>").html(ret.rankArray[i].score));
+                rankList.append(newline);
+            };
+        });
+    })
+})
+$(function(){
+    $("#tail").click(function(){
+        var rankList = $("#table");
+        $.get("/getranklist/",{"openID":openID,"type":"tail"},function(ret){
+            page = ret.page;
+            $("#table  tr:not(:first)").remove();
             for(var i = 0;i<ret.rankArray.length;i++){
                 var newline = $("<tr/>");
                 newline.append($("<td/>").html(ret.rankArray[i].rank));

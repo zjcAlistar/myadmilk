@@ -1,0 +1,89 @@
+#titlebox{
+  position: absolute;
+  height:350px;
+  top:0px;
+  left:0px;
+  border-bottom: 1px solid white;
+  color:white;
+  background: black;
+  font-family:STXihei;
+  text-align: center;
+}
+
+#infobox{
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    height:350px;
+    /*background: #F3F3F3;*/
+    /*background-image:url("../img/run02.jpg");
+    filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+	-moz-background-size:100% 100%;
+	background-size:100% 100%;*/
+   	/*background-repeat: no-repeat;*/
+}
+#exercise-report{
+    font-family:STXihei;
+    position: absolute;
+    left: 10%;
+    top: 5%;
+    height: 20%;
+    width: 80%;
+    background-color:#FFF;
+    border-radius: 10px;
+    opacity:0.7;
+    padding: 2px;
+}
+#lineChart{
+    position: absolute;
+    left: 10%;
+    top: 28%;
+    height: 60%;
+    width: 81%;
+}
+#competition-report{
+    position: absolute;
+    left: 10%;
+    width: 81%;
+    height: 60%;
+    top: 93%;
+    background-color:#FFF;
+    border-radius: 10px;
+    opacity:0.7;
+}
+#table{
+    font-family:STXihei;
+    width:100%;
+
+    margin-top: 2.5%;
+}
+table.altrowstable {
+  /*font-family: verdana,arial,sans-serif;
+  font-size:11px;*/
+  color:#333333;
+  border-width: 1px;
+  border-color: #a9c6c9;
+  border-collapse: collapse;
+}
+table.altrowstable th {
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #a9c6c9;
+}
+table.altrowstable td {
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #a9c6c9;
+}
+.oddrowcolor{
+  background-color:#d4e3e5;
+}
+.evenrowcolor{
+  background-color:#c3dde0;
+}
+p{
+  margin-left: 5%;
+  margin-top: 3%;
+}
