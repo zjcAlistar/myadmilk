@@ -216,10 +216,9 @@
 }
 
 .date_start{
-    position: absolute;
     background: #EBEBEB;
-    top:0%;
-    left: 0%;
+    margin:0;
+	padding: 0;
     width:60%;
     height:70%;
     border-radius: 10px;
@@ -230,11 +229,10 @@
 }
 
 .time_start{
-    position: absolute;
     background: #EBEBEB;
-    top:0%;
-    right: 0%;
-    width:40%;
+    margin:0;
+	padding: 0;
+    width:35%;
     height:70%;
     border-radius: 10px;
     border: none;
@@ -244,10 +242,9 @@
 }
 
 .date_end{
-    position: absolute;
     background: #EBEBEB;
-    top:0%;
-    left: 0%;
+    margin:0;
+	padding:0;
     width:60%;
     height:70%;
     border-radius: 10px;
@@ -258,11 +255,10 @@
 }
 
 .time_end{
-    position: absolute;
     background: #EBEBEB;
-    top:0%;
-    right: 0%;
-    width:40%;
+    margin:0;
+	padding: 0;
+    width:35%;
     height:70%;
     border-radius: 10px;
     border: none;

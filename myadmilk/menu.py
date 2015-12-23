@@ -19,7 +19,7 @@ menu = {"button":
                                                    + API_ID + "&redirect_uri=" + serverIP +
                                                    "showinfo&response_type=code&scope=snsapi_base&state=1#wechat_redirect"}]},
              {"name":"运动计划","sub_button":[
-                {"type":"click","name":"修改提醒","key":"change_remind"},
+                {"type":"click","name":"提醒开关","key":"change_remind"},
                 {"type":"view","name":"一周总结","url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid="
                                                     + API_ID + "&redirect_uri=" + serverIP +
                                                     "showreport&response_type=code&scope=snsapi_base&state=1#wechat_redirect"},

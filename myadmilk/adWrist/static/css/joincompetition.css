@@ -284,6 +284,7 @@
 #confirm{
     position:absolute;
     bottom:8%;
+    text-align: center;
     font-family:STXihei;
     border-radius: 100%;
     background-color:#FFF;
