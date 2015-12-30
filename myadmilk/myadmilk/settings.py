@@ -30,9 +30,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'c&_f7v@7m7q7^u%zv%j4tie$*6jv2n6o36u($nfldm2dd26a2p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -88,14 +88,13 @@ WSGI_APPLICATION = 'myadmilk.wsgi.application'
 DATABASES = {
     'default': {
         "ENGINE": "django.db.backends.mysql", # Add "postgresql_psycopg2", "postgresql", "mysql", "sqlite3" or "oracle".
-        "NAME": "wrist",                       # Or path to database file if using sqlite3.
-        "USER": "root",                          # Not used with sqlite3.
-        "PASSWORD": "dhezzjc0117",                         # Not used with sqlite3.
+        "NAME":os.environ.get("DB_NAME_10"),# Or path to database file if using sqlite3.
+        "USER": os.environ.get("DB_USER_10"),       # Not used with sqlite3.
+        "PASSWORD":os.environ.get("DB_PASSWORD_10") ,    # Not used with sqlite3.
         "HOST": "127.0.0.1",                   # Set to empty string for localhost. Not used with sqlite3.
-        "PORT": "",                             # Set to empty string for default. Not used with sqlite3.
+        "PORT": "3306",                             # Set to empty string for default. Not used with sqlite3.
     }
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -119,7 +118,7 @@ STATIC_URL = '/static/'
 import os
 SITE_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)),'..')
 
-STATIC_ROOT = os.path.join(SITE_ROOT, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 STATICFILES_DIRS = (
     ("css", os.path.join(STATIC_ROOT, 'css')),

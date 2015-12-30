@@ -1,0 +1,136 @@
+#titlebox{
+	position: absolute;
+    height:350px;
+    top:0px;
+    left:0px;
+    border-bottom: 1px solid white;
+    color:white;
+    font-family:STXihei;
+    text-align: center;
+}
+
+#infobox{
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    height:350px;
+    background: #F3F3F3;
+    background-image:url("/static/img/run02.jpg");
+    filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+    -moz-background-size:100% 100%;
+    background-size:100% 100%;
+}
+
+#top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20%;
+    width: 100%;
+}
+
+#next {
+    position: absolute;
+    top: 20%;
+    right:5%;
+    width:15%;
+    height:60%;
+    opacity:0.7;
+    
+
+    border-style: none;
+    BACKGROUND-COLOR: transparent;
+    
+    color: white;
+    text-align: center;
+}
+
+#previous {
+    position: absolute;
+    top: 20%;
+    left:5%;
+    width:15%;
+    height:60%;
+    opacity:0.7;
+    border-style: none;
+    BACKGROUND-COLOR: transparent;
+    
+    color: white;
+    text-align: center;
+}
+
+#date {
+    BACKGROUND-COLOR: transparent;
+    position: absolute;
+    top: 20%;
+    left: 25%;
+    height: 60%;
+    width: 50%;
+    border-style: none;
+    opacity: 0.7;
+    color: white;
+    text-align: center;
+}
+
+::-webkit-inner-spin-button { visibility: hidden; }
+
+#middle {
+    position: absolute;
+    top: 20%;
+    left: 0;
+    height: 60%;
+    width: 100%;
+}
+
+#chart_background {
+    position: absolute;
+    background: white;
+    border-radius: 5%;
+    top:1%;
+    left:6%;
+    width:88%;
+    height:98%;
+    opacity:0.7;
+}
+
+#barChart {
+    position: absolute;
+    top:5%;
+    left:10%;
+    width:80%;
+    height:90%;
+    opacity:1;
+}
+
+#text {
+    position:absolute;
+    bottom:0%;
+    left:0;
+    width:100%;
+    height:15%;
+    font-size: 50px;
+    font-family: STXihei;
+    text-align: center;
+}
+
+#bottom {
+    position:absolute;
+    top:80%;
+    left:0;
+    height:20%;
+    width:100%;
+}
+
+#pedometer{
+    /*position: absolute;
+    bottom:25%;
+    border-radius: 50%;
+    opacity:0.7;*/
+    position: absolute;
+    bottom:15%;
+    left:20%;
+    height:40%;
+    width:60%;
+    border-radius: 10px;
+    opacity: 0.7;    
+}

@@ -49,4 +49,3 @@ class matchrecords(models.Model):
     matchrecords_finish_time = models.DateTimeField(auto_now_add=True)
     matchrecords_finish_flag = models.BooleanField(default=False)
     matchrecords_rank = models.IntegerField(default=0)
-

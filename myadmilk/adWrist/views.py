@@ -1,3 +1,6 @@
+from django.shortcuts import render
+
+# Create your views here.
 # encoding: utf-8
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -135,7 +138,7 @@ def add_test_new(openID):
             sportrecords_subtype=4,
             sportrecords_quantity=random_step,
             sportrecords_calorie=int(random_step/16),
-            sportrecords_dist=int(random_step*0.8/1000)
+            sportrecords_dist=int(random_step*0.8)
         )
         new_record.save()
         re_collect_match(cur_user)
@@ -727,8 +730,7 @@ def get_match_result(request):
                 if (not match.matchrecords_created) or match.matchrecords_start_time > datetime.now():
                     return JsonResponse({"competitiontype": match.matchrecords_matchtype,
                           "start_date": match.matchrecords_start_time.date(), "end_date": match.matchrecords_end_time.date(),
-                          "start_time": match.matchrecords_start_time.time().strftime("%H:%M"),
-                          "end_time": match.matchrecords_end_time.time().strftime("%H:%M"),
+                          "start_time": match.matchrecords_start_time.time(), "end_time": match.matchrecords_end_time.time(),
                           "competitionname": match.matchrecords_title+"尚未开始", "currentnumber": cur_players,
                           "originator": match_originator_nickname, "goal_step": match.matchrecords_target,
                           "rank": ranks, "user_rank": 0, "state": 1})
@@ -757,14 +759,12 @@ def get_match_result(request):
                         else:
                             return JsonResponse({"competitiontype": match.matchrecords_matchtype,
                               "start_date": match.matchrecords_start_time.date(), "end_date": match.matchrecords_end_time.date(),
-                              "start_time": match.matchrecords_start_time.time().strftime("%H:%M"),
-                              "end_time": match.matchrecords_end_time.time().strftime("%H:%M"),
+                              "start_time": match.matchrecords_start_time.time(), "end_time": match.matchrecords_end_time.time(),
                               "competitionname": "提交的比赛类型错误", "currentnumber": cur_players,
                               "originator": match_originator_nickname,"goal_step": match.matchrecords_target,
                               "rank": ranks, "user_rank": 0, "state": 1})
                     rank10 = ranks[0:10]
                     rank = []
-                    print("!!!")
                     for x in rank10:
                         match_player_nickname = x.matchrecords_relate_person.user_nick_name
                         if match.matchrecords_matchtype == 'comp_distance':
@@ -785,8 +785,7 @@ def get_match_result(request):
                     cur_user = userlist.objects.get(user_open_id=openID)
                     return JsonResponse({"competitiontype": match.matchrecords_matchtype,
                           "start_date": match.matchrecords_start_time.date(), "end_date": match.matchrecords_end_time.date(),
-                          "start_time": match.matchrecords_start_time.time().strftime("%H:%M"),
-                          "end_time": match.matchrecords_end_time.time().strftime("%H:%M"),
+                          "start_time": match.matchrecords_start_time.time(), "end_time": match.matchrecords_end_time.time(),
                           "competitionname": match.matchrecords_title, "currentnumber": cur_players,
                           "originator": match_originator_nickname,"goal_step": match.matchrecords_target,
                           "rank": rank, "user_rank": user_rank, "state": state, "user_scorethistime": user_scorethistime,

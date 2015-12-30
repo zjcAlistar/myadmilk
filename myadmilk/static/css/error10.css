@@ -1,0 +1,22 @@
+#titlebox{
+	position: absolute;
+    height:350px;
+    top:0px;
+    left:0px;
+    border-bottom: 1px solid white;
+    color:white;
+    font-family:STXihei;
+    text-align: center;
+}
+
+#infobox{
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    height:350px;
+    background: #F3F3F3;
+    background-image:url("/static/img/run02.jpg");
+    filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+    -moz-background-size:100% 100%;
+    background-size:100% 100%;
+}
